@@ -1,6 +1,4 @@
 import express from "express";
-import https from "https";
-import fs from 'fs';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import axios from 'axios';
@@ -16,7 +14,7 @@ import errorMiddleware from "./middlewares/error-middleware.js";
 import cookieParser from 'cookie-parser';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const app = express();
 dotenv.config();
 
@@ -617,8 +615,8 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 
 
 const start = async () => {
-  server.listen(port, () => {
-    console.log(`Сервер ебашит на ${port}`);
+  app.listen(port, () => {
+    console.log(`Сервер ебашит на http://localhost:${port}`);
   });
 
 };
