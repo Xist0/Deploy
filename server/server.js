@@ -39,11 +39,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
   next();
 });
-// Сертификат безопасности
-const options = {
-  key: fs.readFileSync('./CRMServe-private.key'),
-  cert: fs.readFileSync('./CRMServe.crt')
-};
+
 
 async function createTables() {
   await RoleModel.createRoleTable();
@@ -289,7 +285,7 @@ app.get('/api/shipment/:qrData/:userRole/:userName/:posishion', async (req, res)
     const response = await fetch(`http://192.168.1.10/api/shipment/${qrData}/${userRole}/${userName}/${posishion}`);
 
     if (!response.ok) {
-      const errorMessage = await response.json(); 
+      const errorMessage = await response.json();
       return res.status(response.status).send(errorMessage);
     }
 
@@ -620,22 +616,10 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 });
 
 
-const startServer = () => {
-  const server = https.createServer(options, app);
-  server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
-};
 const start = async () => {
-  try {
-    await sql`SELECT 1`;
-    console.log('Connected to PostgreSQL database');
-    await createTables();
-    console.log('Tables created successfully');
-    startServer();
-  } catch (error) {
-    console.error('Error during startup:', error);
-  }
-};
+  server.listen(port, () => {
+    console.log(`Сервер ебашит на ${port}`);
+  });
 
+};
 start();

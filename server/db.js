@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 export const sql = postgres({
     host: 'localhost',
-    port: 5433,
+    port: 5432,
     database: 'test',
     username: 'postgres',
-    password: '1234'
+    password: 'Qwerty123$'
 });
