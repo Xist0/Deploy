@@ -1,0 +1,85 @@
+.messenger-container {
+    position: fixed;
+    top: 80%;
+    left: calc(100% - 5%);
+    display: flex;
+    min-height: 100%;
+}
+
+.messenger-content {
+    display: none;
+
+}
+
+.messenger-container>svg {
+    width: 60px;
+    height: 60px;
+    background: #a22d2d;
+    border-radius: 50px;
+    padding: 10px;
+    color: aliceblue;
+    cursor: pointer;
+}
+
+.messenger-content-aktive {
+    position: fixed;
+    width: 450px;
+    height: 500px;
+    background: #ffffff;
+    top: 25%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #a22d2d;
+    left: calc(80% - 15%);
+}
+
+.messenger-content-filter-nav {
+    display: flex;
+    height: 40px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.messenger-content-main {
+    width: 100%;
+    height: 80%;
+    padding: 10px;
+    overflow: scroll;
+    background: #ffffff;
+    border: 1px solid;
+}
+
+.messenger-content-header {
+    display: flex;
+    margin-top: 15px;
+    gap: 20px;
+}
+
+.messenger-content-header>svg {
+    width: 40px;
+    height: 30px;
+    color: #1776CD;
+}
+
+@media (max-width: 1280px) {
+    .messenger-container {
+        position: fixed;
+        top: 70%;
+        left: calc(100% - 20%);
+        display: flex;
+        min-height: 100%;
+    }
+
+    .messenger-content-aktive {
+        position: fixed;
+        width: 95%;
+        z-index: 1;
+        height: 450px;
+        background: #ffffff;
+        top: 13%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #a22d2d;
+        left: 10px;
+    }
+}

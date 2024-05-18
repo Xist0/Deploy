@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+
+* {
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	font-family: 'Montserrat', sans-serif;
+
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	font-size: calc(12px + 8 * (100vw - 450px) / 1920);
+}
+
+/* Links */
+
+a,
+a:link,
+a:visited {
+
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* Common */
+
+aside,
+nav,
+footer,
+header,
+section,
+main {
+	display: block;
+}
+
+h1,
+h2,
+h3 {
+	font-size: calc(16px + 8 * (100vw - 450px) / 1920);
+	font-weight: inherit;
+	font-family: 'Montserrat', sans-serif;
+}
+
+
+h4,
+h5,
+h6,
+p {
+
+	font-size: calc(12px + 8 * (100vw - 450px) / 1920);
+	font-weight: inherit;
+	font-family: 'Montserrat', sans-serif;
+}
+
+ul,
+ul li {
+	list-style: none;
+}
+
+img {
+	vertical-align: top;
+}
+
+img,
+svg {
+	max-width: 100%;
+	height: auto;
+}
+
+address {
+	font-style: normal;
+}
+
+/* Form */
+
+input,
+textarea,
+button,
+select {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	background-color: transparent;
+}
+
+input {
+	width: calc(100% - 80%);
+	border: 1px solid #1776CD;
+	padding: 5px 10px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+input:focus {
+	border: 1px #1776CD;
+	box-shadow: 0 0 7px #1776CD;
+	/* добавляем тень при фокусировке */
+}
+
+input::-ms-clear {
+	display: none;
+}
+
+
+input:focus,
+input:active,
+button:focus,
+button:active {
+	outline: none;
+}
+
+button {
+	background-color: #1776cd;
+	cursor: pointer;
+	border: none;
+	color: rgb(224, 224, 224);
+	padding: 15px 80px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 13px;
+	box-shadow: none;
+	display: flex;
+	width: calc(100% - 95%);
+	border-radius: 5px;
+	transition: 0.2s ease-in-out;
+	align-items: center;
+	justify-content: center;
+}
+
+button:hover {
+	box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+	background-color: #145da1;
+	color: rgb(255, 255, 255);
+}
+
+button::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+legend {
+	display: block;
+}
+
+
+.container-box {
+	width: calc(100% - 10%);
+	margin: auto;
+}
+
+@media (max-width: 800px) {
+	input {
+		width: calc(100% - 40%);
+		border: 1px solid #1776CD;
+		border-radius: 6px;
+		padding: 5px 10px;
+		cursor: pointer;
+	}
+
+	button {
+		background-color: #1776cd;
+		cursor: pointer;
+		border: none;
+		color: rgb(224, 224, 224);
+		padding: 15px 50px;
+		font-size: calc(10px + 8 * (100vw - 450px) / 1920);
+		text-align: center;
+		text-decoration: none;
+		text-transform: uppercase;
+		box-shadow: none;
+		display: flex;
+		width: calc(100% - 95%);
+		border-radius: 5px;
+		transition: 0.2s ease-in-out;
+		align-items: center;
+		justify-content: center;
+	}
+
+}

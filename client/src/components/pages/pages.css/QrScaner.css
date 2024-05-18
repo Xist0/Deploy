@@ -1,0 +1,85 @@
+.scaner {
+    display: none;
+
+}
+
+.visible {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.scaner.visible {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    left: 0;
+    width: 100%
+}
+
+.scaner.hidden {
+    display: none;
+}
+
+#qrCodeContainer {
+    border-radius: 7px;
+    height: 300px;
+    overflow: hidden;
+    width: 300px
+}
+
+#qr-shaded-region {
+    border-width: 50px !important
+}
+
+video {
+    left: 50%;
+    min-height: 100%;
+    min-width: 100%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: auto !important
+}
+
+.qr-message {
+    align-items: center;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    font-size: 18px;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    padding: 20px;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    word-break: break-all
+}
+
+.qr-message,
+.start-button {
+    color: #fff;
+}
+
+.start-button {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .start-button {
+        background-color: #1776CD;
+        display: flex;
+        border: 0;
+        border-radius: 7px;
+        padding: 5px 16px;
+        width: auto
+    }
+
+}
