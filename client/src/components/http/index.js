@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = 'http://192.168.1.157:5000/api'
+const API_URL = process.env.API_URL || 'http://192.168.1.157:5000/api';
 
 const $api = axios.create({
     withCredentials: true,
@@ -19,9 +19,9 @@ $api.interceptors.response.use((config) => {
     if (error.response.status == 401 && error.config && !error.config._isRetry) {
         originalRequest._isRetry = true;
         try {
-            const response = await axios.get (`${API_URL}/refresh`, { withCredentials: true }) // Уберите withCredentials
+            const response = await axios.get(`${API_URL}/refresh`, { withCredentials: true })
             localStorage.setItem('token', response.data.accessToken);
-            localStorage.setItem('role', response.data.user.role); 
+            localStorage.setItem('role', response.data.user.role);
             return $api.request(originalRequest);
         } catch (e) {
             console.log('НЕ АВТОРИЗОВАН')
