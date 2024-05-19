@@ -622,10 +622,21 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 });
 
 
-const start = async () => {
+const startServer = () => {
   app.listen(port, () => {
-    console.log(`Сервер ебашит на http://localhost:${port}`);
+    console.log(`Server is running on port ${port}`);
   });
-
 };
+const start = async () => {
+  try {
+    await sql`SELECT 1`;
+    console.log('Connected to PostgreSQL database');
+    await createTables();
+    console.log('Tables created successfully');
+    startServer();
+  } catch (error) {
+    console.error('Error during startup:', error);
+  }
+};
+
 start();
