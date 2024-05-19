@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = 'http://192.168.1.157:5000/api/login'
+export const API_URL = 'http://192.168.1.157:5000/api'
 
 const $api = axios.create({
     withCredentials: true,
