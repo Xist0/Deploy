@@ -27,6 +27,14 @@ app.use(cors({
   origin: process.env.CLIENT_URL
 }));
 
+const corsOptions = {
+  origin: 'http://192.168.1.157',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+app.use(cors(corsOptions));
+
 app.use('/api', router);
 
 app.use(errorMiddleware);

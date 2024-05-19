@@ -37,7 +37,7 @@ export const regSlice = createSlice({
 
 export const regThunk = createAsyncThunk("regThunk", async (data, { rejectWithValue }) => {
     try {
-        const result = await fetch('https://192.168.1.211:4000/reg', {
+        const result = await fetch('http://192.168.1.157:5000/reg', {
             method: 'POST',
             mode: "cors",
             headers: {
