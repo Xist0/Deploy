@@ -29,7 +29,7 @@ app.use(cors({
 
 app.use('/api', router);
 app.use(cors({
-  origin: 'http://192.168.1.157',
+  origin: 'http://94.41.188.23',
 }));
 app.use(errorMiddleware);
 
