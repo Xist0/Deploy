@@ -27,15 +27,6 @@ app.use(cors({
   origin: process.env.CLIENT_URL
 }));
 
-
-const corsOptions = {
-  origin: 'https://order.service-centr.com',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
-};
-app.use(cors(corsOptions));
-
 app.use('/api', router);
 
 app.use(errorMiddleware);
