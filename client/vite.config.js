@@ -1,8 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import macrosPlugin from 'vite-plugin-babel-macros';
+import fs from 'fs';
+import path from 'path';
 
 export default defineConfig({
-  plugins: [ react()],
+  plugins: [macrosPlugin(), react()],
   build: {
     manifest: true,
     rollupOptions: {
@@ -10,14 +13,18 @@ export default defineConfig({
     },
   },
   server: {
+    port: 24,
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "https://192.168.1.211:4000",
         changeOrigin: true,
         secure: false,
         ws: true,
       },
     },
-    
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, './CRMServe-private.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, './CRMServe.crt')),
+    },
   },
 });
