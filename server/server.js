@@ -41,22 +41,6 @@ app.use(cors(corsOptions));
 
 app.use('/api', router);
 
-// Получение текущего пути файла и директории
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Пути к ключу и сертификатам
-const keyPath = path.join(__dirname, 'private.key');
-const certPath = path.join(__dirname, 'certificate.crt');
-const caPath = path.join(__dirname, 'chain.pem');
-
-// Чтение ключа и сертификатов
-const privateKey = fs.readFileSync(keyPath, 'utf8');
-const certificate = fs.readFileSync(certPath, 'utf8');
-const ca = fs.readFileSync(caPath, 'utf8');
-
-const credentials = { key: privateKey, cert: certificate, ca: ca };
-
 app.use(errorMiddleware);
 
 app.use((req, res, next) => {
@@ -643,9 +627,8 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 
 
 const startServer = () => {
-  const httpsServer = https.createServer(credentials, app);
 
-  httpsServer.listen(port, () => {
+  app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
 };
