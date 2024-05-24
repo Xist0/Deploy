@@ -624,9 +624,8 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 
 
 const startServer = () => {
-
-  app.createServer(options, app).listen(5000, () => {
-    console.log('Сервер запущен на порту 5000');
+  app.listen(port, () => {
+    console.log(`Сервер запущен на порту ${port}`);
   });
 };
 const start = async () => {
