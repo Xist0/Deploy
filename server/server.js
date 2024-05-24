@@ -14,7 +14,7 @@ import errorMiddleware from "./middlewares/error-middleware.js";
 import cookieParser from 'cookie-parser';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 5000;
 const app = express();
 dotenv.config();
 
