@@ -29,7 +29,7 @@ app.use(cors({
 
 
 const corsOptions = {
-  origin: 'https://94.41.188.23',
+  origin: 'https://order.service-centr.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
