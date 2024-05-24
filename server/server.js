@@ -4,17 +4,21 @@ import bodyParser from 'body-parser';
 import axios from 'axios';
 import multer from 'multer';
 import fetch from 'node-fetch';
+import https from 'https'
 import dotenv from 'dotenv';
 import { router } from "./router/index.js";
 import { sql } from "./db.js";
 import RoleModel from './models/role-model.js';
 import UserModel from './models/user-model.js';
+import fs from 'fs';  
+import path from 'path'; 
+import { fileURLToPath } from 'url';  
 import TokenSchema from './models/token-model.js';
 import errorMiddleware from "./middlewares/error-middleware.js";
 import cookieParser from 'cookie-parser';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 6000;
 const app = express();
 dotenv.config();
 
@@ -28,7 +32,7 @@ app.use(cors({
 }));
 
 const corsOptions = {
-  origin: 'http://192.168.1.157',
+  origin: 'https://order.service-centr.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
@@ -36,6 +40,22 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/api', router);
+
+// Получение текущего пути файла и директории
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Пути к ключу и сертификатам
+const keyPath = path.join(__dirname, 'private.key');
+const certPath = path.join(__dirname, 'certificate.crt');
+const caPath = path.join(__dirname, 'chain.pem');
+
+// Чтение ключа и сертификатов
+const privateKey = fs.readFileSync(keyPath, 'utf8');
+const certificate = fs.readFileSync(certPath, 'utf8');
+const ca = fs.readFileSync(caPath, 'utf8');
+
+const credentials = { key: privateKey, cert: certificate, ca: ca };
 
 app.use(errorMiddleware);
 
@@ -623,7 +643,9 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 
 
 const startServer = () => {
-  app.listen(port, () => {
+  const httpsServer = https.createServer(credentials, app);
+
+  httpsServer.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
 };

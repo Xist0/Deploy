@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = process.env.API_URL || 'http://192.168.1.157:5000/api';
+const API_URL = process.env.API_URL || 'https://order.service-centr.com:5000/api';
 
 const $api = axios.create({
     withCredentials: true,
