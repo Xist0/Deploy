@@ -1,11 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import macrosPlugin from 'vite-plugin-babel-macros';
-import fs from 'fs';
-import path from 'path';
 
 export default defineConfig({
-  plugins: [macrosPlugin(), react()],
+  plugins: [ react()],
   build: {
     manifest: true,
     rollupOptions: {
