@@ -10,9 +10,9 @@ import { router } from "./router/index.js";
 import { sql } from "./db.js";
 import RoleModel from './models/role-model.js';
 import UserModel from './models/user-model.js';
-import fs from 'fs';  
-import path from 'path'; 
-import { fileURLToPath } from 'url';  
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import TokenSchema from './models/token-model.js';
 import errorMiddleware from "./middlewares/error-middleware.js";
 import cookieParser from 'cookie-parser';
@@ -31,6 +31,15 @@ app.use(cors({
   origin: process.env.CLIENT_URL
 }));
 
+
+app.use(cors({
+  origin: 'https://94.41.188.23',
+  credentials: true,
+}));
+const options = {
+  key: fs.readFileSync('./CRMServe-private.key'),
+  cert: fs.readFileSync('./CRMServe.crt')
+};
 const corsOptions = {
   origin: 'https://order.service-centr.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -628,8 +637,8 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 
 const startServer = () => {
 
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  https.createServer(options, app).listen(5000, () => {
+    console.log('Сервер запущен на порту 5000');
   });
 };
 const start = async () => {
