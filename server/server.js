@@ -41,7 +41,7 @@ const options = {
   cert: fs.readFileSync('./CRMServe.crt')
 };
 const corsOptions = {
-  origin: 'https://order.service-centr.com',
+  origin: 'https://94.41.188.23',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
