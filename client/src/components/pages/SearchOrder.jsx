@@ -4,7 +4,7 @@ import QRcodeScaner from './QRcodeScaner';
 import { useLocation } from 'react-router-dom';
 import { Context } from '../../main';
 
-function SearcOrder() {
+function SearchOrder() {
     const [number, setNumber] = useState('');
     const [records, setRecords] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -148,4 +148,4 @@ function SearcOrder() {
     );
 }
 
-export default SearcOrder;
+export default SearchOrder;

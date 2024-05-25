@@ -33,7 +33,7 @@ function NavMenu() {
     if (role === 'Клиент' || role === 'ADMIN' || role === 'Админ' || role === 'Менеджер') {
       return (
         <div>
-          <NavLink to="/SearcOrder" onClick={closeMenu}>Поиск заказа</NavLink>
+          <NavLink to="/SearchOrder" onClick={closeMenu}>Поиск заказа</NavLink>
         </div>
       );
     } else {
