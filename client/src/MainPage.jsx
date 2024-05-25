@@ -11,7 +11,7 @@ import Orders from './components/pages/Orders.jsx';
 import Employees from './components/pages/Employees.jsx';
 import ChangeOrder from './components/pages/ChangeOrder.jsx';
 import Calls from './components/pages/Calls.jsx';
-import SearcOrder from './components/pages/SearcOrder.jsx';
+import SearchOrder from './components/pages/SearchOrder.jsx';
 import PersonalAccount from './components/pages/PersonalAccount.jsx';
 import { Context } from './main.jsx';
 import Acceptance from './components/pages/Acceptance.jsx';
@@ -28,22 +28,22 @@ const MainPage = () => {
             <Header />
             {/* <AppMedia /> */}
             <Routes>
-                <Route path="/Works" element={userRole === 'Админ' || userRole === 'Мастер' ? <Works /> : <Navigate to="/" />} />
-                <Route path="/WarrantyRepair" element={userRole === 'Админ' || userRole === 'Менеджер' || userRole === 'Мастер' ? <WarrantyRepair /> : <Navigate to="/" />} />
-                <Route path="/SpareParts" element={userRole === 'Админ' || userRole === 'Мастер' ? <SpareParts /> : <Navigate to="/" />} />
-                <Route path="/OrderStatus" element={userRole === 'Админ' || userRole === 'Мастер' || userRole === 'Менеджер' ? <OrderStatus /> : <Navigate to="/" />} />
-                <Route path="/Orders" element={userRole === 'Админ' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Orders /> : <Navigate to="/" />} />
-                <Route path="/Maxvi" element={userRole === 'Админ' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Maxvi /> : <Navigate to="/" />} />
-                <Route path="/Employees" element={userRole === 'Админ' ? <Employees /> : <Navigate to="/" />} />
-                <Route path="/ChangeOrder" element={userRole === 'Админ' || userRole === 'Мастер' ? <ChangeOrder /> : <Navigate to="/" />} />
-                <Route path="/Calls" element={userRole === 'Админ' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Calls /> : <Navigate to="/" />} />
+                <Route path="/Works" element={userRole === 'Администратор' || userRole === 'Мастер' ? <Works /> : <Navigate to="/" />} />
+                <Route path="/WarrantyRepair" element={userRole === 'Администратор' || userRole === 'Менеджер' || userRole === 'Мастер' ? <WarrantyRepair /> : <Navigate to="/" />} />
+                <Route path="/SpareParts" element={userRole === 'Администратор' || userRole === 'Мастер' ? <SpareParts /> : <Navigate to="/" />} />
+                <Route path="/OrderStatus" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <OrderStatus /> : <Navigate to="/" />} />
+                <Route path="/Orders" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Orders /> : <Navigate to="/" />} />
+                <Route path="/Maxvi" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Maxvi /> : <Navigate to="/" />} />
+                <Route path="/Employees" element={userRole === 'Администратор' ? <Employees /> : <Navigate to="/" />} />
+                <Route path="/ChangeOrder" element={userRole === 'Администратор' || userRole === 'Мастер' ? <ChangeOrder /> : <Navigate to="/" />} />
+                <Route path="/Calls" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Calls /> : <Navigate to="/" />} />
                 <Route path='PhoneBook' element={<PhoneBook />} />
-                <Route path="/SearcOrder" element={userRole === 'Админ' || userRole === 'ADMIN' || userRole === 'Менеджер' ? <SearcOrder /> : <Navigate to="/" />} />
-                <Route path="/adminka" element={userRole === 'Админ' ? <Adminka /> : <Navigate to="/" />} />
+                <Route path="/SearchOrder" element={userRole === 'Администратор' || userRole === 'ADMIN' || userRole === 'Менеджер' ? <SearchOrder /> : <Navigate to="/" />} />
+                <Route path="/adminka" element={userRole === 'Администратор' ? <Adminka /> : <Navigate to="/" />} />
                 <Route path="/PersonalAccount" element={<PersonalAccount />} />
                 <Route path='/SpareParts' element={<SpareParts />} />
-                <Route path='/Acceptance' element={userRole === 'Туркистанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Админ' ? <Acceptance /> : <Navigate to="/" />} />
-                <Route path='/Shipment' element={userRole === 'Туркистанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Админ' ? <Shipment /> : <Navigate to="/" />} />
+                <Route path='/Acceptance' element={userRole === 'Туркистанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? <Acceptance /> : <Navigate to="/" />} />
+                <Route path='/Shipment' element={userRole === 'Туркистанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? <Shipment /> : <Navigate to="/" />} />
             </Routes>
         </>
     );

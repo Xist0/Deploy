@@ -1,6 +1,5 @@
 import ApiError from '../errors/api-error.js';
 import TokenService from "../service/token-service.js";
-
 export default function (req, res, next){
     try {
         const authorizationHeader = req.headers.authorization;
@@ -16,7 +15,7 @@ export default function (req, res, next){
         if(!userData){
             return next(ApiError.UnauthorizedError())
         }
-        req.user = { ...userData, role: userData.role }; // Убедитесь, что роль добавляется в req.user
+        req.user = { ...userData, role: userData.role }; 
         next()
     } catch (e) {
         return next(ApiError.UnauthorizedError())

@@ -32,9 +32,11 @@ export default class Store {
             document.cookie = `refreshToken=${response.data.refreshToken}; Max-Age=${30 * 24 * 60 * 60}; Path=/; Secure; SameSite=None`;
             this.setAuth(true);
             this.setUser(response.data.user, response.data.role);
-            localStorage.setItem('role', response.data.role);
+            localStorage.setItem('role', response.data.role); 
+            return { success: true, data: response.data }; 
         } catch (e) {
             console.log(e.response?.data?.message);
+            return { success: false, error: e.response?.data?.message || 'Ошибка при авторизации' }; 
         }
     }
 

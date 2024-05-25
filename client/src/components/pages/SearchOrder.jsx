@@ -11,32 +11,19 @@ function SearcOrder() {
     const location = useLocation();
     const { store } = useContext(Context);
     const userRole = store.user.role;
-    const UserName = store.user.login
+    const UserName = store.user.login;
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const orderNumber = queryParams.get('orderNumber');
         if (orderNumber) {
-            setNumber(orderNumber);
-            fetchData(orderNumber);
+            const trimmedOrderNumber = orderNumber.replace(/^0+/, '');
+            setNumber(trimmedOrderNumber);
+            fetchData(trimmedOrderNumber);
         }
     }, [location.search]);
 
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const orderNumber = queryParams.get('orderNumber');
-
-        if (orderNumber) {
-            setNumber(orderNumber);
-            const searchInput = document.getElementById("searchInput");
-            if (searchInput) {
-                searchInput.focus();
-            }
-            fetchData(orderNumber);
-        }
-    }, [location.search]);
-
-    const fetchData = async (searchNumber, userRole, UserName) => {
+    const fetchData = async (searchNumber) => {
         if (searchNumber.trim() === '') {
             return;
         }
@@ -72,7 +59,6 @@ function SearcOrder() {
         setNumber(searchNumber);
         fetchData(searchNumber, userRole, UserName);
     };
-
     const renderData = () => {
         if (isLoading) {
             return (
@@ -149,16 +135,14 @@ function SearcOrder() {
     };
 
     return (
-        <div>
-            <div className="container-box">
-                <div className="container-block">
-                    <div className="container-block-search">
-                        <input type="number" pattern="\d*" value={number} onChange={handleChange} onKeyPress={handleKeyPress} placeholder='Введите номер заказа' />
-                        <button onClick={() => fetchData(number)}> Найти </button >
-                    </div>
-                    <QRcodeScaner updateSearchWithQRCode={(searchData) => searchWithQRCode(searchData)} />
-                    <div className="container-results">{renderData()}</div>
+        <div className="container-box">
+            <div className="container-block">
+                <div className="container-block-search">
+                    <input type="number" pattern="\d*" value={number} onChange={handleChange} onKeyPress={handleKeyPress} placeholder='Введите номер заказа' />
+                    <button onClick={() => fetchData(number)}> Найти </button >
                 </div>
+                <QRcodeScaner updateSearchWithQRCode={(searchData) => searchWithQRCode(searchData)} />
+                <div className="container-results">{renderData()}</div>
             </div>
         </div>
     );

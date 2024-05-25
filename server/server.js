@@ -104,6 +104,25 @@ app.get('/api/typeofrepaire', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+app.get('/api/source', async (req, res) => {
+
+  try {
+    const { default: fetch } = await import('node-fetch');
+
+    const response = await fetch(`http://192.168.1.10/api/source`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 app.get('/api/audio/:name', async (req, res) => {
   const { name } = req.params;
   const audioUrl = `http://192.168.1.10/static/song/${name}`;
@@ -167,40 +186,18 @@ app.get('/api/byt/order/:searchNumber/:encodedUserRole/:UserName', async (req, r
   }
 });
 app.get('/api/1c/users', async (req, res) => {
-
   try {
     const { default: fetch } = await import('node-fetch');
-
-    const response = await fetch(`http://192.168.1.10/api/1c/users`);
+    const response = await fetch('http://192.168.1.10/api/1c/users');
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const responseData = await response.json();
-
     res.json(responseData);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-app.get('/api/1c/users', async (req, res) => {
-
-  try {
-    const { default: fetch } = await import('node-fetch');
-
-    const response = await fetch(`http://192.168.1.10/api/1c/users`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseData = await response.json();
-
-    res.json(responseData);
-  } catch (error) {
-    console.error(error);
+    console.error('Error:', error);
     res.status(500).send('Internal Server Error');
   }
 });

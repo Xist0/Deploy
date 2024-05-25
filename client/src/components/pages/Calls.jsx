@@ -114,6 +114,7 @@ const Calls = () => {
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [matchedOrder, setMatchedOrder] = useState([])
   const [iconRotation, setIconRotation] = useState(0);
+  const [requestCounter, setRequestCounter] = useState(0);
   const [state, setState] = useState([
     {
       startDatePlaceholder: null,
@@ -121,6 +122,10 @@ const Calls = () => {
       key: 'selection'
     }
   ]);
+  const latestRequestCounter = useRef(0);
+  useEffect(() => {
+    latestRequestCounter.current = requestCounter;
+  }, [requestCounter]);
 
   const russianTranslations = {
     startDatePlaceholder: 'Начальная дата',
@@ -148,6 +153,8 @@ const Calls = () => {
   };
 
   const fetchData = async () => {
+    setRequestCounter(requestCounter + 1);
+
     if (isLoading) {
       return;
     }
@@ -162,6 +169,10 @@ const Calls = () => {
       const data = await response.json();
       setRecords(data);
       setTableHeaderVisibility(true);
+      if (latestRequestCounter.current === requestCounter) {
+        setRecords(data);
+        setTableHeaderVisibility(true);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -184,26 +195,30 @@ const Calls = () => {
     try {
       const response = await fetch(`/api/users/search/${encodeURIComponent(fullName)}`);
       const data = await response.json();
-      const filteredUsers = data.users.filter(user => user.phone_user);
+      const filteredUsers = data.filter(user => user.user_phone);
+      setMatchedOrder([]); // Очищаем результаты поиска заказов
       setMatchedUsers(filteredUsers);
     } catch (error) {
       console.error('Error searching users:', error);
       setMatchedUsers([]);
     }
   };
+
   const searchUserOrder = async (number) => {
     try {
       const response = await fetch(`/api/byt/order/${encodeURIComponent(number)}`);
       const data = await response.json();
       if (Array.isArray(data)) {
+        setMatchedUsers([]); // Очищаем результаты поиска пользователей
         setMatchedOrder(data);
       } else {
+        setMatchedUsers([]); // Очищаем результаты поиска пользователей
         setMatchedOrder([data]);
       }
     } catch (error) {
       console.error('Error searching users:', error);
     }
-  }
+  };
 
   const fetchRecordDetails = async (name, day) => {
     const response = await fetch(`/api/order/record/${day}/${name}`);
@@ -245,14 +260,14 @@ const Calls = () => {
 
   };
   const handleOrderClick = (order) => {
-    setSearchNumber(order.user.phone_user);
+    setSearchNumber(order.retail_user.user_phone);
     setSearchFIO(order.retail_user.user_name);
     setMatchedOrder([]);
   }
 
   const handleUserClick = (user) => {
-    setSearchFIO(user.retail_user.user_name);
-    setSearchNumber(user.phone_user);
+    setSearchFIO(user.user_name);
+    setSearchNumber(user.user_phone);
     setMatchedUsers([]);
   };
   const handleSearchNumberChange = (e) => {
@@ -273,13 +288,21 @@ const Calls = () => {
       searchUserOrder(value);
     }
   };
-  const downloadAudio = (name) => {
-    const audioUrl = `http://192.168.1.10/static/song/${name}`;
-    const link = document.createElement('a');
-    link.href = audioUrl;
-    link.download = name;
-    link.click();
-  };
+  const downloadAudio = async (name) => {
+    try {
+        const response = await fetch(`/api/audio/${name}`);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    } catch (error) {
+        console.error('Ошибка скачивания:', error);
+    }
+};
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -288,7 +311,7 @@ const Calls = () => {
     const orderNumber = parseOrderNumber(text);
 
     if (orderNumber) {
-      const searchUrl = `https://192.168.1.211:24/SearcOrder?orderNumber=${orderNumber}`;
+      const searchUrl = `https://order.service-centr.com/SearchOrder?orderNumber=${orderNumber}`;
       window.open(searchUrl, '_blank');
     } else {
       console.error('Failed to parse order number from link:', text);
@@ -470,7 +493,7 @@ const Calls = () => {
                     <div className="matched-users">
                       {matchedUsers.map((user, index) => (
                         <div key={index} className="matched-user" onClick={() => handleUserClick(user)}>
-                          {user.retail_user.user_name}
+                          {user.user_name}
                         </div>
                       ))}
                     </div>
