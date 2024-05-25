@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL =  'http://94.41.188.23:5000/api';
+export const API_URL =  'https://order.service-centr.com/api'; 
 
 const $api = axios.create({
     withCredentials: true,
@@ -30,4 +30,4 @@ $api.interceptors.response.use((config) => {
     throw error;
 })
 
-export default $api
+export default $api;
