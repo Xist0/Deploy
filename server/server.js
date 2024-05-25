@@ -22,11 +22,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
-const corsOptions = {
-  origin: process.env.CLIENT_URL || 'https://order.service-centr.com',
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'https://order.service-centr.com',
+  methods: 'GET,POST,OPTIONS',
+  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization'
+}));
 app.use('/api', router);
 app.use(errorMiddleware);
 
