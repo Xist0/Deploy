@@ -36,10 +36,10 @@ const MainPage = () => {
                 <Route path="/Maxvi" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Maxvi /> : <Navigate to="/" />} />
                 <Route path="/Employees" element={userRole === 'Администратор' ? <Employees /> : <Navigate to="/" />} />
                 <Route path="/ChangeOrder" element={userRole === 'Администратор' || userRole === 'Мастер' ? <ChangeOrder /> : <Navigate to="/" />} />
-                <Route path="/Calls" element={userRole === 'Администратор' || userRole === 'Админ' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Calls /> : <Navigate to="/" />} />
+                <Route path="/Calls" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Calls /> : <Navigate to="/" />} />
                 <Route path='PhoneBook' element={<PhoneBook />} />
-                <Route path="/SearchOrder" element={userRole === 'Администратор' || userRole === 'Админ' || userRole === 'Менеджер' ? <SearchOrder /> : <Navigate to="/" />} />
-                <Route path="/adminka" element={userRole === 'Администратор' || userRole === 'Админ' ? <Adminka /> : <Navigate to="/" />} />
+                <Route path="/SearchOrder" element={userRole === 'Администратор' || userRole === 'ADMIN' || userRole === 'Менеджер' ? <SearchOrder /> : <Navigate to="/" />} />
+                <Route path="/adminka" element={userRole === 'Администратор' ? <Adminka /> : <Navigate to="/" />} />
                 <Route path="/PersonalAccount" element={<PersonalAccount />} />
                 <Route path='/SpareParts' element={<SpareParts />} />
                 <Route path='/Acceptance' element={userRole === 'Туркистанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? <Acceptance /> : <Navigate to="/" />} />

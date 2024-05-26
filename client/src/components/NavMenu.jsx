@@ -30,7 +30,7 @@ function NavMenu() {
   };
 
   const renderOrderUserLinks = (role) => {
-    if (role === 'Клиент' || role === 'ADMIN' || role === 'Админ' || role === 'Менеджер') {
+    if (role === 'Клиент' || role === 'ADMIN' || role === 'Администратор' || role === 'Менеджер') {
       return (
         <div>
           <NavLink to="/SearchOrder" onClick={closeMenu}>Поиск заказа</NavLink>
@@ -41,7 +41,7 @@ function NavMenu() {
     }
   };
   const renderOrderLinks = (role) => {
-    if (role === 'ы' || role === 'EMPLOYEE') {
+    if (role === 'ы' || role === 'Администратор') {
       return (
         <div>
           <NavLink to="/OrderStatus" onClick={closeMenu}>Новый Заказ</NavLink>
@@ -99,10 +99,10 @@ function NavMenu() {
           </div>
         </li>
 
-        {userRole === 'Админ' || userRole === '3' || userRole === 'Менеджер' ? (
+        {userRole === 'Админ' || userRole === 'Администратор' || userRole === 'Менеджер' ? (
           <li><NavLink to="/Calls" onClick={closeMenu}>Звонки</NavLink></li>
         ) : null}
-        {userRole === 'Админ' ? (
+        {userRole === 'Администратор' ? (
           <li><NavLink to="/adminka" onClick={closeMenu}> Админка </NavLink></li>
         ) : null}
         <li><NavLink to="/PhoneBook" onClick={closeMenu}>Телефонный справочник</NavLink> </li>
