@@ -1,16 +1,16 @@
-import React from 'react'
-import LoginForm from '../component/LoginForm'
-import RegisterForm from '../component/RegisterForm'
-
+import React, { useState } from 'react';
+import LoginForm from '../component/LoginForm';
+import RegisterForm from '../component/RegisterForm';
+import UserList from './UserList';
 
 function Adminka() {
+
     return (
         <div className="container-box">
-            
-        <h1>sads</h1>
-       <RegisterForm/>
+            <RegisterForm  />
+            <UserList />
         </div>
-    )
+    );
 }
 
-export default Adminka
+export default Adminka;

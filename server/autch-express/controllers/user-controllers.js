@@ -11,7 +11,7 @@ class UserController {
                 return next(ApiError.BadRequest('Ошибка авторизации', errors.array()));
             }
             const { login, password, role } = req.body;
-            const userData = await UserService.registration(login, password, role); // Передайте роль в метод регистрации
+            const userData = await UserService.registration(login, password, role); 
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -23,7 +23,6 @@ class UserController {
             const { login, password, role } = req.body;
             const userData = await UserService.login(login, password, role);
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpsOnly: true });
-            // Заменяем использование req.user.roleName на userData.role
             return res.json({ ...userData, role: userData.role }); 
         } catch (error) {
             next(error);
@@ -47,7 +46,7 @@ class UserController {
     static async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
-            const userData = req.user ? { role: req.user.role } : {}; // Добавляем роль в userData
+            const userData = req.user ? { role: req.user.role } : {}; 
             const updatedUserData = await UserService.refresh(refreshToken, userData);
             res.cookie('refreshToken', updatedUserData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpsOnly: true });
             return res.json(updatedUserData);
@@ -59,6 +58,26 @@ class UserController {
         try {
             const users = await UserService.getAllUsers();
             return res.json(users);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    static async deleteUser(req, res, next) {
+        try {
+            const { id } = req.params;
+            await UserService.deleteUser(id);
+            return res.status(200).json({ message: 'User deleted successfully' });
+        } catch (e) {
+            next(e);
+        }
+    }
+    static async updateUserRole(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { role } = req.body;
+            await UserService.updateUserRole(id, role);
+            return res.status(200).json({ message: 'User role updated successfully' });
         } catch (e) {
             next(e);
         }

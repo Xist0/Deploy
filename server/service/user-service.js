@@ -30,20 +30,19 @@ export default class UserService {
             const userData = await sql`
                 SELECT * FROM users WHERE login = ${login}`;
             if (!userData || userData.length === 0) {
-                throw  ApiError.BadRequest(`Пользователь с таким именем ${login} не найден`);
+                throw ApiError.BadRequest(`Пользователь с именем ${login} не найден`);
             }
             const user = userData[0];
             const isPassEquals = await bcrypt.compare(password, user.password);
             if (!isPassEquals) {
-                throw  ApiError.BadRequest(`Неверный пароль`);
+                throw ApiError.BadRequest(`Неверный пароль`);
             }
             const userDTO = new UserDTO(user);
             const tokens = TokenService.generateTokens({ ...userDTO });
             await TokenService.saveToken(userDTO.id, tokens.refreshToken);
-            // Возвращаем объект userData, содержащий роль пользователя
             return { ...tokens, user: userDTO, role: user.role };
         } catch (error) {
-            throw  Error('Error logging in');
+            throw error;
         }
     }
     static async findUserById(id) {
@@ -53,7 +52,7 @@ export default class UserService {
             `;
             return user[0];
         } catch (error) {
-            throw  Error('Ошибка при поиске пользователя по id');
+            throw Error('Ошибка при поиске пользователя по id');
         }
     }
     static async logout(refreshToken) {
@@ -83,7 +82,13 @@ export default class UserService {
             const users = await sql`SELECT * FROM users`;
             return users;
         } catch (error) {
-            throw  Error('Ошибка при получении пользователей');
+            throw Error('Ошибка при получении пользователей');
         }
+    }
+    static async deleteUser(userId) {
+        return await sql`DELETE FROM users WHERE id = ${userId}`;
+    }
+    static async updateUserRole(userId, newRole) {
+        return await sql`UPDATE users SET role = ${newRole} WHERE id = ${userId}`;
     }
 }

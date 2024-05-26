@@ -12,6 +12,9 @@ router.post('/registration',
     UserController.registration
 );
 router.post('/login', UserController.login);
+router.get('/users', UserController.getUsers);
+router.delete('/users/:id', UserController.deleteUser);
+router.put('/users/:id', UserController.updateUserRole);
 router.post('/logout', UserController.logout);
 router.get('/refresh', UserController.refresh);
 router.get('/users', authMiddlewares, UserController.getUsers);
