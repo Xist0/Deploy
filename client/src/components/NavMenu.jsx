@@ -110,10 +110,10 @@ function NavMenu() {
           <li><NavLink to="/adminka" onClick={closeMenu}> Админка </NavLink></li>
         ) : null}
         <li><NavLink to="/PhoneBook" onClick={closeMenu}>Телефонный справочник</NavLink> </li>
-        {userRole === 'Туркенстанская' || userRole === 'Выдача' || userRole === 'Отправка' || userRole === 'Выдача' || userRole === 'Администратор' ? (
+        {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Выдача' || userRole === 'Администратор' ? (
           <li><NavLink to="/Acceptance" onClick={closeMenu}>Выдача</NavLink></li>
         ) : null}
-        {userRole === 'Туркенстанская' || userRole === 'Выдача' || userRole === 'Отправка' || userRole === 'Администратор' ? (
+        {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? (
           <li><NavLink to="/Shipment" onClick={closeMenu}>Отправка</NavLink></li>
         ) : null}
         <li><NavLink to="/" className='ManageAccounts' onClick={closeMenu}><MdManageAccounts />{store.user.login}</NavLink></li>
