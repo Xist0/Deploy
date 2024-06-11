@@ -9,6 +9,7 @@ function Shipment() {
     const [qrData, setQRData] = useState(null);
     const [orderStatus, setOrderStatus] = useState('');
     const [fadeOut, setFadeOut] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const userRole = store.user.role;
     const userName = store.user.login;
     const [isButtonDisabled, setButtonDisabled] = useState(true);
@@ -21,6 +22,9 @@ function Shipment() {
 
     const acceptanceFetch = async (posishion, qrData, userRole, userName) => {
         console.log(`Fetching with posishion: ${posishion}, qrData: ${qrData}, userRole: ${userRole}, userName: ${userName}`);
+
+        setIsLoading(true); // Начало загрузки
+
         try {
             const response = await fetch(`/api/shipment/${qrData}/${userRole}/${userName}/${posishion}`, {
                 method: 'GET',
@@ -28,6 +32,7 @@ function Shipment() {
                     'Content-Type': 'application/json',
                 },
             });
+
             const responseData = await response.json();
             console.log(responseData);
 
@@ -50,6 +55,8 @@ function Shipment() {
             Form();
         } catch (error) {
             console.error('Ошибка при отправке запроса:', error.message);
+        } finally {
+            setIsLoading(false); // Конец загрузки
         }
     };
 
@@ -86,8 +93,9 @@ function Shipment() {
                 {posishion === '' && (
                     <h1>Необходимо выбрать точку</h1>
                 )}
+                {isLoading && <p>Загрузка...</p>}
                 <div className="QRbutton" style={{ pointerEvents: isButtonDisabled ? 'none' : 'auto', cursor: isButtonDisabled ? 'not-allowed' : 'pointer' }}>
-                    <QRcodeScaner updateSearchWithQRCode={handleQRCodeScan} isButtonDisabled={isButtonDisabled} />
+                    <QRcodeScaner updateSearchWithQRCode={handleQRCodeScan} isButtonDisabled={isButtonDisabled || isLoading} />
                 </div>
                 {orderStatus && (
                     <div className={`order-status ${fadeOut ? 'fade-out' : ''}`}>

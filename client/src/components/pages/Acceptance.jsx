@@ -7,6 +7,7 @@ function Acceptance() {
     const { store } = useContext(Context);
     const [orderStatus, setOrderStatus] = useState('');
     const [fadeOut, setFadeOut] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const userRole = store.user.role || null;
     const UserName = store.user.login || null;
@@ -19,6 +20,8 @@ function Acceptance() {
         destination = destination || null;
 
         console.log(`Sending request with params: orderNumber=${orderNumber}, userRole=${userRole}, UserName=${UserName}, destination=${destination}`);
+
+        setIsLoading(true); // Начало загрузки
 
         try {
             const response = await fetch(`/api/shipment/${orderNumber}/${userRole}/${UserName}/${destination}`, {
@@ -57,6 +60,8 @@ function Acceptance() {
             }
         } catch (error) {
             console.error('Ошибка при отправке запроса:', error);
+        } finally {
+            setIsLoading(false); // Конец загрузки
         }
     };
 
@@ -73,7 +78,8 @@ function Acceptance() {
         <div className="container-box">
             <div className="container-block">
                 <h1>Выдать заказ</h1>
-                <QRcodeScaner updateSearchWithQRCode={handleQRCodeData} />
+                {isLoading && <div className="loading-animation"> <img src="/public/LogoAnims.svg" alt="" /></div>}
+                <QRcodeScaner updateSearchWithQRCode={handleQRCodeData} isButtonDisabled={isLoading} />
                 {orderStatus && (
                     <div className={`order-status ${fadeOut ? 'fade-out' : ''}`}>
                         <h1>{orderStatus}</h1>
