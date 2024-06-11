@@ -20,6 +20,7 @@ function Shipment() {
     };
 
     const acceptanceFetch = async (posishion, qrData, userRole, userName) => {
+        console.log(`Fetching with posishion: ${posishion}, qrData: ${qrData}, userRole: ${userRole}, userName: ${userName}`);
         try {
             const response = await fetch(`/api/shipment/${qrData}/${userRole}/${userName}/${posishion}`, {
                 method: 'GET',
@@ -42,7 +43,7 @@ function Shipment() {
                     setFadeOut(true);
                     setTimeout(() => {
                         setOrderStatus('');
-                    }, 1000); // Длительность анимации исчезновения (1 секунда)
+                    }, 1000);
                 }, 30000);
             }
 
@@ -53,6 +54,7 @@ function Shipment() {
     };
 
     const handleQRCodeScan = (data) => {
+        console.log(`QR code scanned: ${data}`);
         setQRData(data);
         if (posishion !== '' && data !== null) {
             acceptanceFetch(posishion, data, userRole, userName);
