@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
+// Разрешения CORS работать с конкретным адресом 
 app.use(cors({
   origin: 'https://order.service-centr.com',
   methods: 'GET,POST,OPTIONS',
@@ -30,26 +31,29 @@ app.use(cors({
 app.use('/api', router);
 app.use(errorMiddleware);
 
+// Разрешения CORS 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https//order.service-centr.com');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   next();
 });
-
+// Функция создания таблиц 
 async function createTables() {
   await RoleModel.createRoleTable();
   await UserModel.createUserTable();
   await TokenSchema.createTokenTable();
 }
-// API доступа к 1C
-app.get('/api/:resource', async (req, res) => {
-  const { resource } = req.params;
+// API запросы к 1C
+app.get('/api/order/:limit/:offset', async (req, res) => {
+  const { limit, offset } = req.params;
+  console.log(limit);
+  console.log(offset);
 
   try {
     const { default: fetch } = await import('node-fetch');
 
-    const response = await fetch(`http://192.168.1.10/api/${resource}`);
+    const response = await fetch(`http://192.168.1.10/api/order/${limit}/${offset}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -63,15 +67,50 @@ app.get('/api/:resource', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-app.get('/api/order/:limit/:offset', async (req, res) => {
-  const { limit, offset } = req.params;
-  console.log(limit);
-  console.log(offset);
+app.get('/api/device/types', async (req, res) => {
 
   try {
     const { default: fetch } = await import('node-fetch');
 
-    const response = await fetch(`http://192.168.1.10/api/order/${limit}/${offset}`);
+    const response = await fetch(`http://192.168.1.10/api/device/types`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.get('/api/device/brands', async (req, res) => {
+
+  try {
+    const { default: fetch } = await import('node-fetch');
+
+    const response = await fetch(`http://192.168.1.10/api/device/brands`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.get('/api/staff', async (req, res) => {
+
+  try {
+    const { default: fetch } = await import('node-fetch');
+
+    const response = await fetch(`http://192.168.1.10/api/staff`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -249,13 +288,18 @@ app.get('/api/order/record/:day/:name', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-app.get('/api/acceptance/:data/:userRole/:UserName', async (req, res) => {
-  const { data, userRole, UserName } = req.params;
+app.get('/api/shipment/:data/:userRole/:UserName/:destination', async (req, res) => {
+  let { data, userRole, UserName, destination } = req.params;
+
+  data = data === 'null' ? null : data;
+  userRole = userRole === 'null' ? null : userRole;
+  UserName = UserName === 'null' ? null : UserName;
+  destination = destination === 'null' ? null : destination;
 
   try {
     const { default: fetch } = await import('node-fetch');
 
-    const response = await fetch(`http://192.168.1.10/api/acceptance/${data}/${userRole}/${UserName}`);
+    const response = await fetch(`http://192.168.1.10/api/shipment/${data}/${userRole}/${UserName}/${destination}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -269,20 +313,38 @@ app.get('/api/acceptance/:data/:userRole/:UserName', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-app.get('/api/shipment/:qrData/:userRole/:userName/:posishion', async (req, res) => {
-  const { qrData, userRole, userName, posishion } = req.params;
+app.get('/api/orders/', async (req, res) => {
+  let { fio, brand, deviceType, master, orderStatus, serialNumber, imei } = req.query;
+
+  // Если значения пусты, заменяем их на null
+  fio = fio || null;
+  brand = brand || null;
+  deviceType = deviceType || null;
+  master = master || null;
+  orderStatus = orderStatus || null;
+  serialNumber = serialNumber || null;
+  imei = imei || null;
 
   try {
-    const { default: fetch } = await import('node-fetch');
+    const params = new URLSearchParams({
+      fio,
+      brand,
+      deviceType,
+      master,
+      orderStatus,
+      serialNumber,
+      imei
+    });
 
-    const response = await fetch(`http://192.168.1.10/api/shipment/${qrData}/${userRole}/${userName}/${posishion}`);
+    const apiUrl = `http://192.168.1.10/api/orders/?${params}`;
+    const response = await fetch(apiUrl);
 
     if (!response.ok) {
-      const errorMessage = await response.json();
-      return res.status(response.status).send(errorMessage);
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const responseData = await response.json();
+
     res.json(responseData);
   } catch (error) {
     console.error(error);
@@ -296,6 +358,26 @@ app.get('/api/users/search/:l_name', async (req, res) => {
     const { default: fetch } = await import('node-fetch');
 
     const response = await fetch(`http://192.168.1.10/api/users/search/${encodeURIComponent(l_name)}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.get('/api/device/model/:deviceModel', async (req, res) => {
+  const { deviceModel } = req.params;
+
+  try {
+    const { default: fetch } = await import('node-fetch');
+
+    const response = await fetch(`http://192.168.1.10/api/device/model/${encodeURIComponent(deviceModel)}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -370,6 +452,42 @@ app.get(`/api/WarrantyOrdermaxvi/:numberMaxvi`, async (req, res) => {
     res.status(500).send(error.message || 'Internal Server Error');
   }
 });
+app.post('/api/neworder', async (req, res) => {
+  try {
+    const cleanData = req.body;
+
+    const response = await fetch('http://192.168.1.10/api/neworder', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(cleanData)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch (parseError) {
+        console.error('Ошибка создания заказа:', parseError);
+        throw new Error(`External server error! Status: ${response.status}, Message: ${errorText}`);
+      }
+
+      const errorMessage = `Непредвиденная ошибка, статус: ${response.status}, Сообщение: ${errorData.message || errorText}`;
+      console.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const responseData = await response.json();
+    res.json(responseData);
+
+  } catch (error) {
+    console.error('Ошибка:', error);
+    res.status(500).send(error.message || 'Ошибка сервера');
+  }
+});
+
 
 // Maxvi
 let savedLink = '';
@@ -609,6 +727,8 @@ app.post('/api/parser/warrantyorder', upload.single('file'), async (req, res) =>
 });
 
 
+
+// Запуск сервера
 const startServer = () => {
   app.listen(port, () => {
     console.log(`Сервер запущен на порту ${port}`);

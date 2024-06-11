@@ -42,8 +42,9 @@ function ChangeOrder() {
     try {
       const response = await fetch(`/api/byt/order/${searchNumber}`);
       const data = await response.json();
+      console.log('Полученные данные:', data);
       setRecords(data);
-      setInitialData(data); // Сохраняем изначальные данные
+      setInitialData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -51,17 +52,17 @@ function ChangeOrder() {
     }
   };
 
-  // Функция для возвращения к изначальным данным
+
   const resetData = () => {
     setFormData({
       nameParts: '',
       selectedParts: [],
-      selectedWork: [], // Добавляем сброс выбранных работ
+      selectedWork: [],
     });
     setEditedPrices([]);
     setDeletedParts([]);
     setChangedData([]);
-    setDeletedWork([]); // Добавляем сброс удаленных работ
+    setDeletedWork([]);
   };
 
   const handleChange = (e) => {
@@ -76,7 +77,7 @@ function ChangeOrder() {
 
   const searchParts = async (nameParts) => {
     try {
-      const response = await fetch(`/api/parts1c/${encodeURIComponent(nameParts)}`); // Изменяем поиск на соответствующий раздел
+      const response = await fetch(`/api/parts1c/${encodeURIComponent(nameParts)}`);
       const data = await response.json();
       setMatchedParts(data);
     } catch (error) {
@@ -87,7 +88,7 @@ function ChangeOrder() {
 
   const searchWork = async (nameWork) => {
     try {
-      const response = await fetch(`/api/works1c/${encodeURIComponent(nameWork)}`); // Изменяем поиск на соответствующий раздел
+      const response = await fetch(`/api/works1c/${encodeURIComponent(nameWork)}`);
       const data = await response.json();
       setMatchedWork(data);
     } catch (error) {
@@ -151,7 +152,7 @@ function ChangeOrder() {
       initialData.work[workIndex].work_price = event.target.value;
       updatedData[workIndex] = { ...initialData.work[workIndex], work_price: event.target.value };
     }
-    setChangedData(updatedData); // Обновляем массив измененных данных
+    setChangedData(updatedData);
   };
 
   const handleAddButtonClick = () => {
@@ -162,7 +163,7 @@ function ChangeOrder() {
         selectedParts: [...formData.selectedParts, newSelectedPart],
       });
       setSelectedPart(null);
-      setChangedData([...changedData, newSelectedPart]); // Добавляем новый элемент в массив измененных данных
+      setChangedData([...changedData, newSelectedPart]);
       setInitialData(prevData => {
         const updatedParts = [...prevData.parts, newSelectedPart];
         return { ...prevData, parts: updatedParts };
@@ -178,7 +179,7 @@ function ChangeOrder() {
         selectedWork: [...formData.selectedWork, newSelectedPart],
       });
       setSelectedPart(null);
-      setChangedData([...changedData, newSelectedPart]); // Добавляем новый элемент в массив измененных данных
+      setChangedData([...changedData, newSelectedPart]);
       setInitialData(prevData => {
         const updatedWork = [...prevData.work, newSelectedPart];
         return { ...prevData, work: updatedWork };
@@ -198,14 +199,14 @@ function ChangeOrder() {
       initialData.parts[partIndex].parts_price = event.target.value;
       updatedData[partIndex] = { ...initialData.parts[partIndex], parts_price: event.target.value };
     }
-    setChangedData(updatedData); // Обновляем массив измененных данных
+    setChangedData(updatedData);
   };
 
   const handleSaveChanges = () => {
     const changedDataToSend = {
       id_order: initialData.id_order,
-      parts: formData.selectedParts, // Изменяем на отправку выбранных запчастей
-      work: formData.selectedWork, // Изменяем на отправку выбранных работ
+      parts: formData.selectedParts,
+      work: formData.selectedWork,
     };
 
     console.log('Измененные данные для отправки:', changedDataToSend);
@@ -219,7 +220,7 @@ function ChangeOrder() {
         </div>
       );
     }
-    if (!records || !records.parts || !records.work) {
+    if (!records || !records.parts || !records.works) {
       return <p>Ничего не найдено</p>;
     }
     return (
@@ -227,42 +228,39 @@ function ChangeOrder() {
         <div className="container-block-main">
           <div className='forma-input input-column'>
             <div className="container-search-result-title">
-              <h1>Заказ: {records.id_order}</h1>
+              <h1>Заказ: {records.order_id}</h1>
             </div>
             <div className="container-block-orders">
-              <label >
-                <h4>Пользователь:</h4> <p>{records.user.name_user}</p>
+              <label>
+                <h4>Пользователь:</h4> <p>{records.retail_user.user_name}</p>
               </label>
-              <label >
-                <h4>Номер телефона:</h4> <p>{records.user.phone_user}</p>
+              <label>
+                <h4>Номер телефона:</h4> <p>{records.retail_user.user_phone}</p>
               </label>
-              <label >
-                <h4>Адресс:</h4> <p>{records.user.address_user}</p>
+              <label>
+                <h4>Адрес:</h4> <p>{records.retail_user.user_address}</p>
               </label>
-              <label >
-                <h4>Тип устройства:</h4> <p>{records.device.type}</p>
+              <label>
+                <h4>Тип устройства:</h4> <p>{records.device.device_type}</p>
               </label>
-              <label >
-                <h4>Бренд:</h4> <p>{records.device.brand}</p>
+              <label>
+                <h4>Бренд:</h4> <p>{records.device.device_brand}</p>
               </label>
-              <label >
-                <h4>Номер модели:</h4> <p>{records.device.model}</p>
+              <label>
+                <h4>Номер модели:</h4> <p>{records.device.device_model}</p>
               </label>
-              <label >
-                <h4>Стутус:</h4> <p>{records.status.status_order}</p>
+              <label>
+                <h4>Статус:</h4> <p>{records.order_status}</p>
               </label>
-              <label >
-                <h4>Серийный номер модели:</h4> <p>{records.device.sn}</p>
+              <label>
+                <h4>Серийный номер модели:</h4> <p>{records.device.device_sn}</p>
               </label>
-              <label >
-                <h4>Дефект:</h4> <p>{records.device.defect}</p>
+              <label>
+                <h4>Дефект:</h4> <p>{records.device.device_stated_defect}</p>
               </label>
             </div>
-            <select name="option">
-              <option value="" disabled selected hidden>Выберите статус</option>
-            </select>
           </div>
-          <div className="forma-input input-column">
+          {/* <div className="forma-input input-column">
             <div className="container-block-orders">
               <div className="container-search-result-parts-title">
                 <h1>Работа</h1>
@@ -270,11 +268,11 @@ function ChangeOrder() {
               {formData.selectedWork.concat(records.work).map((workItem, key) => (
                 deletedWork.includes(key) ? null : (
                   <div key={key} className='container-search-result-parts-main'>
-                    <p>{workItem.work_name || workItem.name_parts}</p>
+                    <p>{workItem.works.work_name || workItem.works.work_price}</p>
                     <div className="container-search-result-parts-prise">
                       <input
                         type="text"
-                        value={editedWorkPrices[key] || workItem.work_price}
+                        value={editedWorkPrices[key] || workItem.works.work_price}
                         onChange={(event) => handleWorkPriceChange(key, event)}
                       />
                       <IoMdCloseCircleOutline onClick={() => handleRemoveWorkButtonClick(key)} />
@@ -302,14 +300,14 @@ function ChangeOrder() {
                       className={`matched-user ${selectedPart === work ? 'matched-user-acktive' : ''}`}
                       onClick={() => handlePartClick(work)}
                     >
-                      {work.name_parts}
+                      {work.works.work_name}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-          </div>
-          <div className="forma-input input-column">
+          </div> */}
+          {/* <div className="forma-input input-column">
             <div className="container-block-orders">
               <div className="container-search-result-parts-title">
                 <h1>Запчасти</h1>
@@ -349,16 +347,13 @@ function ChangeOrder() {
                       className={`matched-user ${selectedPart === part ? 'matched-user-acktive' : ''}`}
                       onClick={() => handlePartClick(part)}
                     >
-                      {part.name_parts}
+                      {part.part_name}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-          </div>
-        </div>
-        <div className="container-block-search">
-          <button onClick={handleSaveChanges}>Сохранить</button>
+          </div> */}
         </div>
       </div>
     );

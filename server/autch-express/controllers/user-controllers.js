@@ -2,6 +2,7 @@ import { validationResult } from 'express-validator'
 import ApiError from '../../errors/api-error.js';
 import UserService from '../../service/user-service.js';
 import TokenService from '../../service/token-service.js'
+import UserModel from '../../models/user-model.js';
 
 class UserController {
     static async registration(req, res, next) {
@@ -11,7 +12,7 @@ class UserController {
                 return next(ApiError.BadRequest('Ошибка авторизации', errors.array()));
             }
             const { login, password, role } = req.body;
-            const userData = await UserService.registration(login, password, role); 
+            const userData = await UserService.registration(login, password, role);
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -23,7 +24,7 @@ class UserController {
             const { login, password, role } = req.body;
             const userData = await UserService.login(login, password, role);
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpsOnly: true });
-            return res.json({ ...userData, role: userData.role }); 
+            return res.json({ ...userData, role: userData.role });
         } catch (error) {
             next(error);
         }
@@ -46,7 +47,7 @@ class UserController {
     static async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
-            const userData = req.user ? { role: req.user.role } : {}; 
+            const userData = req.user ? { role: req.user.role } : {};
             const updatedUserData = await UserService.refresh(refreshToken, userData);
             res.cookie('refreshToken', updatedUserData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpsOnly: true });
             return res.json(updatedUserData);
@@ -70,6 +71,15 @@ class UserController {
             return res.status(200).json({ message: 'User deleted successfully' });
         } catch (e) {
             next(e);
+        }
+    }
+    static async updateUser1CUserId(userId, user1CUserId) {
+        try {
+            await UserModel.updateUser1CUserId(userId, user1CUserId);
+            return { success: true };
+        } catch (error) {
+            console.error(error); // Добавьте вывод ошибки для отладки
+            throw new Error('Ошибка при обновлении 1C_User_ID');
         }
     }
     static async updateUserRole(req, res, next) {

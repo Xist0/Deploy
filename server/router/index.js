@@ -11,6 +11,17 @@ router.post('/registration',
     body('password').isLength({ min: 3, max: 32 }),
     UserController.registration
 );
+router.put('/users/:id/1c-user-id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { user1CUserId } = req.body;
+        const result = await UserController.updateUser1CUserId(id, user1CUserId);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
 router.post('/login', UserController.login);
 router.get('/users', UserController.getUsers);
 router.delete('/users/:id', UserController.deleteUser);

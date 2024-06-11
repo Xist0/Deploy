@@ -1,12 +1,15 @@
 import React from 'react';
 import './orders.css';
+import QRCode from 'qrcode.react';
 
-const Summary = ({ formData, onEditClick }) => {
+const Summary = ({ formData, onEditClick, handleSubmit, qrCodeLink, orderId }) => {
   return (
     <div className="container-box">
       <div className='forma-input-end'>
         <h2> Просмотр данных</h2>
         <div className="forma-input-main">
+          <QRCode value={qrCodeLink} />
+          <p>Номер заказа: {orderId}</p>
           <div className="forma-input-main-content">
             <h3>Вариант:</h3> <p>{formData.option}</p>
           </div>
@@ -38,18 +41,15 @@ const Summary = ({ formData, onEditClick }) => {
             <h3>Комплектация</h3> <p>{formData.equipmentComments}</p>
           </div>
           <div className="forma-input-main-content">
-            <h3>Пожелания:</h3> <p>{formData.wishes}</p>
+            <h3>Дефект:</h3> <p>{formData.defect}</p>
           </div>
           <div className="forma-input-main-content">
             <h3>Мастер:</h3> <p>{formData.master}</p>
           </div>
-          <div className="forma-input-main-content">
-            <h3>Статус:</h3> <p>{formData.status}</p>
-          </div>
         </div>
         <div className="divButton">
           <button onClick={onEditClick}>Редактировать</button>
-          <button >Сохранить</button>
+          <button onClick={handleSubmit}>Сохранить</button>
         </div>
       </div>
     </div>

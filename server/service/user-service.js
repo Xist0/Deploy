@@ -91,4 +91,13 @@ export default class UserService {
     static async updateUserRole(userId, newRole) {
         return await sql`UPDATE users SET role = ${newRole} WHERE id = ${userId}`;
     }
+    static async updateUser1CUserId(userId, user1CUserId) {
+        try {
+            await sql`UPDATE users SET 1c_user_id = ${user1CUserId} WHERE id = ${userId}`;
+            return { success: true };
+        } catch (error) {
+            console.error(error);
+            throw new Error('Ошибка при обновлении 1C_User_ID');
+        }
+    }
 }

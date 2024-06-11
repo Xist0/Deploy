@@ -108,8 +108,16 @@ input::-ms-clear {
 }
 
 
+select:focus-visible {
+	outline: none;
+}
+textarea:focus-visible {
+	outline: none;
+}
+
 input:focus,
 input:active,
+input:focus-visible,
 button:focus,
 button:active {
 	outline: none;

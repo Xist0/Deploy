@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../Header';
 import Messenger from './messenger/Messenger';
 import axios from 'axios';
+import { TbExclamationMark } from "react-icons/tb";
+
 
 function WarrantyRepair() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [types, setTypes] = useState([]);
   const [receivedData, setReceivedData] = useState(null);
   const [expandedRow, setExpandedRow] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [editedData, setEditedData] = useState(null);
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState({
@@ -17,13 +20,16 @@ function WarrantyRepair() {
     deviceAppearance: '',
     deviceEquipment: '',
     deviceSaleDate: '',
-  
+    orderType: '',
     DeviceModel: '',
-
   });
   const [imei, setImei] = useState('');
   const minInputLength = 3;
   const minInputLengthsn = 10;
+  useEffect(() => {
+    fetchTypes();
+
+  }, []);
 
   useEffect(() => {
     if (editedData) {
@@ -33,7 +39,7 @@ function WarrantyRepair() {
       const isValidDeviceEquipment = device.device_equipment && device.device_equipment.trim().length >= minInputLength;
       const isValidDeviceModel = device.device_model && device.device_model.trim().length >= minInputLength;
       setIsValid(
-        isValidDeviceEquipment && isValiddeviceSn && isValidDeviceAppearance 
+        isValidDeviceEquipment && isValiddeviceSn && isValidDeviceAppearance
       );
       setErrors({
         deviceAppearance: isValidDeviceAppearance ? '' : `Поле должно содержать не менее ${minInputLength} символов`,
@@ -100,13 +106,15 @@ function WarrantyRepair() {
     }
   };
 
-  const toggleExpandedRow = (index) => {
+  const toggleExpandedRow = (index, orderId) => {
     if (isEditing) return;
 
     if (expandedRow === index) {
       setExpandedRow(null);
+      setSelectedOrderId(null);
     } else {
       setExpandedRow(index);
+      setSelectedOrderId(orderId); // Сохраняем order_id при раскрытии строки
     }
   };
 
@@ -130,7 +138,6 @@ function WarrantyRepair() {
           ...device,
           device_imei: imei,
           device_full_model: `${device.device_type} ${device.device_brand} ${device.device_model}`,
-
         },
         end_user: {
           ...end_user
@@ -162,7 +169,15 @@ function WarrantyRepair() {
     setEditMode(false);
     setIsEditing(false);
   };
-
+  const fetchTypes = async () => {
+    try {
+      const response = await fetch('/api/typeofrepaire');
+      const data = await response.json();
+      setTypes(data.types);
+    } catch (error) {
+      console.error('Error fetching types:', error);
+    }
+  };
   const handleImeiChange = (e) => {
     setImei(e.target.value);
   };
@@ -182,46 +197,38 @@ function WarrantyRepair() {
       setErrors({ ...errors, deviceAppearance: e.target.value.trim().length >= minInputLength ? '' : `Поле должно содержать не менее ${minInputLength} символов` });
     };
     const handleDeviceSn = (e) => {
-      const sn = e.target.value.trim();
-      const warrantyStatus = sn ? checkWarranty(sn) : ''; // Проверяем, пустое ли поле серийного номера
-      const hasLetters = /[a-zA-Z]/.test(sn); // Проверяем, содержит ли серийный номер буквы
-
-      setErrors({
-        ...errors,
-        deviceSn: sn.length >= minInputLength && hasLetters ? '' : `Поле должно содержать не менее ${minInputLength} символов или содержать буквы`,
-      });
-
-      setEditedData({
-        ...editedData,
-        device: {
-          ...editedData.device,
-          device_sn: sn,
-        },
-        warrantyStatus: hasLetters ? warrantyStatus : sn ? 'Некорректный серийный номер' : '', // Устанавливаем пустую строку, если поле серийного номера пустое
-      });
+      setEditedData({ ...editedData, device: { ...editedData.device, device_sn: e.target.value } });
+      setErrors({ ...errors, deviceSn: e.target.value.trim().length >= minInputLengthsn ? '' : `Поле должно содержать не менее ${minInputLengthsn} символов` });
     };
-
-
     const handleDeviceEquipmentChange = (e) => {
       setEditedData({ ...editedData, device: { ...editedData.device, device_equipment: e.target.value } });
       setErrors({ ...errors, deviceEquipment: e.target.value.trim().length >= minInputLength ? '' : `Поле должно содержать не менее ${minInputLength} символов` });
     };
+
     const handlaDeviceModelChange = (e) => {
       setEditedData({ ...editedData, device: { ...editedData.device, device_model: e.target.value } });
       setErrors({ ...errors, deviceModel: e.target.value.trim().length >= minInputLength ? '' : `Поле должно содержать не менее ${minInputLength} символов` });
     };
+
     const handleEndUserAddressChange = (e) => {
       setEditedData({ ...editedData, end_user: { ...editedData.end_user, user_address: e.target.value } });
       setErrors({ ...errors, endUserAddress: '' });
     };
+
     const handleEndUserDateChange = (e) => {
       setEditedData({ ...editedData, device: { ...editedData.device, device_sale_date: e.target.value } });
       setErrors({ ...errors, endUserDate: '' });
     };
+
     const handleEndUserPhoneChange = (e) => {
       setEditedData({ ...editedData, end_user: { ...editedData.end_user, user_phone: e.target.value } });
-
     };
+
+    const handleOrderType = (e) => {
+      setEditedData({ ...editedData, order_type: e.target.value });
+    };
+
+
 
     return (
       <div className="expanded-content-active">
@@ -283,6 +290,22 @@ function WarrantyRepair() {
           </div>
         </div>
         <div className='expanded-content-main'>
+          <h1>Тип ремонта</h1>
+          <div className="expanded-content-main-inpit">
+            <select
+              value={editedData.order_type}
+              onChange={handleOrderType}
+            >
+              <option value="" disabled hidden>Выберите тип ремонта</option>
+              {types.map((type, index) => (
+                <option key={index} value={type}>{type}</option>
+              ))}
+            </select>
+            <TbExclamationMark />
+
+          </div>
+        </div>
+        <div className='expanded-content-main'>
           <h1>Дата продажи</h1>
           <div className="expanded-content-main-inpit">
             <input
@@ -330,7 +353,7 @@ function WarrantyRepair() {
               type="text"
               value={editedData.end_user.user_phone}
               onChange={handleEndUserPhoneChange}
-           
+
             />
           </div>
         </div>
@@ -353,6 +376,10 @@ function WarrantyRepair() {
         <div className='expanded-content-main'>
           <h1>Комплектация</h1>
           <h4><>{data.device.device_equipment}</> </h4>
+        </div>
+        <div className='expanded-content-main'>
+          <h1>Тип ремонта</h1>
+          <h4><>{data.order_type}</> </h4>
         </div>
         <div className='expanded-content-main'>
           <h1>Дата продажи</h1>
@@ -416,7 +443,7 @@ function WarrantyRepair() {
                   {receivedData.map((data, index) => (
                     <React.Fragment key={index}>
                       <tr onClick={() => toggleExpandedRow(index)}>
-                        <td>{data.order_id}</td>
+                        <td>{selectedOrderId}</td>
                         <td>{data.retail_user.user_name}</td>
                         <td><label>{data.order_type}</label></td>
                         <td><label>{data.device.device_type}</label></td>

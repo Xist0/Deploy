@@ -1,17 +1,17 @@
 import { makeAutoObservable } from "mobx";
-import AuthService from "../service/AuthService";
+import AuthService from "..//service/AuthService";
 import axios from 'axios';
-import { API_URL } from "../http/index.js";
+import { API_URL } from "../http";
 
 export default class Store {
     user = {};
     isAuth = false;
     isLoading = false;
 
+
     constructor() {
         makeAutoObservable(this);
     }
-
     setAuth(bool) {
         this.isAuth = bool;
     }
@@ -24,12 +24,13 @@ export default class Store {
         this.isLoading = bool;
     }
 
+    // метод для входа
     async login(login, password, role) {
         try {
             const response = await AuthService.login(login, password, role);
             console.log(response);
             localStorage.setItem('token', response.data.accessToken);
-            document.cookie = `refreshToken=${response.data.refreshToken}; Max-Age=${30 * 24 * 60 * 60}; Path=/; Secure; SameSite=None`;
+            document.cookie = `refreshToken=${response.data.refreshToken}; Max-Age=${30 * 24 * 60 * 60}; Path=/PersonalAccount; Secure; SameSite=None`;
             this.setAuth(true);
             this.setUser(response.data.user, response.data.role);
             localStorage.setItem('role', response.data.role); 
@@ -39,7 +40,7 @@ export default class Store {
             return { success: false, error: e.response?.data?.message || 'Ошибка при авторизации' }; 
         }
     }
-
+    // метод для регистрации
     async registration(login, password, role) {
         try {
             const response = await AuthService.registration(login, password, role);
@@ -49,6 +50,7 @@ export default class Store {
         }
     }
 
+    // метод для выхода
     async logout() {
         try {
             const response = await AuthService.logout();

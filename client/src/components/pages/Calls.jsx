@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { IoChevronDownOutline } from "react-icons/io5";
 import './orders.css';
+import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate once
 import Messenger from './messenger/Messenger';
-import { Link } from 'react-router-dom';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import { ru } from 'date-fns/locale';
 import { format } from 'date-fns';
+import { GoTriangleDown } from "react-icons/go";
 
 const Modal = ({ cal, isModalOpen, toggleModal, downloadAudio }) => {
   const audioRef = useRef(null);
@@ -104,16 +105,16 @@ const Calls = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchFIO, setSearchFIO] = useState('');
   const [searchNumber, setSearchNumber] = useState('');
+  const [sortByDateTimeAsc, setSortByDateTimeAsc] = useState(true);
   const [searchOrder, setSearchOrder] = useState('');
   const [isSearchDisabled, setIsSearchDisabled] = useState(false);
-  const [sortByTimeAsc, setSortByTimeAsc] = useState(true);
   const [sortByDateAsc, setSortByDateAsc] = useState(true);
   const [filterType, setFilterType] = useState('all');
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const iconClass = isDateRangeVisible ? 'rotate' : '';
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [matchedOrder, setMatchedOrder] = useState([])
-  const [iconRotation, setIconRotation] = useState(0);
+  const navigate = useNavigate();
   const [requestCounter, setRequestCounter] = useState(0);
   const [state, setState] = useState([
     {
@@ -140,6 +141,10 @@ const Calls = () => {
     if (icon) {
       icon.classList.toggle('rotated');
     }
+  };
+  const handleFIOClick = (fio) => {
+    const searchUrl = `https://192.168.1.211/AllOrders?fio=${encodeURIComponent(fio)}`;
+    window.open(searchUrl, '_blank');
   };
   const parseOrderNumber = (text) => {
     const orderNumberRegex = /00НФ-(\d+)/;
@@ -263,6 +268,7 @@ const Calls = () => {
     setSearchNumber(order.retail_user.user_phone);
     setSearchFIO(order.retail_user.user_name);
     setMatchedOrder([]);
+    // fetchData()
   }
 
   const handleUserClick = (user) => {
@@ -290,19 +296,19 @@ const Calls = () => {
   };
   const downloadAudio = async (name) => {
     try {
-        const response = await fetch(`/api/audio/${name}`);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', name);
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
+      const response = await fetch(`/api/audio/${name}`);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', name);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
     } catch (error) {
-        console.error('Ошибка скачивания:', error);
+      console.error('Ошибка скачивания:', error);
     }
-};
+  };
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -318,16 +324,16 @@ const Calls = () => {
     }
   };
 
-  const handleSortByTime = () => {
+  const handleSortByDateTime = () => {
+    setSortByDateTimeAsc(!sortByDateTimeAsc);
     const sortedRecords = [...records];
     sortedRecords.sort((a, b) => {
-      const timeA = new Date(`1970/01/01 ${a.time}`);
-      const timeB = new Date(`1970/01/01 ${b.time}`);
-      return sortByTimeAsc ? timeA - timeB : timeB - timeA;
+      const dateTimeA = new Date(`${a.day}T${a.time}`);
+      const dateTimeB = new Date(`${b.day}T${b.time}`);
+      return sortByDateTimeAsc ? dateTimeA - dateTimeB : dateTimeB - dateTimeA;
     });
 
     setRecords(sortedRecords);
-    setSortByTimeAsc(!sortByTimeAsc);
   };
 
   const handleFilterChange = (type) => {
@@ -404,7 +410,11 @@ const Calls = () => {
           <td id='type_call' className='table-left'>{cal.call_type}</td>
           <td>{cal.in_number}</td>
           <td>{cal.out_nomber}</td>
-          <td className='th-style-width truncate'><p>{cal.name_user}</p></td>
+          <td className='th-style-width truncate'>
+            <Link className="link-button" onClick={() => handleFIOClick(cal.name_user)}>
+              {cal.name_user}
+            </Link>
+          </td>
           <td>
             {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
               <Link target={"_blank"} to="#" onClick={handleClick}>{cal.id_order}</Link>
@@ -412,8 +422,8 @@ const Calls = () => {
               cal.id_order && cal.id_order.length > 0 ? cal.id_order : 'Нет заказа'
             )}
           </td>
-          <td>{format(new Date(cal.day), 'dd-MM-yyyy')}</td>
-          <td >{cal.time}</td>
+          <td>{`${cal.day} ${cal.time}`}</td>
+
           <td>{logoCall}</td>
           <td id='type-butn'>{playButton}</td>
         </tr>
@@ -434,7 +444,7 @@ const Calls = () => {
               <form onSubmit={handleSubmit}>
                 <div className="row-cols">
                   <label onClick={handleToggleDateRange}>
-                    Введите дату поиска записей <IoChevronDownOutline className="chevron-icon" />
+                    Введите дату поиска записей <GoTriangleDown className={`icon ${isDateRangeVisible ? 'rotate' : ''}`} />
                   </label>
                   {isDateRangeVisible && (
                     <DateRange
@@ -482,7 +492,7 @@ const Calls = () => {
                   {matchedOrder.length > 0 && (
                     <div className="matched-users">
                       {matchedOrder.map((order, index) => (
-                        <div key={index} className="matched-user" onClick={() => handleOrderClick(order)}>
+                        <div key={index} className="matched-user" type="submit" disabled={isLoading || isSearchDisabled} onClick={() => handleOrderClick(order)} >
                           {order.retail_user.user_name} <br />
                           {order.retail_user.user_phone}
                         </div>
@@ -519,8 +529,14 @@ const Calls = () => {
                           <th scope="col">номер звонящий</th>
                           <th scope="col" className='th-style-width'>Ф.И.О</th>
                           <th scope="col">заказ наряд</th>
-                          <th scope="col" className='th-filter' onClick={handleSortByDate}>дата звонка</th>
-                          <th className='th-filter' scope="col" onClick={handleSortByTime}>время звонка</th>
+                          <th className='th-filter' onClick={handleSortByDateTime}>
+                            Дата и время
+                            <GoTriangleDown
+                              style={{
+                                transform: sortByDateTimeAsc ? 'rotate(180deg)' : 'rotate(0deg)',
+                              }}
+                            />
+                          </th>
                           <th className="icon"></th>
                           <th scope="col">воспроизвести</th>
                         </tr>

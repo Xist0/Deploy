@@ -41,6 +41,19 @@ li a:hover {
     display: none;
 }
 
+.phone-book-search {
+    display: flex;
+    width: 100%;
+    gap: 25%;
+    text-align: center;
+    align-items: center;
+}
+
+.phone-book-search h1 {
+    display: flex;
+    text-align: left;
+}
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -58,6 +71,101 @@ li a:hover {
     height: 40px;
 }
 
+.orders-box {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.orders-box h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.orders-container {
+    display: flex;
+    border: 1px solid;
+    min-width: 970px;
+    border-radius: 6px;
+    width: 1200px;
+    gap: 20px;
+    padding: 20px 40px;
+    background: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.orders-button-status {
+    width: 270px;
+}
+
+#bntn {
+    background-color: #09D186;
+    cursor: inherit;
+    width: 100%;
+    color: #ffffff;
+}
+
+.orders-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    width: 20%;
+    align-items: center;
+    text-align: center;
+}
+
+.orders-centr {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 50%;
+    align-items: center;
+
+    text-align: center;
+}
+
+.orders-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 35%;
+    text-align: center;
+}
+
+.orders-status button {
+    background-color: #FF9A0B;
+    cursor: inherit;
+
+    color: #ffffff;
+}
+
+.orders-status button:hover {
+    box-shadow: none;
+    color: #ffffff;
+}
+
+.order-status {
+    transition: opacity 1s ease-out;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.disabled-button {
+    background: #494949;
+    cursor: initial;
+}
+
+.disabled-button:hover {
+    background: #494949;
+    box-shadow: none;
+}
+
 .dropdown>.parts-dropdown-add>select,
 input {
     max-width: 400px;
@@ -68,11 +176,25 @@ input {
     color: #1776CD;
 }
 
+.device_vibor {
+    cursor: pointer;
+}
+
+.device_vibor:hover {
+    cursor: pointer;
+    border: 1px solid;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
 .dropdown>span {
     display: flex;
-    gap: 10px;
     color: black;
     font-size: 16px;
+    align-items: center;
+}
+
+.dropdown>span>.icon {
+    width: 20px;
 }
 
 .dropdown-content {
@@ -82,7 +204,7 @@ input {
     min-width: 300px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    top: 3vh;
+    top: 7vh;
 }
 
 .rotate {
@@ -112,12 +234,41 @@ input {
     background-color: #ddd;
 }
 
+.ManageAccounts {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 .container-block {
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: auto;
     gap: 15px;
+}
+
+.block-select {
+    width: 100%;
+    justify-content: end;
+    display: flex;
+}
+
+.block-select select {
+    width: 250px;
+    border: 1px solid #1776CD;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.block-select select>option {
+    border: 1px solid;
+    border-radius: 6px;
+}
+
+.container-block h1 {
+    text-align: center;
 }
 
 .container-block-main {
@@ -373,7 +524,13 @@ td>a:hover {
     align-items: center;
     text-align: center;
 }
-
+.expanded-content-main-inpit select{
+    border: 1px solid #1776CD;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 25%;
+}
 .expanded-content-main-inpit input {
     width: 25%;
 }
@@ -466,10 +623,10 @@ td>a:hover {
 
 }
 
-/* s */
-.truncate{
+.truncate {
     padding: 5px;
 }
+
 .truncate p {
     -webkit-line-clamp: 2;
     display: -webkit-box;
@@ -566,7 +723,6 @@ td>a:hover {
 
 .order-details-main-container-sell {
     display: flex;
-    /* align-items: center; */
     justify-content: space-between;
     gap: 40px;
 }
@@ -699,6 +855,71 @@ input {
     border: 3px solid #1776CD;
     border-radius: 4px;
 }
+.order-box{
+    display: flex;
+    flex-direction: column;
+    
+}
+.order-box h2{
+    text-align: center;
+}
+.order-nav{
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+}
+.order-cards{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.order-filter{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    margin: 20px 0;
+}
+.order-filter input{
+    width: 100%;
+}
+.order-card-main{
+    display: flex;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+}
+.order-card-main:hover{
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+
+}
+.order-card-main-active{
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+    background-color: #ffffff;
+    border: 1px solid #1776CD;
+}
+.order-card-details{
+    display: flex;
+    width: 100%;
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+    background-color: #ffffff;
+    border-radius: 0px 0px 10px 10px;
+    align-items: center;
+    border: 1px solid #1776CD;
+    transition: max-height 0.3s ease-in-out;
+    padding: 30px;
+    justify-content: space-between;
+}
+
+
+
 
 .dropdown>select {
     border: 1px solid #1776CD;
@@ -750,12 +971,10 @@ input {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Полупрозрачный черный цвет фона */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    /* Поднимаем поверх других элементов */
 }
 
 .modal-content {
@@ -763,10 +982,183 @@ input {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    /* Тень */
     z-index: 1001;
-    /* Поднимаем поверх фона модального окна */
 }
+
+
+.staff {
+    overflow: hidden;
+    margin: 40px 0;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.staff h2 {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.staffh2Active>.icon {
+    width: 45px;
+}
+
+.orders-box h1 {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.icon {
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+}
+
+
+
+.orders-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+}
+
+.orders-content.visible {
+    max-height: 1000px;
+    /* Убедитесь, что это значение достаточно велико для содержимого */
+    opacity: 1;
+}
+
+.orders-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+
+
+.orders-status {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.rotate {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table th {
+    border: none !important;
+    padding: 8px;
+    text-align: center !important;
+}
+
+.table td {
+    border: none !important;
+    padding: 8px;
+    text-align: center !important;
+}
+
+.staff table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.staff thead {
+    background-color: #f2f2f2;
+}
+
+.staff td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
+
+.staff th {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
+
+
+#userID {
+    width: 5%;
+    text-align: center;
+}
+
+
+#staffButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#action {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#User1CID {
+    display: flex;
+    gap: 20px;
+}
+
+#User1CID>input {
+    width: 100%;
+}
+
+#userRole {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+#UserName {
+    width: 25%;
+}
+
+#userRole>select {
+    width: 440px;
+}
+
+.staff th {
+    background-color: #1776CD;
+    color: white;
+    text-align: center;
+}
+
+.staff tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.staff tr:hover {
+    background-color: #ddd;
+}
+
+.staff td select {
+    border: 1px solid #1776CD;
+    border-radius: 6px;
+    padding: 5px 5px;
+
+}
+
+.staff td select:hover {
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+
+}
+
 
 @media (max-width: 1280px) {
     .burger-menu-mav {
@@ -855,7 +1247,6 @@ input {
 
     .dropdown>span {
         display: flex;
-        gap: 10px;
         color: black;
         font-size: 16px;
         text-align: left;

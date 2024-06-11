@@ -4,7 +4,7 @@ import QRcodeScaner from './QRcodeScaner';
 import { useLocation } from 'react-router-dom';
 import { Context } from '../../main';
 
-function SearchOrder() {
+function SearcOrder() {
     const [number, setNumber] = useState('');
     const [records, setRecords] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -57,8 +57,9 @@ function SearchOrder() {
 
     const searchWithQRCode = (searchNumber) => {
         setNumber(searchNumber);
-        fetchData(searchNumber, userRole, UserName);
+        fetchData(searchNumber);
     };
+
     const renderData = () => {
         if (isLoading) {
             return (
@@ -79,13 +80,13 @@ function SearchOrder() {
                         <h2>Пользователь:</h2> <p>{records.retail_user.user_name}</p>
                         <h2>Тип пользователя:</h2> <p>{records.retail_user.user_type}</p>
                         <h2>Номер телефона:</h2> <p>{records.retail_user.user_phone}</p>
-                        <div className="OrderDefect"><h2>Адресс:</h2> <p>{records.retail_user.user_address}</p></div>
+                        <div className="OrderDefect"><h2>Адрес:</h2> <p>{records.retail_user.user_address}</p></div>
                         <h2>Дата заказа:</h2> <p>{records.order_date}</p>
                         <h2>Тип устройства:</h2> <p>{records.device.device_type}</p>
                         <h2>Тип ремонта:</h2> <p>{records.order_type}</p>
                         <h2>ID устройства:</h2> <p>{records.device.device_id}</p>
                         <h2>Бренд:</h2> <p>{records.device.device_brand}</p>
-                        <h2>Внешний вид:</h2> <p>{records.device.device_appearance}</p>
+                        <div className="OrderDefect"><h2>Внешний вид:</h2> <p>{records.device.device_appearance}</p></div>
                         <h2>Комплектация:</h2> <p>{records.device.device_equipment}</p>
                         <h2>Номер модели:</h2> <p>{records.device.device_model}</p>
                         <h2>Статус:</h2> <p>{records.order_status}</p>
@@ -114,6 +115,9 @@ function SearchOrder() {
                                 </div>
                             ))}
                         </div>
+                        <button>Оповестить клиента</button>
+                        <button>Отправить смс</button>
+
                     </div>
                 </div>
                 <div className="container-search-result-staff">
@@ -141,11 +145,11 @@ function SearchOrder() {
                     <input type="number" pattern="\d*" value={number} onChange={handleChange} onKeyPress={handleKeyPress} placeholder='Введите номер заказа' />
                     <button onClick={() => fetchData(number)}> Найти </button >
                 </div>
-                <QRcodeScaner updateSearchWithQRCode={(searchData) => searchWithQRCode(searchData)} />
+                <QRcodeScaner updateSearchWithQRCode={searchWithQRCode} />
                 <div className="container-results">{renderData()}</div>
             </div>
         </div>
     );
 }
 
-export default SearchOrder;
+export default SearcOrder;

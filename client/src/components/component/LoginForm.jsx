@@ -1,65 +1,67 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../../main';
 import { observer } from 'mobx-react-lite';
-import './login.css'
+import './login.css';
 
 function LoginForm() {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
-    const [error, setError] = useState('');
-    const [isFieldsValid, setIsFieldsValid] = useState(false);
     const { store } = useContext(Context);
+    const [message, setMessage] = useState('');
 
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        if (name === 'login') setLogin(value);
-        if (name === 'password') setPassword(value);
-        if (login.trim() !== '' && password.trim() !== '') {
-            setIsFieldsValid(true);
-        } else {
-            setIsFieldsValid(false);
+    const handleRegistration = async () => {
+        try {
+            await store.registration(login, password, role);
+            handleMessage('Пользователь успешно создан');
+            clearForm();
+        } catch (error) {
+            handleMessage(`Ошибка создания пользователя: ${error.message}`);
         }
     };
 
-    const handleLogin = async () => {
-        try {
-            const response = await store.login(login, password, role);
-            if (response.error) {
-                setError(response.error);
-            } else {
-                setError('');
-            }
-        } catch (error) {
-            setLogin('');
-            setPassword('');
-            setError(error.message);
-        }
+    const handleMessage = (msg) => {
+        setMessage(msg);
+        setTimeout(() => {
+            setMessage('');
+        }, 3000); 
+    };
+
+    const clearForm = () => {
+        setLogin('');
+        setPassword('');
+        setRole('');
     };
 
     return (
         <div className='container-login'>
-            <h1>Авторизация</h1>
+            <h1>Создание новой учётной записи</h1>
+
             <input
-                onChange={handleInputChange}
+                onChange={e => setLogin(e.target.value)}
                 value={login}
-                name="login"
                 type="text"
                 placeholder='Логин'
-                className={!isFieldsValid && login.trim() === '' ? 'invalid' : ''}
             />
             <input
-                onChange={handleInputChange}
+                onChange={e => setPassword(e.target.value)}
                 value={password}
-                name="password"
                 type="password"
                 placeholder='Пароль'
-                className={!isFieldsValid && password.trim() === '' ? 'invalid' : ''}
             />
-
-            <button onClick={handleLogin} disabled={!isFieldsValid} className={!isFieldsValid ? 'button-error' : ''}>Войти</button>
-            {error && <div className="error">{error}</div>}
+            <select onChange={(e) => setRole(e.target.value)} value={role}>
+                <option value="">Выберите роль</option>
+                <option value="Администратор">Администратор</option>
+                <option value="Приём">Приём</option>
+                <option value="Отправка">Отправка</option>
+                <option value="Стажёр">Стажёр</option>
+                <option value="Мастер">Мастер</option>
+                <option value="Выдача">Выдача</option>
+                <option value="Курьер">Курьер</option>
+                <option value="ТехАдмин">ТехАдмин</option>
+            </select>
+            <h1>{message}</h1>
+            <button onClick={handleRegistration}>Создать</button>
         </div>
     );
 }

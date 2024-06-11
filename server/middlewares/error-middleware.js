@@ -1,5 +1,6 @@
 import  ApiError  from "../errors/api-error.js";
 
+// Обработчик критических ошибок на сервере 
 export default function (err, req, res, next){
     console.log(err);
     if(err instanceof ApiError){

@@ -1,5 +1,7 @@
 import ApiError from '../errors/api-error.js';
 import TokenService from "../service/token-service.js";
+
+// Обработчик ошибок при авторизации 
 export default function (req, res, next){
     try {
         const authorizationHeader = req.headers.authorization;

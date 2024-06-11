@@ -4,6 +4,8 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoClose, IoChevronDownOutline } from "react-icons/io5";
 import './components.css';
 import { Context } from '../main';
+import { MdManageAccounts } from "react-icons/md";
+import { GoTriangleDown } from "react-icons/go";
 
 function NavMenu() {
   const [nav, setNav] = useState(false);
@@ -30,10 +32,11 @@ function NavMenu() {
   };
 
   const renderOrderUserLinks = (role) => {
-    if (role === 'Клиент' || role === 'ADMIN' || role === 'Администратор' || role === 'Менеджер') {
+    if (role === 'Клиент' || role === 'Мастер' || role === 'Администратор' || role === 'Менеджер') {
       return (
         <div>
           <NavLink to="/SearchOrder" onClick={closeMenu}>Поиск заказа</NavLink>
+          <NavLink to="/AllOrders" onClick={closeMenu}>Все заказы</NavLink>
         </div>
       );
     } else {
@@ -41,7 +44,7 @@ function NavMenu() {
     }
   };
   const renderOrderLinks = (role) => {
-    if (role === 'ы' || role === 'Администратор') {
+    if (role === 'Менеджер' || role === 'Администратор') {
       return (
         <div>
           <NavLink to="/OrderStatus" onClick={closeMenu}>Новый Заказ</NavLink>
@@ -81,7 +84,8 @@ function NavMenu() {
         <li className='orders'>
           <div className="dropdown">
             <span onClick={toggleExpanded}>
-              Заказы<IoChevronDownOutline className={expanded ? 'rotate' : ''} />
+
+              Заказы<GoTriangleDown className={`icon ${expanded ? 'rotate' : ''}`} />
             </span>
             <div className={`dropdown-content ${expanded ? 'show' : ''}`}>
               <>
@@ -106,14 +110,13 @@ function NavMenu() {
           <li><NavLink to="/adminka" onClick={closeMenu}> Админка </NavLink></li>
         ) : null}
         <li><NavLink to="/PhoneBook" onClick={closeMenu}>Телефонный справочник</NavLink> </li>
-        {userRole === 'Туркенстанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Админ' ? (
-          <li><NavLink to="/Acceptance" onClick={closeMenu}>Приёмка</NavLink></li>
+        {userRole === 'Туркенстанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Выдача' || userRole === 'Администратор' ? (
+          <li><NavLink to="/Acceptance" onClick={closeMenu}>Выдача</NavLink></li>
         ) : null}
-        {userRole === 'Туркенстанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Админ' ? (
+        {userRole === 'Туркенстанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? (
           <li><NavLink to="/Shipment" onClick={closeMenu}>Отправка</NavLink></li>
         ) : null}
-        <li><NavLink to='/SpareParts'>SpareParts</NavLink></li>
-        <li><NavLink to="/PersonalAccount" onClick={closeMenu}>{store.user.login}</NavLink></li>
+        <li><NavLink to="/" className='ManageAccounts' onClick={closeMenu}><MdManageAccounts />{store.user.login}</NavLink></li>
       </ul>
     </div>
   );

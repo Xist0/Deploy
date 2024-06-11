@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import './pages.css/QrScaner.css'
+import './pages.css/QrScaner.css';
 
-function QRcodeScaner({ updateSearchWithQRCode,acceptanceFetch  }) {
+function QRcodeScaner({ updateSearchWithQRCode }) {
     const [isEnabled, setEnable] = useState(false);
-    const [qrMessage, setQrMessenge] = useState('');
+    const [qrMessage, setQrMessage] = useState('');
 
     const qrCodeSuccess = (decodedText) => {
-        setQrMessenge(decodedText);
+        setQrMessage(decodedText);
         setEnable(false);
-    
-        const searchOrderUrlRegex = /^https?:\/\/\d+\.\d+\.\d+\.\d+:\d+\/SearcOrder\/(\d+)$/;
+
+        const searchOrderUrlRegex = /\/SearcOrder\?orderNumber=(\d+)/; // Updated regex
         const match = decodedText.match(searchOrderUrlRegex);
-        
+
         if (match) {
-            const orderNumber = match[1];
+            let orderNumber = match[1];
+            orderNumber = orderNumber.replace(/^0+/, ''); // Remove leading zeros
             updateSearchWithQRCode(orderNumber);
-            acceptanceFetch(orderNumber);
         } else {
-            console.log(decodedText);
+            console.log('QR code does not match the expected format:', decodedText);
         }
     };
 
@@ -29,7 +29,7 @@ function QRcodeScaner({ updateSearchWithQRCode,acceptanceFetch  }) {
         const startScanner = () => {
             try {
                 html5QrCode.start({ facingMode: 'environment' }, config, qrCodeSuccess);
-                setQrMessenge('');
+                setQrMessage('');
             } catch (error) {
                 console.error('Error starting QR Code scanner:', error);
             }
@@ -61,7 +61,7 @@ function QRcodeScaner({ updateSearchWithQRCode,acceptanceFetch  }) {
             <div className='visible'>
                 <div id='qrCodeContainer' className={`scaner ${isEnabled ? 'visible' : 'hidden'}`}></div>
                 <button className='start-button' onClick={() => setEnable(!isEnabled)}>
-                    {isEnabled ? 'Выкл' : ` Сканировать QRCode `}
+                    {isEnabled ? 'Выкл' : 'Сканировать QRCode'}
                 </button>
             </div>
         </div>

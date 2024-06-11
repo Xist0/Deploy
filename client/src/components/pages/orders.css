@@ -70,7 +70,8 @@
 }
 
 .input-style {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100%;
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -157,7 +158,11 @@ form {
   gap: 20px;
   width: 500px;
 }
-
+.row-cols label{
+  display: flex;
+  width: 500px;
+  align-items: center;
+}
 .row-cols>.form-control {
   width: 50%;
   min-height: 25px;
@@ -485,14 +490,7 @@ tbody {
     gap: 10px;
   }
 
-  .input-style {
-    width: 100%;
-    padding: 10px;
-    margin: 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border-color 0.3s ease-in-out;
-  }
+
 
   .input-valid {
     border-color: #1776cd;

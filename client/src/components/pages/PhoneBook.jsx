@@ -16,8 +16,13 @@ const PhoneBook = () => {
     const fetchData = async () => {
         setIsLoading(true);
         try {
+            console.log('Fetching data from /api/1c/users');
             const response = await fetch(`/api/1c/users`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
             const data = await response.json();
+            console.log('Data received:', data);
             setRecords(data);
             setTableHeaderVisibility(true);
         } catch (error) {
@@ -31,9 +36,9 @@ const PhoneBook = () => {
         let filteredRecords = records;
         if (searchTerm) {
             filteredRecords = records.filter(record =>
-                record.user_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                record.user_phone.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                record.user_address.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                record.user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                record.user_phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                record.user_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 record.user_legal_address.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
@@ -68,19 +73,21 @@ const PhoneBook = () => {
 
     return (
         <div className="container-box">
-            <h1>Телефонный справочник</h1>
             <div className="calls-container">
                 <div className="phone-book">
                     {isLoading ? (
                         <div className="loading-animation"> <img src="/public/LogoAnims.svg" alt="" /></div>
                     ) : (
                         <div className="phone-book">
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={handleSearchTermChange}
-                                placeholder="Поиск совпадений"
-                            />
+                            <div className="phone-book-search">
+                                <h1>Телефонный справочник</h1>
+                                <input
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={handleSearchTermChange}
+                                    placeholder="Поиск совпадений"
+                                />
+                            </div>
                             <table className="table">
                                 {isTableHeaderVisible && (
                                     <thead>
@@ -95,16 +102,16 @@ const PhoneBook = () => {
                                 <tbody>{renderRecords()}</tbody>
                             </table>
                             <div className="pagination">
-                                <button 
-                                    className="page-link" 
+                                <button
+                                    className="page-link"
                                     onClick={() => paginate(currentPage - 1)}
                                     disabled={currentPage === 1}
                                 >
                                     Назад
                                 </button>
                                 <span className="page-number">{currentPage}</span>
-                                <button 
-                                    className="page-link" 
+                                <button
+                                    className="page-link"
                                     onClick={() => paginate(currentPage + 1)}
                                     disabled={currentPage === Math.ceil(records.length / recordsPerPage)}
                                 >
