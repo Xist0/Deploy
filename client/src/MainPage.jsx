@@ -44,7 +44,7 @@ const MainPage = () => {
                 <Route path="/SearchOrder" element={userRole === 'Администратор' || userRole === 'ADMIN' || userRole === 'Менеджер' ? <SearchOrder /> : <Navigate to="/PersonalAccount" />} />
                 <Route path="/adminka" element={userRole === 'Администратор' ? <Adminka /> : <Navigate to="/PersonalAccount" />} />
                 <Route path='/Acceptance' element={userRole === 'Туркистанская' || userRole === 'Выдача' || userRole === 'Отправка' || userRole === 'Администратор' ? <Acceptance /> : <Navigate to="/PersonalAccount" />} />
-                <Route path='/Shipment' element={userRole === 'Туркистанская' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? <Shipment /> : <Navigate to="/PersonalAccount" />} />
+                <Route path='/Shipment' element={userRole === 'Туркистанская' || userRole === 'Выдача' || userRole === 'Отправка' || userRole === 'Администратор' ? <Shipment /> : <Navigate to="/PersonalAccount" />} />
             </Routes>
         </>
     );
