@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import './pages.css/SeacrOrder.css';
 import QRcodeScaner from './QRcodeScaner';
 import { Context } from '../../main';
@@ -17,6 +17,8 @@ function Acceptance() {
         userRole = userRole || null;
         UserName = UserName || null;
         destination = destination || null;
+
+        console.log(`Sending request with params: orderNumber=${orderNumber}, userRole=${userRole}, UserName=${UserName}, destination=${destination}`);
 
         try {
             const response = await fetch(`/api/shipment/${orderNumber}/${userRole}/${UserName}/${destination}`, {
@@ -40,7 +42,7 @@ function Acceptance() {
                 console.error('Unexpected content type:', contentType);
             }
 
-            console.log(responseData);
+            console.log('Response data:', responseData);
 
             if (responseData.order_status) {
                 setOrderStatus(responseData.order_status);
