@@ -143,7 +143,7 @@ const Calls = () => {
     }
   };
   const handleFIOClick = (fio) => {
-    const searchUrl = `https://order.service-centr.com/AllOrders?fio=${encodeURIComponent(fio)}`;
+    const searchUrl = `https://192.168.1.211/AllOrders?fio=${encodeURIComponent(fio)}`;
     window.open(searchUrl, '_blank');
   };
   const parseOrderNumber = (text) => {
