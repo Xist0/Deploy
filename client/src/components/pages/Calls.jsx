@@ -9,6 +9,7 @@ import { DateRange } from 'react-date-range';
 import { ru } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { GoTriangleDown } from "react-icons/go";
+import { FaTimesCircle } from "react-icons/fa";
 
 const Modal = ({ cal, isModalOpen, toggleModal, downloadAudio }) => {
   const audioRef = useRef(null);
@@ -108,7 +109,6 @@ const Calls = () => {
   const [sortByDateTimeAsc, setSortByDateTimeAsc] = useState(true);
   const [searchOrder, setSearchOrder] = useState('');
   const [isSearchDisabled, setIsSearchDisabled] = useState(false);
-  const [sortByDateAsc, setSortByDateAsc] = useState(true);
   const [filterType, setFilterType] = useState('all');
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const iconClass = isDateRangeVisible ? 'rotate' : '';
@@ -143,7 +143,7 @@ const Calls = () => {
     }
   };
   const handleFIOClick = (fio) => {
-    const searchUrl = `https://192.168.1.211/AllOrders?fio=${encodeURIComponent(fio)}`;
+    const searchUrl = `https://order.service-centr.com/AllOrders?fio=${encodeURIComponent(fio)}`;
     window.open(searchUrl, '_blank');
   };
   const parseOrderNumber = (text) => {
@@ -186,10 +186,6 @@ const Calls = () => {
     }
   };
 
-  const handleSortByDate = () => {
-    setSortByDateAsc(!sortByDateAsc);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchData();
@@ -225,8 +221,8 @@ const Calls = () => {
     }
   };
 
-  const fetchRecordDetails = async (name, day) => {
-    const response = await fetch(`/api/order/record/${day}/${name}`);
+  const fetchRecordDetails = async (name, date) => {
+    const response = await fetch(`/api/order/record/${date}/${name}`);
 
     try {
       const data = await response.json();
@@ -323,13 +319,17 @@ const Calls = () => {
       console.error('Failed to parse order number from link:', text);
     }
   };
-
+  const closeDateRange = () => {
+    if (isDateRangeVisible) {
+      setIsDateRangeVisible(false);
+    }
+  };
   const handleSortByDateTime = () => {
     setSortByDateTimeAsc(!sortByDateTimeAsc);
     const sortedRecords = [...records];
     sortedRecords.sort((a, b) => {
-      const dateTimeA = new Date(`${a.day}T${a.time}`);
-      const dateTimeB = new Date(`${b.day}T${b.time}`);
+      const dateTimeA = new Date(`${a.date_time}`);
+      const dateTimeB = new Date(`${b.date_time}`);
       return sortByDateTimeAsc ? dateTimeA - dateTimeB : dateTimeB - dateTimeA;
     });
 
@@ -339,7 +339,14 @@ const Calls = () => {
   const handleFilterChange = (type) => {
     setFilterType(type);
   };
-
+  const resetFilters = () => {
+    fetchData();
+    setSearchTerm('');
+    setSearchFIO('');
+    setSearchNumber('');
+    setSearchOrder('');
+    setState([{ startDatePlaceholder: null, endDatePlaceholder: null, key: 'selection' }]);
+  };
   const handleTypeHeaderClick = () => {
     let newFilterType;
     switch (filterType) {
@@ -370,13 +377,6 @@ const Calls = () => {
     } else if (filterType === 'outgoing') {
       filteredRecords = records.filter(record => record.call_type === 'Исходящий');
     }
-
-    if (sortByDateAsc) {
-      filteredRecords.sort((a, b) => new Date(a.day) - new Date(b.day));
-    } else {
-      filteredRecords.sort((a, b) => new Date(b.day) - new Date(a.day));
-    }
-
     return filteredRecords.map((cal, index) => {
       let logoCall;
       let playButton;
@@ -394,7 +394,7 @@ const Calls = () => {
               <button
                 className="btn-td"
                 onClick={() => {
-                  fetchRecordDetails(cal.record_file_name, cal.day)
+                  fetchRecordDetails(cal.record_file_name, cal.date)
                 }}
               >
                 Воспроизвести
@@ -415,15 +415,15 @@ const Calls = () => {
               {cal.name_user}
             </Link>
           </td>
-          <td>
+          <td className='td-orders'>
             {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
               <Link target={"_blank"} to="#" onClick={handleClick}>{cal.id_order}</Link>
             ) : (
               cal.id_order && cal.id_order.length > 0 ? cal.id_order : 'Нет заказа'
             )}
           </td>
-          <td>{`${cal.day} ${cal.time}`}</td>
-
+          <td>{`${cal.date_time}`}</td>
+          <td>{`${cal.call_bill_sec}`}</td>
           <td>{logoCall}</td>
           <td id='type-butn'>{playButton}</td>
         </tr>
@@ -465,6 +465,7 @@ const Calls = () => {
                   value={searchNumber}
                   className='input-search'
                   onChange={handleSearchNumberChange}
+                  onFocus={closeDateRange}
                   placeholder='Поиск по номеру'
                   disabled={isLoading || isSearchDisabled}
                 />
@@ -473,44 +474,46 @@ const Calls = () => {
                   value={searchFIO}
                   className='input-search'
                   onChange={handleSearchFIOChange}
+                  onFocus={closeDateRange}
                   placeholder='Поиск по ФИО'
                   disabled={isLoading || isSearchDisabled}
                 />
-
+                {matchedUsers.length > 0 && (
+                  <div className="matched-users">
+                    {matchedUsers.map((user, index) => (
+                      <div key={index} className="matched-user" onClick={() => handleUserClick(user)}>
+                        {user.user_name}
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <input
                   type="text"
                   value={searchOrder}
                   className='input-search'
                   onChange={handleSearchOrderChange}
+                  onFocus={closeDateRange}
                   placeholder='Поиск по номеру заказа'
                   disabled={isLoading || isSearchDisabled}
                 />
+                {matchedOrder.length > 0 && (
+                  <div className="matched-users-orders">
+                    {matchedOrder.map((order, index) => (
+                      <div key={index} className="matched-user" type="submit" disabled={isLoading || isSearchDisabled} onClick={() => handleOrderClick(order)} >
+                        {order.retail_user.user_name} <br />
+                        {order.retail_user.user_phone}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <FaTimesCircle
+                  className="reset-icon"
+                  onClick={resetFilters}
+                  style={{ marginLeft: '10px', cursor: 'pointer',  fontSize: '20px' }}
+                />
                 <button type="submit" className="btn btn-primary" disabled={isLoading || isSearchDisabled}>поиск</button>
               </form>
-              <div className="seath-container">
-                <div className="container-poisk">
-                  {matchedOrder.length > 0 && (
-                    <div className="matched-users">
-                      {matchedOrder.map((order, index) => (
-                        <div key={index} className="matched-user" type="submit" disabled={isLoading || isSearchDisabled} onClick={() => handleOrderClick(order)} >
-                          {order.retail_user.user_name} <br />
-                          {order.retail_user.user_phone}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  {matchedUsers.length > 0 && (
-                    <div className="matched-users">
-                      {matchedUsers.map((user, index) => (
-                        <div key={index} className="matched-user" onClick={() => handleUserClick(user)}>
-                          {user.user_name}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
 
-              </div>
             </div>
           </div>
           <div className="calls-container">
@@ -537,6 +540,7 @@ const Calls = () => {
                               }}
                             />
                           </th>
+                          <th scope="col">Время <br /> разговора</th>
                           <th className="icon"></th>
                           <th scope="col">воспроизвести</th>
                         </tr>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 
 function OrderCard({ order, toggleDetails, isOpen }) {
     const [showDetails, setShowDetails] = useState(isOpen);
@@ -12,6 +12,28 @@ function OrderCard({ order, toggleDetails, isOpen }) {
     const handleToggleDetails = () => {
         toggleDetails(order.order_id);
         setShowDetails(!showDetails);
+    };
+
+    const parseOrderNumber = (text) => {
+        const orderNumberRegex = /00НФ-0*(\d+)/;
+        const match = text.match(orderNumberRegex);
+
+        if (match) {
+            return match[1];
+        } else {
+            return null;
+        }
+    };
+
+    const handleClick = (event) => {
+        event.preventDefault();
+        const orderNumber = parseOrderNumber(order.order_id);
+        if (orderNumber) {
+            const searchUrl = `https://order.service-centr.com/SearchOrder?orderNumber=${orderNumber}`;
+            window.open(searchUrl, '_blank');
+        } else {
+            console.error('Failed to parse order number from link:', order.order_id);
+        }
     };
 
     return (
@@ -27,25 +49,29 @@ function OrderCard({ order, toggleDetails, isOpen }) {
                 </div>
                 {showDetails && (
                     <div className="order-card-details">
-                        <div className="order-details-user">
-                            <h1>Клиент</h1>
-                            <p>ID клиента: {order.retail_user.user_id}</p>
-                            <p>ФИО клиента: {order.retail_user.user_name}</p>
-                            <p>Номер телефона: {order.retail_user.user_phone}</p>
-                            <p>Адрес: {order.retail_user.user_address}</p>
-                            <p>Тип клиента: {order.retail_user.user_type}</p>
-
+                        <div className="order-details-container">
+                            <div className="order-details-user">
+                                <h1>Клиент</h1>
+                                <p>ID клиента: {order.retail_user.user_id}</p>
+                                <p>ФИО клиента: {order.retail_user.user_name}</p>
+                                <p>Номер телефона: {order.retail_user.user_phone}</p>
+                                <p>Адрес: {order.retail_user.user_address}</p>
+                                <p>Тип клиента: {order.retail_user.user_type}</p>
+                            </div>
+                            <div className="order-dateils-device">
+                                <h1>Устройство</h1>
+                                <p>ID устройства: {order.device.device_id}</p>
+                                <p>Полная модель: {order.device.device_full_model}</p>
+                                <p>Тип устройства: {order.device.device_type}</p>
+                                <p>Бренд: {order.device.device_brand}</p>
+                                <p>Модель: {order.device.device_model}</p>
+                                <p>Внешний вид: {order.device.device_appearance}</p>
+                                <p>Коментарии: {order.device.device_equipment}</p>
+                                <p>Дефект: {order.device.device_stated_defect}</p>
+                            </div>
                         </div>
-                        <div className="order-dateils-device">
-                            <h1>Устройство</h1>
-                            <p>ID устройства: {order.device.device_id}</p>
-                            <p>Полная модель: {order.device.device_full_model}</p>
-                            <p>Тип устройства: {order.device.device_type}</p>
-                            <p>Бренд: {order.device.device_brand}</p>
-                            <p>Модель: {order.device.device_model}</p>
-                            <p>Внешний вид: {order.device.device_appearance}</p>
-                            <p>Коментарии: {order.device.device_equipment}</p>
-                            <p>Дефект: {order.device.device_stated_defect}</p>
+                        <div className="link-button">
+                            <Link target={"_blank"} to="#" onClick={handleClick}> Перейти</Link>
                         </div>
                     </div>
                 )}
@@ -53,8 +79,6 @@ function OrderCard({ order, toggleDetails, isOpen }) {
         </>
     );
 }
-
-
 function AllOrders() {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -69,7 +93,7 @@ function AllOrders() {
     const [deviceBrands, setDeviceBrands] = useState([]);
     const location = useLocation();
     const [filteredDeviceBrands, setFilteredDeviceBrands] = useState([]);
-    const [loading, setLoading] = useState(false); // Флаг загрузки данных
+    const [loading, setLoading] = useState(false);
     const [selectedDeviceBrand, setSelectedDeviceBrand] = useState(null);
     const [formData, setFormData] = useState({
         master: '',
@@ -80,12 +104,12 @@ function AllOrders() {
         deviceBrandId: '',
     });
 
-        useEffect(() => {
+    useEffect(() => {
         fetchStaff();
-        fetchDeviceTypes()
-        fetchDeviceBrands()
+        fetchDeviceTypes();
+        fetchDeviceBrands();
     }, []);
-    
+
     useEffect(() => {
         const fetchOrders = async () => {
             try {
@@ -102,14 +126,15 @@ function AllOrders() {
                     window.location.reload();
                 }
             } finally {
-                setLoading(false); 
+                setLoading(false);
             }
         };
 
         if (!loading) {
             fetchOrders();
         }
-    }, [searchParams,]);
+    }, [searchParams]);
+
     const fetchStaff = async () => {
         try {
             const response = await fetch('/api/staff');
@@ -137,6 +162,7 @@ function AllOrders() {
             setDeviceTypes([]);
         }
     };
+
     const fetchDeviceBrands = async () => {
         try {
             const response = await fetch('/api/device/brands');
@@ -150,6 +176,7 @@ function AllOrders() {
             setDeviceBrands([]);
         }
     };
+
     const searchDeviceBrands = (input) => {
         const filtered = deviceBrands.filter(brand =>
             brand.device_brand_name.toLowerCase().includes(input.toLowerCase())
@@ -161,6 +188,7 @@ function AllOrders() {
         setFilteredDeviceBrands([]);
         setSelectedDeviceBrand(null);
     };
+
     const handleDeviceBrandChange = (e) => {
         const { value } = e.target;
         setFormData((prevData) => ({
@@ -173,6 +201,7 @@ function AllOrders() {
             resetDeviceBrand();
         }
     };
+
     const handleDeviceBrandClick = (brand) => {
         setFormData((prevData) => ({
             ...prevData,
@@ -189,6 +218,7 @@ function AllOrders() {
         );
         setFilteredDeviceTypes(filtered);
     };
+
     const resetDeviceType = () => {
         setFilteredDeviceTypes([]);
         setSelectedDeviceType(null);
@@ -203,11 +233,11 @@ function AllOrders() {
     const totalPages = Math.ceil(orders.length / ordersPerPage);
 
     const handlePrevious = () => {
-        setCurrentPage(prevPage => Math.max(prevPage - 1, 1)); // Не позволяет уйти ниже 1-й страницы
+        setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
     const handleNext = () => {
-        setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages)); // Не позволяет уйти дальше максимальной страницы
+        setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
     };
 
     const handleSearch = (fio) => {
@@ -227,6 +257,7 @@ function AllOrders() {
             setExpandedOrderId(orderId);
         }
     };
+
     const handleDeviceTypeClick = (type) => {
         setFormData((prevData) => ({
             ...prevData,
@@ -248,14 +279,16 @@ function AllOrders() {
             resetDeviceType();
         }
     };
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const fio = params.get('fio');
         if (fio) {
             setSearchValue(fio);
-            handleSearch(fio); // Автоматически выполняем поиск
+            handleSearch(fio);
         }
     }, [location.search]);
+
     return (
         <div className="container-box">
             <div className="order-box">
@@ -359,8 +392,6 @@ function AllOrders() {
             </div>
         </div>
     );
-
 }
 
 export default AllOrders;
-

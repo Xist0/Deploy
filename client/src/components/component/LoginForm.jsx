@@ -41,7 +41,11 @@ function LoginForm() {
             setError(error.message);
         }
     };
-
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && isFieldsValid) {
+            handleLogin();
+        }
+    };
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(prevState => !prevState); // Функция для переключения видимости пароля
     };
@@ -51,6 +55,7 @@ function LoginForm() {
             <h1>Авторизация</h1>
             <input
                 onChange={handleInputChange}
+                onKeyPress={handleKeyPress} // Добавлено обработчик нажатия клавиши
                 value={login}
                 name="login"
                 type="text"
@@ -60,9 +65,10 @@ function LoginForm() {
             <div className="password-container">
                 <input
                     onChange={handleInputChange}
+                    onKeyPress={handleKeyPress} // Добавлено обработчик нажатия клавиши
                     value={password}
                     name="password"
-                    type={isPasswordVisible ? 'text' : 'password'} 
+                    type={isPasswordVisible ? 'text' : 'password'}
                     placeholder='Пароль'
                     className={!isFieldsValid && password.trim() === '' ? 'invalid' : ''}
                 />

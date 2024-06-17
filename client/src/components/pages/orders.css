@@ -191,18 +191,20 @@ tbody {
 
 .table-success {
   text-align: center;
-  background-color: rgba(82, 246, 82, 0.34);
+  box-shadow: 0px 0px 25px 0px rgba(82, 246, 82, 0.34);
   width: 100%;
   display: flex;
   padding: 5px;
-
+  border-radius: 6px;
 }
 
 .tdRed {
   display: flex;
   justify-content: center;
   text-align: center;
+  box-shadow: 0px 0px 25px 0px rgba(192, 35, 35, 0.334);
   background: rgba(192, 35, 35, 0.334);
+  border-radius: 6px;
   cursor: default;
   pointer-events: none;
   padding: 5px 4px;
@@ -298,13 +300,6 @@ tbody {
   gap: 10px;
 }
 
-.matched-users {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  flex-wrap: wrap;
-  gap: 10px;
-}
 
 .modal-header h5 {
   display: flex;
@@ -312,28 +307,14 @@ tbody {
   width: 100%;
 }
 
-.matched-user {
-  cursor: pointer;
-  border: 1px solid;
-  padding: 5px 10px;
-}
 
 .matched-user-acktive {
   border: 1px solid #1776CD !important;
   box-shadow: 0px 0px 1px 1px #1776CD;
 }
 
-.matched-user {
-  cursor: pointer;
-  border: 1px solid;
-  padding: 5px 10px;
-}
 
-.matched-user:hover {
-  /* background: #c8c8c8; */
-  border: 1px solid #1776CD;
-  box-shadow: 0px 0px 1px 1px #1776CD;
-}
+
 
 .box {
   display: flex;
@@ -494,17 +475,6 @@ tbody {
 
   .input-valid {
     border-color: #1776cd;
-  }
-
-  .tdRed {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    background: rgba(192, 35, 35, 0.334);
-    cursor: default;
-    pointer-events: none;
-    padding: 5px 4px;
-    width: 100%;
   }
 
   .pagination-custom svg {

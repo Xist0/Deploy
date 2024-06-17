@@ -94,11 +94,13 @@
 
 .OrderDefect {
     display: flex;
-    gap: 39.2%;
     align-items: center;
     width: 100%;
     padding-bottom: 5px;
     border-bottom: 1px solid;
+}
+.OrderDefect h2{
+    width: 50%;
 }
 .container-search-result-parts {
     display: flex;

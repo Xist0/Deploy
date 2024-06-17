@@ -4,7 +4,7 @@ import QRCode from 'qrcode.react';
 
 const Summary = ({ formData, onEditClick, handleSubmit, qrCodeLink, orderId }) => {
   return (
-    <div className="container-box">
+    
       <div className='forma-input-end'>
         <h2> Просмотр данных</h2>
         <div className="forma-input-main">
@@ -52,7 +52,7 @@ const Summary = ({ formData, onEditClick, handleSubmit, qrCodeLink, orderId }) =
           <button onClick={handleSubmit}>Сохранить</button>
         </div>
       </div>
-    </div>
+    
   );
 };
 

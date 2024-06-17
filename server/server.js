@@ -264,13 +264,13 @@ app.get('/api/callstoday/:startDate/:endDate/:searchNumberValue', async (req, re
     res.status(500).send('Internal Server Error');
   }
 });
-app.get('/api/order/record/:day/:name', async (req, res) => {
-  const { day, name } = req.params;
+app.get('/api/order/record/:date/:name', async (req, res) => {
+  const { date, name } = req.params;
 
   try {
     const { default: fetch } = await import('node-fetch');
 
-    const response = await fetch(`http://192.168.1.10/api/order/record/${day}/${name}`);
+    const response = await fetch(`http://192.168.1.10/api/order/record/${date}/${name}`);
 
     res.header('Access-Control-Allow-Origin', req.headers.origin || "*");
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,HEAD,DELETE,OPTIONS');
@@ -487,7 +487,46 @@ app.post('/api/neworder', async (req, res) => {
     res.status(500).send(error.message || 'Ошибка сервера');
   }
 });
+app.post('/api/sms/message/sms', async (req, res) => {
+  try {
+    const requestData = req.body;
 
+    const response = await fetch('http://192.168.1.76:8000/sms/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    const responseData = await response.json();
+    console.log('Data received:', responseData);
+    res.json(responseData);
+  } catch (error) {
+    console.error('Error sending data:', error);
+    res.status(500).send(error.message || 'Internal Server Error');
+  }
+});
+app.post('/api/sms/message', async (req, res) => {
+  try {
+    const requestData = req.body;
+
+    const response = await fetch('http://192.168.1.76:8000/sms/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    const responseData = await response.json();
+    console.log('Data received:', responseData);
+    res.json(responseData);
+  } catch (error) {
+    console.error('Error sending data:', error);
+    res.status(500).send(error.message || 'Internal Server Error');
+  }
+});
 
 // Maxvi
 let savedLink = '';

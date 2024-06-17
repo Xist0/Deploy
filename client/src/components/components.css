@@ -19,8 +19,92 @@ li a {
     font-size: 16px;
 }
 
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.matched-users {
+    position: absolute;
+    width: 16.2%;
+    top: 22%;
+    left: 49.567%;
+    background-color: white;
+    z-index: 10;
+    border: 1px solid #1776CD;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+audio {
+    width: 100%;
+}
+
+.react-dadata__suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.react-dadata__container {
+    width: 100%;
+}
+
+.react-dadata__input {
+    width: 100% !important;
+    max-width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.react-dadata__suggestion {
+    width: 100%;
+    border: 1px solid #1776CD;
+    background: no;
+}
+
+.react-dadata--highlighted {
+    background: transparent;
+    color: #f0f0f0;
+}
+
+.matched-users-orders {
+    position: absolute;
+    width: 16.18%;
+    top: 22%;
+    left: 66.86%;
+    background-color: white;
+    z-index: 10;
+    border: 1px solid #1776CD;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.rdrCalendarWrapper {
+    position: absolute;
+    top: 30%;
+    color: #000000;
+    font-size: 12px;
+}
+
+.matched-user {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.matched-user:hover {
+    background-color: #f0f0f0;
+}
+
+.input-search {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 li a:hover {
-    font-weight: 800;
+    font-weight: 400;
     color: #1776CD;
 }
 
@@ -28,7 +112,7 @@ li a:hover {
     color: #1776CD;
     font-size: 16px;
     font-style: normal;
-    font-weight: 800;
+    font-weight: 400;
     line-height: normal;
 }
 
@@ -98,6 +182,10 @@ li a:hover {
 
 .orders-button-status {
     width: 270px;
+}
+
+.td-orders {
+    width: 200px;
 }
 
 #bntn {
@@ -172,7 +260,7 @@ input {
 }
 
 .dropdown span:hover {
-    font-weight: 800;
+    font-weight: 400;
     color: #1776CD;
 }
 
@@ -524,13 +612,15 @@ td>a:hover {
     align-items: center;
     text-align: center;
 }
-.expanded-content-main-inpit select{
+
+.expanded-content-main-inpit select {
     border: 1px solid #1776CD;
     padding: 5px 10px;
     border-radius: 6px;
     cursor: pointer;
     width: 25%;
 }
+
 .expanded-content-main-inpit input {
     width: 25%;
 }
@@ -825,6 +915,7 @@ input {
 
 .th-filter {
     cursor: pointer;
+
 }
 
 .th-filter:hover {
@@ -835,7 +926,7 @@ input {
 }
 
 .th-style-width {
-    max-width: 250px;
+    min-width: 400px;
 }
 
 .parts-dropdown-add .dropdown>select>.select-option {
@@ -855,36 +946,43 @@ input {
     border: 3px solid #1776CD;
     border-radius: 4px;
 }
-.order-box{
+
+.order-box {
     display: flex;
     flex-direction: column;
-    
+
 }
-.order-box h2{
+
+.order-box h2 {
     text-align: center;
 }
-.order-nav{
+
+.order-nav {
     display: flex;
     justify-content: center;
     gap: 40px;
     margin: 30px 0;
 }
-.order-cards{
+
+.order-cards {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
-.order-filter{
+
+.order-filter {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 400px;
     margin: 20px 0;
 }
-.order-filter input{
+
+.order-filter input {
     width: 100%;
 }
-.order-card-main{
+
+.order-card-main {
     display: flex;
     cursor: pointer;
     flex-direction: column;
@@ -895,18 +993,20 @@ input {
     border-radius: 10px;
     padding: 30px;
 }
-.order-card-main:hover{
+
+.order-card-main:hover {
     box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
 
 }
-.order-card-main-active{
+
+.order-card-main-active {
     border-radius: 10px 10px 0px 0px;
     box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
     background-color: #ffffff;
     border: 1px solid #1776CD;
 }
-.order-card-details{
-    display: flex;
+
+.order-card-details {
     width: 100%;
     box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
     background-color: #ffffff;
@@ -915,11 +1015,32 @@ input {
     border: 1px solid #1776CD;
     transition: max-height 0.3s ease-in-out;
     padding: 30px;
+}
+
+.order-details-container {
+    display: flex;
+    width: 100%;
     justify-content: space-between;
 }
 
+.link-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.link-button a {
+    background: #1776CD;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #ffffff;
+}
 
+.link-button a:hover {
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+    color: #cccccc;
+}
 
 .dropdown>select {
     border: 1px solid #1776CD;
@@ -942,7 +1063,26 @@ input {
     width: 100%;
 }
 
+.container-search-sms {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 15px;
+}
 
+.container-search-sms textarea {
+    width: 50%;
+    border-radius: 6px;
+    border: 1px solid #1776CD;
+    padding: 10px 15px;
+}
+
+textarea:focus {
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+}
 
 .parts-dropdown-add {
     display: flex;
@@ -1021,7 +1161,6 @@ input {
 .orders-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease, opacity 0.5s ease;
     opacity: 0;
 }
 
@@ -1159,6 +1298,27 @@ input {
 
 }
 
+.matched-Order-users {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.matched-Order-user {
+    width: 100%;
+    padding: 10px 20px;
+    border: 1px solid;
+    cursor: pointer;
+}
+
+.matched-Order-user:hover {
+    border: 1px solid #1776CD;
+    box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
+    background: #cecece65;
+    color: #1776CD;
+}
 
 @media (max-width: 1280px) {
     .burger-menu-mav {
@@ -1311,5 +1471,61 @@ input {
         text-align: left;
         justify-content: flex-start;
         align-items: center;
+    }
+}
+
+@media (max-width: 500px) {
+    .row {
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 10%);
+        margin: auto;
+    }
+
+    .row-cols label {
+        display: flex;
+        align-items: center;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .rdrCalendarWrapper {
+        position: absolute;
+        top: 15%;
+        color: #000000;
+        font-size: 12px;
+    }
+
+    .table {
+        width: 400px;
+    }
+
+    tr {
+        width: calc(100% - 20%);
+        margin: auto;
+    }
+
+    .td-orders {
+        width: 100px;
+    }
+
+    .modal-footer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    .ManageAccounts {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .order-filter {
+        width: 100%;
     }
 }

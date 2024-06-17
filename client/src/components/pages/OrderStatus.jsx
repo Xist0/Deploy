@@ -3,14 +3,15 @@ import Summary from './Summary';
 import './orders.css';
 import { Context } from '../../main';
 import Messenger from './messenger/Messenger';
+import { AddressSuggestions } from 'react-dadata';
 
 const OrderStatus = () => {
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState('');
   const { store } = useContext(Context);
+  const [value, setValue] = useState();
   const [qrCodeLink, setQrCodeLink] = useState('');
   const [orderId, setOrderId] = useState('');
-
   const [formData, setFormData] = useState({
     user_id: '',
     fullName: '',
@@ -54,7 +55,7 @@ const OrderStatus = () => {
     defect: false,
     master: false,
   });
-
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [types, setTypes] = useState([]);
   const [staffs, setStaffs] = useState([]);
   const [filteredDeviceTypes, setFilteredDeviceTypes] = useState([]);
@@ -130,7 +131,7 @@ const OrderStatus = () => {
       case 1:
         return validation.option;
       case 2:
-        return validation.fullName && validation.phoneNumber && validation.address && validation.source_user && validation.userType;
+        return validation.fullName && validation.phoneNumber && validation.source_user && validation.userType;
       case 3:
         return validation.deviceType && validation.brand && validation.model && validation.serialNumber && validation.appearanceComments && validation.equipmentComments && validation.defect && validation.imei && validation.сomment;
       case 4:
@@ -153,22 +154,21 @@ const OrderStatus = () => {
     }
   };
 
+
   const handleChange = async (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target || e; // Учитывает случай, когда функция вызывается из AddressSuggestions
     const trimmedValue = value.trim();
 
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-
     setValidation((prevValidation) => ({
       ...prevValidation,
       [name]: trimmedValue !== '',
       phoneNumber: name === 'phoneNumber' ? trimmedValue !== '' : prevValidation.phoneNumber,
       address: name === 'address' ? trimmedValue !== '' : prevValidation.address,
     }));
-
     if (trimmedValue === '') {
       if (name === 'brand') {
         setFilteredBrandsTypes([]);
@@ -226,6 +226,7 @@ const OrderStatus = () => {
       );
       setFilteredBrandsTypes(filteredBrands);
     }
+
 
     if (name === 'deviceType') {
       const filteredTypes = deviceTypes.filter((type) =>
@@ -541,9 +542,9 @@ const OrderStatus = () => {
                 />
               </label>
               {matchedUsers.length > 0 && (
-                <div className="matched-users">
+                <div className="matched-Order-users">
                   {matchedUsers.map((user, index) => (
-                    <div key={index} className="matched-user" onClick={() => handleUserClick(user)}>
+                    <div key={index} className="matched-Order-user" onClick={() => handleUserClick(user)}>
                       {user.user_name}
                     </div>
                   ))}
@@ -571,16 +572,34 @@ const OrderStatus = () => {
                   placeholder="Номер Телефона"
                 />
               </label>
-              <label id='address'>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className={`input-style ${validation.address ? 'input-valid' : 'input-error'}`}
-                  placeholder="Адрес"
-                />
-              </label>
+
+              <AddressSuggestions
+                token="5b62c95fa0f8d31860b557b959d74091b06ee92c"
+                value={formData.address}
+                onChange={(value) => {
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    address: value.value, // Change value to value.value
+                  }));
+                  setValidation((prevValidation) => ({
+                    ...prevValidation,
+                    address: value.value.trim() !== '', // Change value to value.value
+                  }));
+                }}
+                onSuggestionSelected={(suggestion) => {
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    address: suggestion.value,
+                  }));
+                  setValidation((prevValidation) => ({
+                    ...prevValidation,
+                    address: suggestion.value.trim() !== '',
+                  }));
+                }}
+                className={`input-style ${validation.address ? 'input-valid' : 'input-error'}`}
+                placeholder="Адрес"
+              />
+
               <select
                 name="source_user"
                 value={formData.source_user}
@@ -631,9 +650,9 @@ const OrderStatus = () => {
                 />
               </label>
               {formData.deviceType !== '' && (
-                <div className="matched-users" style={{ display: filteredDeviceTypes.length > 0 && selectedDeviceType === null ? 'block' : 'none' }}>
+                <div className="matched-Order-users" style={{ display: filteredDeviceTypes.length > 0 && selectedDeviceType === null ? 'flex' : 'none' }}>
                   {filteredDeviceTypes.map((type, index) => (
-                    <div className='device_vibor' key={index} onClick={() => handleDeviceTypeClick(type)}>
+                    <div  className="matched-Order-user"  key={index} onClick={() => handleDeviceTypeClick(type)}>
                       <h1>{type.device_type_name}</h1>
                     </div>
                   ))}
@@ -670,9 +689,9 @@ const OrderStatus = () => {
                 />
               </label>
               {formData.brand !== '' && (
-                <div className="matched-users" style={{ display: filteredBrandsTypes.length > 0 && selectedBrandType === null ? 'block' : 'none' }}>
+                <div className="matched-Order-users" style={{ display: filteredBrandsTypes.length > 0 && selectedBrandType === null ? 'flex' : 'none' }}>
                   {filteredBrandsTypes.map((brand, index) => (
-                    <div className='device_vibor' key={index} onClick={() => handleBrandClick(brand)}>
+                    <div className="matched-Order-user" key={index} onClick={() => handleBrandClick(brand)}>
                       <h1>{brand.device_brand_name}</h1>
                     </div>
                   ))}
@@ -689,9 +708,9 @@ const OrderStatus = () => {
                 />
               </label>
               {deviceModel.length > 0 && (
-                <div className="matched-users">
+                <div className="matched-Order-users">
                   {deviceModel.map((model, index) => (
-                    <div key={index} className="matched-user" onClick={() => handleModelClick(model)}>
+                    <div key={index} className="matched-Order-user" onClick={() => handleModelClick(model)}>
                       {model.device_model_name}
                     </div>
                   ))}
