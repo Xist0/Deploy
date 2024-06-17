@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IoChevronDownOutline } from "react-icons/io5";
 import './orders.css';
-import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate once
+import { Link, useNavigate } from 'react-router-dom';
 import Messenger from './messenger/Messenger';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
@@ -10,22 +9,20 @@ import { ru } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { GoTriangleDown } from "react-icons/go";
 import { FaTimesCircle } from "react-icons/fa";
-
 const Modal = ({ cal, isModalOpen, toggleModal, downloadAudio }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [showOptions, setShowOptions] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
 
     const handleTimeUpdate = () => {
-      setCurrentTime(audio.currentTime);
+      // Update current time
     };
 
     const handleLoadedData = () => {
-      setDuration(audio.duration);
+      // Set duration
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -54,42 +51,40 @@ const Modal = ({ cal, isModalOpen, toggleModal, downloadAudio }) => {
     setIsPlaying(!isPlaying);
   };
 
-  const handleTimeSeek = (e) => {
-    const audio = audioRef.current;
-    const seekTime = parseFloat(e.target.value);
-    audio.currentTime = seekTime;
-    setCurrentTime(seekTime);
-  };
-
   const handleCloseModal = () => {
     stopAudio();
     toggleModal();
   };
 
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
+  };
+
+  if (!isModalOpen) {
+    return null;
+  }
+
   return (
-    <div className={`modal-door${isModalOpen ? 'modal-dialog' : ''}`}>
-      <div className="modal fade" id={`exampleModal-${cal.id_record}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${cal.record_file_name}`} aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id={`exampleModalLabel-${cal.id_record}`}>{cal.name}</h5>
-            </div>
-            <div className="modal-body">
-              <audio ref={audioRef} src={`/api/audio/${cal.name}`} preload="auto" controls></audio>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary btn-sm" onClick={handleCloseModal}>
-                Закрыть
-              </button>
-              <button
-                className="btn btn-primary btn-sm"
-                type="button"
-                onClick={() => downloadAudio(cal.name)}
-              >
-                Скачать
-              </button>
-            </div>
+    <div className="modal-overlay" onClick={handleCloseModal}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h5 className="modal-title">{cal.name}</h5>
+
+        </div>
+        <div className="modal-body">
+          <div className="audio-container">
+            <audio ref={audioRef} src={`/api/audio/${cal.name}`} preload="auto" controls></audio>
+
           </div>
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-primary btn-sm" onClick={handleCloseModal}>
+            Закрыть
+          </button>
+
+
+          <button onClick={() => downloadAudio(cal.name)}>Скачать</button>
+
         </div>
       </div>
     </div>
@@ -172,6 +167,10 @@ const Calls = () => {
 
       const response = await fetch(`/api/callstoday/${startDateParam ?? 'null'}/${endDateParam ?? 'null'}/${searchNumberValue}`);
       const data = await response.json();
+
+      // Sort the data by date_time from earliest to latest
+      data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
+
       setRecords(data);
       setTableHeaderVisibility(true);
       if (latestRequestCounter.current === requestCounter) {
@@ -435,9 +434,9 @@ const Calls = () => {
   }, [searchTerm]);
 
   return (
-    <div>
+    <>
       <Messenger />
-      <div className="container-box">
+      <div div className="container-box">
         <div className="calls-container">
           <div className="row row-cols-auto">
             <div className="p-3 mb-2">
@@ -509,7 +508,7 @@ const Calls = () => {
                 <FaTimesCircle
                   className="reset-icon"
                   onClick={resetFilters}
-                  style={{ marginLeft: '10px', cursor: 'pointer',  fontSize: '20px' }}
+                  style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
                 />
                 <button type="submit" className="btn btn-primary" disabled={isLoading || isSearchDisabled}>поиск</button>
               </form>
@@ -562,7 +561,7 @@ const Calls = () => {
           />
         )}
       </div>
-    </div>
+    </>
   );
 };
 

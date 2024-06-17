@@ -286,12 +286,14 @@ tbody {
   background-color: #fff;
   padding: 40px;
   display: flex;
-  width: calc(100% - 65%);
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
-
+#top-layer {
+  position: absolute;
+  top: 50%;
+}
 .modal-content {
   display: flex;
   flex-direction: column;

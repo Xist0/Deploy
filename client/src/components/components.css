@@ -1319,7 +1319,78 @@ textarea:focus {
     background: #cecece65;
     color: #1776CD;
 }
-
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+  }
+  
+  .modal-content {
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-body {
+    margin-top: 10px;
+  }
+  
+  .audio-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .options-container {
+    position: relative;
+  }
+  
+  .options-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  #top-layer.options {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
 @media (max-width: 1280px) {
     .burger-menu-mav {
         display: block;
@@ -1434,6 +1505,13 @@ textarea:focus {
         align-items: center;
         gap: 20px;
     }
+    .rdrCalendarWrapper {
+        position: absolute;
+        top: 28%;
+        left: 2%;
+        color: #000000;
+        font-size: 12px;
+    }
 
     .block {
         width: 100%;
@@ -1475,6 +1553,23 @@ textarea:focus {
 }
 
 @media (max-width: 500px) {
+    .matched-users {
+        width: 100%;
+        top: 48%;
+        left: 3%;
+    }
+
+    .matched-users-orders {
+        width: 100%;
+        top: 64%;
+        left: 3%;
+    }
+
+    .th-style-width {
+        width: 190px;
+        min-width: 0px;
+    }
+
     .row {
         display: flex;
         flex-direction: column;
@@ -1484,17 +1579,25 @@ textarea:focus {
 
     .row-cols label {
         display: flex;
+        width: 100%;
         align-items: center;
     }
-
+    .row-cols input{
+        position: relative;
+    }
     form {
         display: flex;
+        position: relative;
         flex-direction: column;
     }
-
+    .rdrMonth{
+        width: 100% !important;
+    }
     .rdrCalendarWrapper {
         position: absolute;
-        top: 15%;
+        width: 100%;
+        top: 14%;
+        left: 2%;
         color: #000000;
         font-size: 12px;
     }
@@ -1504,7 +1607,7 @@ textarea:focus {
     }
 
     tr {
-        width: calc(100% - 20%);
+        width: 100%;
         margin: auto;
     }
 
