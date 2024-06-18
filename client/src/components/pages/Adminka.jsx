@@ -10,7 +10,7 @@ function Adminka() {
         <div className="container-box">
             <RegisterForm  />
             <UserList />
-            <PrintComponent/>
+            {/* <PrintComponent/> */}
         </div>
     );
 }
