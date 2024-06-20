@@ -577,10 +577,10 @@ const Calls = () => {
                       <thead>
                         <tr>
                           <th className='th-filter table-left ' scope="col" onClick={handleTypeHeaderClick}>тип звонка</th>
-                          <th scope="col">набранный номер</th>
-                          <th scope="col">номер звонящий</th>
-                          <th scope="col" className='th-style-width'>Ф.И.О</th>
-                          <th scope="col">заказ наряд</th>
+                          <th scope="col" className='calls-mobail'>набранный номер</th>
+                          <th scope="col" className='calls-mobail'>номер звонящий</th>
+                          <th scope="col" className='th-style-width calls-mobail'>Ф.И.О</th>
+                          <th scope="col" className='calls-mobail'>заказ наряд</th>
                           <th className='th-filter' onClick={handleSortByDateTime}>
                             Дата и время
                             <GoTriangleDown
@@ -589,9 +589,9 @@ const Calls = () => {
                               }}
                             />
                           </th>
-                          <th scope="col">Время <br /> разговора</th>
-                          <th className="icon"></th>
-                          <th scope="col">воспроизвести</th>
+                          <th scope="col" className='calls-mobail'>Время <br /> разговора</th>
+                          <th className="icon calls-mobail" ></th>
+                          <th scope="col"className='calls-mobail'>воспроизвести</th>
                         </tr>
                       </thead>
                     )}

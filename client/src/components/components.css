@@ -878,7 +878,6 @@ td>a:hover {
     display: flex;
     align-items: center;
 }
-
 .table-input {
     width: 55% !important;
 }
@@ -1764,6 +1763,20 @@ textarea:focus {
     #userID {
         width: 100%;
         text-align: center;
+    }
+    .calls-mobail{
+        display: none;
+    }
+    thead {
+        left: 0 !important;
+        position:initial !important;
+        visibility:initial !important;
+        padding: 0;
+        margin: 0;
+        display: flex;
+    }
+    .table thead tr {
+        margin: 0;
     }
     .staff td {
         border: 1px solid #000000;
