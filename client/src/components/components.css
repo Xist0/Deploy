@@ -878,6 +878,7 @@ td>a:hover {
     display: flex;
     align-items: center;
 }
+
 .table-input {
     width: 55% !important;
 }
@@ -993,37 +994,40 @@ input {
 .order-box h2 {
     text-align: center;
 }
+
 .search-container {
     position: relative;
-    width: 300px; 
-  }
-  
-  .search-input {
+    width: 300px;
+}
+
+.search-input {
     width: 100%;
-    padding-right: 40px; 
-    height: 36px; 
+    padding-right: 40px;
+    height: 36px;
     font-size: 16px;
     border-radius: 6px;
     outline: none;
-  }
-  
-  .search-icon {
+}
+
+.search-icon {
     position: absolute;
     top: 58%;
-    right: 10px; 
+    right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
-  }
-  
-  .search-icon svg {
+}
+
+.search-icon svg {
     width: 30px;
     height: 20px;
-    fill: #666; /* Цвет иконки можно изменить по желанию */
-  }
-  
-  .search-icon:hover svg {
-    fill: #1776CD; 
-  }
+    fill: #666;
+    /* Цвет иконки можно изменить по желанию */
+}
+
+.search-icon:hover svg {
+    fill: #1776CD;
+}
+
 .order-nav {
     display: flex;
     justify-content: center;
@@ -1049,25 +1053,28 @@ input {
     width: 100%;
     max-width: 100%;
 }
+
 .device-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
-  }
-  
-  .input-container {
+}
+
+.input-container {
     position: relative;
     width: 100%;
-  }
-  
-  .input-container input {
+}
+
+.input-container input {
     width: 100%;
-    padding-right: 40px; /* Увеличьте, если нужно больше места для иконки */
+    padding-right: 40px;
+    /* Увеличьте, если нужно больше места для иконки */
     box-sizing: border-box;
-  }
-  
-  .matched-deviceType, .matched-deviceBrand {
+}
+
+.matched-deviceType,
+.matched-deviceBrand {
     position: absolute;
     top: 100%;
     left: 0;
@@ -1079,16 +1086,17 @@ input {
     overflow-y: auto;
     border: 1px solid #ddd;
     box-sizing: border-box;
-  }
-  
-  .device_vibor {
+}
+
+.device_vibor {
     padding: 10px;
     cursor: pointer;
-  }
-  
-  .device_vibor:hover {
+}
+
+.device_vibor:hover {
     background-color: #e9e9e9;
-  }
+}
+
 .order-card-main {
     display: flex;
     cursor: pointer;
@@ -1130,16 +1138,19 @@ input {
     gap: 40px;
     justify-content: space-between;
 }
-.order-dateils-device{
+
+.order-dateils-device {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.order-details-user{
+
+.order-details-user {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .link-button {
     display: flex;
     align-items: center;
@@ -1280,9 +1291,11 @@ textarea:focus {
     max-height: 0;
     opacity: 0;
 }
-.orders-content  label{
+
+.orders-content label {
     width: 100%;
 }
+
 .orders-content.visible {
     max-height: 1000px;
     padding: 10px;
@@ -1757,32 +1770,45 @@ textarea:focus {
         gap: 40px;
         justify-content: center;
     }
+
     #userRole>select {
         width: 100%;
     }
+
     #userID {
         width: 100%;
         text-align: center;
     }
-    .calls-mobail{
+
+    .calls-mobail {
         display: none;
     }
+    .phone-book > .table > thead {
+        left: -9999px !important;
+        position: absolute !important;
+        visibility: hidden !important;
+    }
+
+
     thead {
         left: 0 !important;
-        position:initial !important;
-        visibility:initial !important;
+        position: initial !important;
+        visibility: initial !important;
         padding: 0;
         margin: 0;
         display: flex;
     }
+
     .table thead tr {
         margin: 0;
     }
+
     .staff td {
         border: 1px solid #000000;
         padding: 8px;
         text-align: center;
     }
+
     .staff tr:nth-child(even) {
         background-color: transparent;
     }
