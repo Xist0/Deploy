@@ -48,7 +48,7 @@ function NavMenu() {
       return (
         <div>
           <NavLink to="/OrderStatus" onClick={closeMenu}>Новый Заказ</NavLink>
-          {/* <NavLink to="/ChangeOrder" onClick={closeMenu}>Изменить заказ</NavLink> */}
+          <NavLink to="/ChangeOrder" onClick={closeMenu}>Изменить заказ</NavLink>
         </div>
       );
     } else {
@@ -110,10 +110,10 @@ function NavMenu() {
           <li><NavLink to="/adminka" onClick={closeMenu}> Админка </NavLink></li>
         ) : null}
         <li><NavLink to="/PhoneBook" onClick={closeMenu}>Телефонный справочник</NavLink> </li>
-        {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Выдача' ? (
+        {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Выдача' || userRole === 'Администратор' ? (
           <li><NavLink to="/Acceptance" onClick={closeMenu}>Выдача</NavLink></li>
         ) : null}
-        {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' ? (
+        {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? (
           <li><NavLink to="/Shipment" onClick={closeMenu}>Отправка</NavLink></li>
         ) : null}
         <li><NavLink to="/" className='ManageAccounts' onClick={closeMenu}><MdManageAccounts />{store.user.login}</NavLink></li>

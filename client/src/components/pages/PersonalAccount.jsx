@@ -65,7 +65,7 @@ function PersonalAccount() {
                     <div className="personal-container-orders">
                     </div>
                 </div>
-                <div className="orders-box">
+                {/* <div className="orders-box">
                     <h1 onClick={() => setIsOrdersVisible(!isOrdersVisible)}>
                         Список активных заказов
                         <GoTriangleDown className={`icon ${isOrdersVisible ? 'rotate' : ''}`} />
@@ -104,7 +104,7 @@ function PersonalAccount() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

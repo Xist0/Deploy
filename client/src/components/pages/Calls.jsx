@@ -118,6 +118,7 @@ const Calls = () => {
       key: 'selection'
     }
   ]);
+  const shouldShowResetIcon = searchTerm || searchFIO || searchNumber || searchOrder;
   const latestRequestCounter = useRef(0);
   useEffect(() => {
     latestRequestCounter.current = requestCounter;
@@ -141,6 +142,7 @@ const Calls = () => {
     const searchUrl = `https://order.service-centr.com/AllOrders?fio=${encodeURIComponent(fio)}`;
     window.open(searchUrl, '_blank');
   };
+
   const parseOrderNumber = (text) => {
     const orderNumberRegex = /00НФ-(\d+)/;
     const match = text.match(orderNumberRegex);
@@ -168,7 +170,6 @@ const Calls = () => {
       const response = await fetch(`/api/callstoday/${startDateParam ?? 'null'}/${endDateParam ?? 'null'}/${searchNumberValue}`);
       const data = await response.json();
 
-      // Sort the data by date_time from earliest to latest
       data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
 
       setRecords(data);
@@ -185,6 +186,39 @@ const Calls = () => {
     }
   };
 
+
+  const filterfetchData = async () => {
+
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      let startDateParam = null;
+      let endDateParam = null;
+      const searchNumberValue = null;
+
+      const response = await fetch(`/api/callstoday/${startDateParam ?? 'null'}/${endDateParam ?? 'null'}/${searchNumberValue}`);
+      const data = await response.json();
+
+      data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
+
+      setRecords(data);
+      setTableHeaderVisibility(true);
+      if (latestRequestCounter.current === requestCounter) {
+        setRecords(data);
+        setTableHeaderVisibility(true);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+      setIsSearchDisabled(false);
+    }
+  };
+  const handleNumberClick = (number) => {
+    setSearchNumber(number); // Устанавливаем номер в поле поиска
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchData();
@@ -329,7 +363,7 @@ const Calls = () => {
     sortedRecords.sort((a, b) => {
       const dateTimeA = new Date(`${a.date_time}`);
       const dateTimeB = new Date(`${b.date_time}`);
-      return sortByDateTimeAsc ? dateTimeA - dateTimeB : dateTimeB - dateTimeA;
+      return sortByDateTimeAsc ? dateTimeB - dateTimeA : dateTimeA - dateTimeB;
     });
 
     setRecords(sortedRecords);
@@ -339,12 +373,12 @@ const Calls = () => {
     setFilterType(type);
   };
   const resetFilters = () => {
-    fetchData();
     setSearchTerm('');
     setSearchFIO('');
     setSearchNumber('');
     setSearchOrder('');
-    setState([{ startDatePlaceholder: null, endDatePlaceholder: null, key: 'selection' }]);
+    setState([{ startDate: null, endDate: null, key: 'selection' }]); // Adjusted state reset
+    filterfetchData(); // Fetch new data after resetting filters
   };
   const handleTypeHeaderClick = () => {
     let newFilterType;
@@ -389,7 +423,7 @@ const Calls = () => {
           logoCall = cal.call_type === 'Входящий' ? <img src="/pic/inCallErr.svg" style={{ color: 'transparent' }} /> : <img src="/pic/outCallErr.svg" style={{ color: 'blue' }} />;
         } else {
           playButton = (
-            <td className="table-success" style={{ textAlign: 'center', backgroundColor: '#52f65257' }}>
+            <td className="table-success" style={{ textAlign: 'center' }}>
               <button
                 className="btn-td"
                 onClick={() => {
@@ -408,7 +442,10 @@ const Calls = () => {
         <tr key={index}>
           <td id='type_call' className='table-left'>{cal.call_type}</td>
           <td>{cal.in_number}</td>
-          <td>{cal.out_nomber}</td>
+          <td>
+            <a class="link-button" key={index} onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>
+
+          </td>
           <td className='th-style-width truncate'>
             <Link className="link-button" onClick={() => handleFIOClick(cal.name_user)}>
               {cal.name_user}
@@ -458,59 +495,72 @@ const Calls = () => {
                     />
                   )}
                 </div>
+                <div className="block-searh">
 
-                <input
-                  type="text"
-                  value={searchNumber}
-                  className='input-search'
-                  onChange={handleSearchNumberChange}
-                  onFocus={closeDateRange}
-                  placeholder='Поиск по номеру'
-                  disabled={isLoading || isSearchDisabled}
-                />
-                <input
-                  type="text"
-                  value={searchFIO}
-                  className='input-search'
-                  onChange={handleSearchFIOChange}
-                  onFocus={closeDateRange}
-                  placeholder='Поиск по ФИО'
-                  disabled={isLoading || isSearchDisabled}
-                />
-                {matchedUsers.length > 0 && (
-                  <div className="matched-users">
-                    {matchedUsers.map((user, index) => (
-                      <div key={index} className="matched-user" onClick={() => handleUserClick(user)}>
-                        {user.user_name}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <input
-                  type="text"
-                  value={searchOrder}
-                  className='input-search'
-                  onChange={handleSearchOrderChange}
-                  onFocus={closeDateRange}
-                  placeholder='Поиск по номеру заказа'
-                  disabled={isLoading || isSearchDisabled}
-                />
-                {matchedOrder.length > 0 && (
-                  <div className="matched-users-orders">
-                    {matchedOrder.map((order, index) => (
-                      <div key={index} className="matched-user" type="submit" disabled={isLoading || isSearchDisabled} onClick={() => handleOrderClick(order)} >
-                        {order.retail_user.user_name} <br />
-                        {order.retail_user.user_phone}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <FaTimesCircle
-                  className="reset-icon"
-                  onClick={resetFilters}
-                  style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
-                />
-                <button type="submit" className="btn btn-primary" disabled={isLoading || isSearchDisabled}>поиск</button>
+                  <input
+                    type="number"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                    value={searchNumber}
+                    className='input-search'
+                    onChange={handleSearchNumberChange}
+                    onFocus={closeDateRange}
+                    placeholder='Поиск по номеру'
+                    disabled={isLoading || isSearchDisabled}
+                  />
+                </div>
+                <div className="block-searh">
+                  <input
+                    type="text"
+                    value={searchFIO}
+                    className='input-search'
+                    onChange={handleSearchFIOChange}
+                    onFocus={closeDateRange}
+                    placeholder='Поиск по ФИО'
+                    disabled={isLoading || isSearchDisabled}
+                  />
+                  {matchedUsers.length > 0 && (
+                    <div className="matched-users">
+                      {matchedUsers.map((user, index) => (
+                        <div key={index} className="matched-user" onClick={() => handleUserClick(user)}>
+                          {user.user_name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="block-searh">
+
+                  <input
+                    type="number"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                    value={searchOrder}
+                    className='input-search'
+                    onChange={handleSearchOrderChange}
+                    onFocus={closeDateRange}
+                    placeholder='Поиск по номеру заказа'
+                    disabled={isLoading || isSearchDisabled}
+                  />
+                  {matchedOrder.length > 0 && (
+                    <div className="matched-users-orders">
+                      {matchedOrder.map((order, index) => (
+                        <div key={index} className="matched-user" type="submit" disabled={isLoading || isSearchDisabled} onClick={() => handleOrderClick(order)} >
+                          {order.retail_user.user_name} <br />
+                          {order.retail_user.user_phone}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="block-searh-button">
+                  {shouldShowResetIcon && (
+                    <FaTimesCircle
+                      className="reset-icon"
+                      onClick={resetFilters}
+                      style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
+                    />
+                  )}
+                  <button type="submit" className="btn btn-primary" disabled={isLoading || isSearchDisabled}>поиск</button>
+                </div>
               </form>
 
             </div>

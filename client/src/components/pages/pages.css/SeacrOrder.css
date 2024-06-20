@@ -99,9 +99,18 @@
     padding-bottom: 5px;
     border-bottom: 1px solid;
 }
-.OrderDefect h2{
+
+.OrderDefect h2 {
     width: 50%;
 }
+
+.OrderDefect p {
+    width: 50%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
 .container-search-result-parts {
     display: flex;
     flex-direction: column;
@@ -109,7 +118,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 
 .container-search-result-parts-title {
@@ -209,6 +218,11 @@
         font-size: calc(12px + 8 * (100vw - 450px) / 1920);
     }
 
+    .OrderDefect h2 {
+        font-size: calc(12px + 8 * (100vw - 450px) / 1920);
+
+    }
+
     .container-search-result {
         display: flex;
         flex-wrap: wrap;
@@ -227,10 +241,11 @@
     .container-search-result-work {
         width: 100%;
         display: flex;
+        margin-top: 40px;
         flex-wrap: wrap;
         height: 100%;
     }
-
+ 
     .container-search-result-staff {
         display: flex;
         flex-wrap: wrap;

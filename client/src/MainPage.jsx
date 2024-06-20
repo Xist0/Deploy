@@ -2,10 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
-import AppMedia from './components/AppMedia';
-import Works from './components/pages/Works.jsx';
 import WarrantyRepair from './components/pages/WarrantyRepair.jsx';
-import SpareParts from './components/pages/SpareParts.jsx';
 import OrderStatus from './components/pages/OrderStatus.jsx';
 import Orders from './components/pages/Orders.jsx';
 import Employees from './components/pages/Employees.jsx';
@@ -29,9 +26,7 @@ const MainPage = () => {
             <Header />
             {/* <AppMedia /> */}
             <Routes>
-                <Route path="/Works" element={userRole === 'Администратор' || userRole === 'Мастер' ? <Works /> : <Navigate to="/PersonalAccount" />} />
                 <Route path="/WarrantyRepair" element={userRole === 'Администратор' || userRole === 'Менеджер' || userRole === 'Мастер' ? <WarrantyRepair /> : <Navigate to="/PersonalAccount" />} />
-                <Route path="/SpareParts" element={userRole === 'Администратор' || userRole === 'Мастер' ? <SpareParts /> : <Navigate to="/PersonalAccount" />} />
                 <Route path="/OrderStatus" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <OrderStatus /> : <Navigate to="/PersonalAccount" />} />
                 <Route path="/Orders" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Orders /> : <Navigate to="/PersonalAccount" />} />
                 <Route path="/Maxvi" element={userRole === 'Администратор' || userRole === 'Мастер' || userRole === 'Менеджер' ? <Maxvi /> : <Navigate to="/PersonalAccount" />} />

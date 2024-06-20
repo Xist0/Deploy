@@ -24,16 +24,32 @@ li a {
     display: inline-block;
 }
 
-.matched-users {
+.block-searh {
+    position: relative; /* Важно для абсолютного позиционирования внутренних элементов */
+    width: 20%;
+    margin-bottom: 20px; /* Отступ между полями */
+}
+.block-searh-button{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    justify-content: space-between;
+}
+.input-search {
+    width: 100%;
+
+}
+.matched-users, .matched-users-orders {
     position: absolute;
-    width: 16.2%;
-    top: 22%;
-    left: 49.567%;
+    width: 100%; /* Теперь ширина совпадает с шириной родительского блока */
+    top: 90%; /* Относительное позиционирование от нижней границы input */
+    left: 0;
     background-color: white;
     z-index: 10;
     border: 1px solid #1776CD;
     max-height: 200px;
     overflow-y: auto;
+    box-sizing: border-box; /* Включаем padding и border в общую ширину */
 }
 
 audio {
@@ -70,23 +86,30 @@ audio {
     color: #f0f0f0;
 }
 
-.matched-users-orders {
-    position: absolute;
-    width: 16.18%;
-    top: 22%;
-    left: 66.86%;
-    background-color: white;
-    z-index: 10;
-    border: 1px solid #1776CD;
-    max-height: 200px;
-    overflow-y: auto;
+.row-cols {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 500px;
+    position: relative; /* Добавляем относительное позиционирование */
+}
+
+.row-cols label {
+    display: flex;
+    width: 100%; /* Ширина совпадает с родительским элементом */
+    align-items: center;
 }
 
 .rdrCalendarWrapper {
     position: absolute;
-    top: 20%;
+    top: 100%; /* Позиционируем относительно нижней границы label */
+    left: 0;
+    width: 100%; /* Ширина совпадает с родительским элементом */
+    background-color: white; /* Для удобства */
+    z-index: 10;
     color: #000000;
     font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Добавляем тень для видимости */
 }
 
 .matched-user {
@@ -96,11 +119,6 @@ audio {
 
 .matched-user:hover {
     background-color: #f0f0f0;
-}
-
-.input-search {
-    width: 100%;
-    box-sizing: border-box;
 }
 
 li a:hover {
@@ -1180,7 +1198,9 @@ textarea:focus {
 }
 
 
-
+.rdrMonth{
+    width: 100% !important;
+}
 .orders-status {
     display: flex;
     align-items: center;
@@ -1319,6 +1339,7 @@ textarea:focus {
     background: #cecece65;
     color: #1776CD;
 }
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1330,45 +1351,45 @@ textarea:focus {
     justify-content: center;
     align-items: center;
     z-index: 1050;
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     background: #fff;
     border-radius: 5px;
     padding: 20px;
     max-width: 600px;
     width: 100%;
     position: relative;
-  }
-  
-  .modal-header {
+}
+
+.modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .modal-body {
+}
+
+.modal-body {
     margin-top: 10px;
-  }
-  
-  .audio-container {
+}
+
+.audio-container {
     position: relative;
     display: flex;
     align-items: center;
-  }
-  
-  .options-container {
+}
+
+.options-container {
     position: relative;
-  }
-  
-  .options-button {
+}
+
+.options-button {
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-  }
-  
-  #top-layer.options {
+}
+
+#top-layer.options {
     position: absolute;
     top: 30px;
     left: 0;
@@ -1377,20 +1398,21 @@ textarea:focus {
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .modal-footer {
+}
+
+.modal-footer {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
-  }
-  
-  .close {
+}
+
+.close {
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-  }
+}
+
 @media (max-width: 1280px) {
     .burger-menu-mav {
         display: block;
@@ -1484,7 +1506,9 @@ textarea:focus {
         justify-content: flex-start;
         align-items: center;
     }
-
+    .rdrCalendarWrapper{
+        width: 80%;
+    }
 }
 
 
@@ -1505,13 +1529,8 @@ textarea:focus {
         align-items: center;
         gap: 20px;
     }
-    .rdrCalendarWrapper {
-        position: absolute;
-        top: 28%;
-        left: 2%;
-        color: #000000;
-        font-size: 12px;
-    }
+
+
 
     .block {
         width: 100%;
@@ -1523,8 +1542,8 @@ textarea:focus {
         border-radius: 6px;
         color: #FFF1F1;
         box-shadow: 0px 0px 4px 1px rgba(251, 247, 247, 0.4);
-    }
-
+    } 
+  
     .dropdown {
         display: flex;
         flex-direction: column;
@@ -1553,23 +1572,14 @@ textarea:focus {
 }
 
 @media (max-width: 500px) {
-    .matched-users {
-        width: 100%;
-        top: 48%;
-        left: 3%;
-    }
-
-    .matched-users-orders {
-        width: 100%;
-        top: 64%;
-        left: 3%;
-    }
 
     .th-style-width {
         width: 190px;
         min-width: 0px;
     }
-
+    .rdrCalendarWrapper{
+        width: 50%;
+    }
     .row {
         display: flex;
         flex-direction: column;
@@ -1582,24 +1592,24 @@ textarea:focus {
         width: 100%;
         align-items: center;
     }
-    .row-cols input{
+
+    .row-cols input {
         position: relative;
     }
+
     form {
         display: flex;
         position: relative;
         flex-direction: column;
     }
-    .rdrMonth{
+
+    .rdrMonth {
         width: 100% !important;
     }
-    .rdrCalendarWrapper {
-        position: absolute;
+
+
+    .block-searh{
         width: 100%;
-        top: 14%;
-        left: 2%;
-        color: #000000;
-        font-size: 12px;
     }
 
     .table {
