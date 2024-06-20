@@ -48,7 +48,7 @@ function NavMenu() {
       return (
         <div>
           <NavLink to="/OrderStatus" onClick={closeMenu}>Новый Заказ</NavLink>
-          <NavLink to="/ChangeOrder" onClick={closeMenu}>Изменить заказ</NavLink>
+          {/* <NavLink to="/ChangeOrder" onClick={closeMenu}>Изменить заказ</NavLink> */}
         </div>
       );
     } else {
