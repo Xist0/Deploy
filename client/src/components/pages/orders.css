@@ -142,16 +142,13 @@
 .pagination-custom .disabled {
   width: auto;
   padding: 5px;
-}
-
-form {
+}form {
   display: flex;
   width: 100%;
   align-items: baseline;
   gap: 20px;
   justify-content: space-between;
 }
-
 
 .rotated {
   transform: rotate(180deg);
@@ -328,12 +325,6 @@ tbody {
     display: flex;
   }
 
-  form {
-    display: flex;
-    width: 100%;
-    align-items: baseline;
-    gap: 20px;
-  }
 
 
   .btn-td {
@@ -361,6 +352,7 @@ tbody {
   td {
     border-top: 1px solid #47474727;
     text-align: center;
+    width: 100%;
     padding: 5px !important;
   }
 

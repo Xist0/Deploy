@@ -14,7 +14,7 @@ function Employees() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://order.service-centr.com/users');
+      const response = await axios.get('https://192.168.1.211:5000/users');
       const usersData = response.data;
       console.log('Список пользователей:', usersData);
       setUsers(usersData);

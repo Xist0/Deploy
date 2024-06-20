@@ -25,31 +25,40 @@ li a {
 }
 
 .block-searh {
-    position: relative; /* Важно для абсолютного позиционирования внутренних элементов */
+    position: relative;
+    /* Важно для абсолютного позиционирования внутренних элементов */
     width: 20%;
-    margin-bottom: 20px; /* Отступ между полями */
+    margin-bottom: 20px;
+    /* Отступ между полями */
 }
-.block-searh-button{
+
+.block-searh-button {
     display: flex;
     align-items: center;
     gap: 40px;
     justify-content: space-between;
 }
+
 .input-search {
     width: 100%;
 
 }
-.matched-users, .matched-users-orders {
+
+.matched-users,
+.matched-users-orders {
     position: absolute;
-    width: 100%; /* Теперь ширина совпадает с шириной родительского блока */
-    top: 90%; /* Относительное позиционирование от нижней границы input */
+    width: 100%;
+    /* Теперь ширина совпадает с шириной родительского блока */
+    top: 90%;
+    /* Относительное позиционирование от нижней границы input */
     left: 0;
     background-color: white;
     z-index: 10;
     border: 1px solid #1776CD;
     max-height: 200px;
     overflow-y: auto;
-    box-sizing: border-box; /* Включаем padding и border в общую ширину */
+    box-sizing: border-box;
+    /* Включаем padding и border в общую ширину */
 }
 
 audio {
@@ -90,26 +99,32 @@ audio {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 500px;
-    position: relative; /* Добавляем относительное позиционирование */
+    width: 30%;
+    position: relative;
+    /* Добавляем относительное позиционирование */
 }
 
 .row-cols label {
     display: flex;
-    width: 100%; /* Ширина совпадает с родительским элементом */
+    width: 100%;
+    /* Ширина совпадает с родительским элементом */
     align-items: center;
 }
 
 .rdrCalendarWrapper {
     position: absolute;
-    top: 100%; /* Позиционируем относительно нижней границы label */
+    top: 100%;
+    /* Позиционируем относительно нижней границы label */
     left: 0;
-    width: 100%; /* Ширина совпадает с родительским элементом */
-    background-color: white; /* Для удобства */
+    width: 100%;
+    /* Ширина совпадает с родительским элементом */
+    background-color: white;
+    /* Для удобства */
     z-index: 10;
     color: #000000;
     font-size: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Добавляем тень для видимости */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Добавляем тень для видимости */
 }
 
 .matched-user {
@@ -148,6 +163,7 @@ li a:hover {
     width: 100%;
     gap: 25%;
     text-align: center;
+    justify-content: center;
     align-items: center;
 }
 
@@ -307,10 +323,15 @@ input {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 300px;
+    min-width: 100%;
+    /* Ширина равна или больше ширины родительского span */
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    top: 7vh;
+    width: 230px !important;
+    top: 100%;
+    /* Позиционируем список под span */
+    left: 0;
+    /* Выравниваем список по левому краю */
 }
 
 .rotate {
@@ -356,12 +377,12 @@ input {
 
 .block-select {
     width: 100%;
-    justify-content: end;
+    justify-content: center;
     display: flex;
 }
 
 .block-select select {
-    width: 250px;
+    width: 100%;
     border: 1px solid #1776CD;
     border-radius: 6px;
     padding: 5px;
@@ -974,7 +995,37 @@ input {
 .order-box h2 {
     text-align: center;
 }
-
+.search-container {
+    position: relative;
+    width: 300px; 
+  }
+  
+  .search-input {
+    width: 100%;
+    padding-right: 40px; 
+    height: 36px; 
+    font-size: 16px;
+    border-radius: 6px;
+    outline: none;
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 58%;
+    right: 10px; 
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  .search-icon svg {
+    width: 30px;
+    height: 20px;
+    fill: #666; /* Цвет иконки можно изменить по желанию */
+  }
+  
+  .search-icon:hover svg {
+    fill: #1776CD; 
+  }
 .order-nav {
     display: flex;
     justify-content: center;
@@ -992,14 +1043,54 @@ input {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 400px;
+    width: 30%;
     margin: 20px 0;
 }
 
 .order-filter input {
     width: 100%;
+    max-width: 100%;
 }
-
+.device-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .input-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .input-container input {
+    width: 100%;
+    padding-right: 40px; /* Увеличьте, если нужно больше места для иконки */
+    box-sizing: border-box;
+  }
+  
+  .matched-deviceType, .matched-deviceBrand {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+  
+  .device_vibor {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .device_vibor:hover {
+    background-color: #e9e9e9;
+  }
 .order-card-main {
     display: flex;
     cursor: pointer;
@@ -1038,12 +1129,23 @@ input {
 .order-details-container {
     display: flex;
     width: 100%;
+    gap: 40px;
     justify-content: space-between;
 }
-
+.order-dateils-device{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.order-details-user{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .link-button {
     display: flex;
     align-items: center;
+    margin-top: 30px;
     justify-content: center;
 }
 
@@ -1178,13 +1280,14 @@ textarea:focus {
 
 .orders-content {
     max-height: 0;
-    overflow: hidden;
     opacity: 0;
 }
-
+.orders-content  label{
+    width: 100%;
+}
 .orders-content.visible {
     max-height: 1000px;
-    /* Убедитесь, что это значение достаточно велико для содержимого */
+    padding: 10px;
     opacity: 1;
 }
 
@@ -1198,9 +1301,10 @@ textarea:focus {
 }
 
 
-.rdrMonth{
+.rdrMonth {
     width: 100% !important;
 }
+
 .orders-status {
     display: flex;
     align-items: center;
@@ -1471,10 +1575,10 @@ textarea:focus {
         flex-direction: column;
         padding-top: 20px;
         background: rgb(255, 255, 255);
-        width: 100%;
+        width: 89%;
         height: 100vh;
         gap: 20px;
-        top: 50px;
+        top: 100%;
         left: 0;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         border-radius: 0px 0px 6px 6px;
@@ -1506,9 +1610,8 @@ textarea:focus {
         justify-content: flex-start;
         align-items: center;
     }
-    .rdrCalendarWrapper{
-        width: 80%;
-    }
+
+
 }
 
 
@@ -1542,9 +1645,11 @@ textarea:focus {
         border-radius: 6px;
         color: #FFF1F1;
         box-shadow: 0px 0px 4px 1px rgba(251, 247, 247, 0.4);
-    } 
-  
+    }
+
     .dropdown {
+        position: relative;
+        /* Добавляем позиционирование для выпадающего списка */
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -1560,6 +1665,7 @@ textarea:focus {
         text-align: left;
     }
 
+
     .dropdown>span {
         display: flex;
         gap: 10px;
@@ -1568,23 +1674,27 @@ textarea:focus {
         text-align: left;
         justify-content: flex-start;
         align-items: center;
+        cursor: pointer;
+        /* Добавляем курсор указывающей руки для элемента span */
     }
 }
 
 @media (max-width: 500px) {
 
     .th-style-width {
-        width: 190px;
         min-width: 0px;
+        width: 100%;
     }
-    .rdrCalendarWrapper{
-        width: 50%;
-    }
+
     .row {
         display: flex;
         flex-direction: column;
         width: calc(100% - 10%);
         margin: auto;
+    }
+
+    .row-cols {
+        width: 100%;
     }
 
     .row-cols label {
@@ -1601,6 +1711,7 @@ textarea:focus {
         display: flex;
         position: relative;
         flex-direction: column;
+        gap: 5px !important;
     }
 
     .rdrMonth {
@@ -1608,7 +1719,7 @@ textarea:focus {
     }
 
 
-    .block-searh{
+    .block-searh {
         width: 100%;
     }
 
@@ -1622,7 +1733,7 @@ textarea:focus {
     }
 
     .td-orders {
-        width: 100px;
+        width: 100%;
     }
 
     .modal-footer {
@@ -1640,5 +1751,27 @@ textarea:focus {
 
     .order-filter {
         width: 100%;
+    }
+
+    .block-searh-button {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        justify-content: center;
+    }
+    #userRole>select {
+        width: 100%;
+    }
+    #userID {
+        width: 100%;
+        text-align: center;
+    }
+    .staff td {
+        border: 1px solid #000000;
+        padding: 8px;
+        text-align: center;
+    }
+    .staff tr:nth-child(even) {
+        background-color: transparent;
     }
 }

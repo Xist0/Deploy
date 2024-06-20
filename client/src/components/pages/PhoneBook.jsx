@@ -80,7 +80,6 @@ const PhoneBook = () => {
                     ) : (
                         <div className="phone-book">
                             <div className="phone-book-search">
-                                <h1>Телефонный справочник</h1>
                                 <input
                                     type="text"
                                     value={searchTerm}

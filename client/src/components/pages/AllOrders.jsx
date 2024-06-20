@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { IoSearch } from "react-icons/io5";
+import { GoTriangleDown } from "react-icons/go";
 
 function OrderCard({ order, toggleDetails, isOpen }) {
     const [showDetails, setShowDetails] = useState(isOpen);
@@ -50,24 +52,18 @@ function OrderCard({ order, toggleDetails, isOpen }) {
                 {showDetails && (
                     <div className="order-card-details">
                         <div className="order-details-container">
-                            <div className="order-details-user">
-                                <h1>Клиент</h1>
-                                <p>ID клиента: {order.retail_user.user_id}</p>
-                                <p>ФИО клиента: {order.retail_user.user_name}</p>
-                                <p>Номер телефона: {order.retail_user.user_phone}</p>
-                                <p>Адрес: {order.retail_user.user_address}</p>
-                                <p>Тип клиента: {order.retail_user.user_type}</p>
-                            </div>
                             <div className="order-dateils-device">
                                 <h1>Устройство</h1>
-                                <p>ID устройства: {order.device.device_id}</p>
-                                <p>Полная модель: {order.device.device_full_model}</p>
-                                <p>Тип устройства: {order.device.device_type}</p>
-                                <p>Бренд: {order.device.device_brand}</p>
-                                <p>Модель: {order.device.device_model}</p>
+                                <p>{order.device.device_full_model}</p>
                                 <p>Внешний вид: {order.device.device_appearance}</p>
                                 <p>Коментарии: {order.device.device_equipment}</p>
                                 <p>Дефект: {order.device.device_stated_defect}</p>
+                            </div>
+                            <div className="order-details-user">
+                                <h1>Клиент</h1>
+                                <p>{order.retail_user.user_name}</p>
+                                <p>Номер телефона: {order.retail_user.user_phone}</p>
+                                <p>Адрес: {order.retail_user.user_address}</p>
                             </div>
                         </div>
                         <div className="link-button">
@@ -92,6 +88,7 @@ function AllOrders() {
     const [selectedDeviceType, setSelectedDeviceType] = useState(null);
     const [deviceBrands, setDeviceBrands] = useState([]);
     const location = useLocation();
+    const [isOrdersVisible, setIsOrdersVisible] = useState(false);
     const [filteredDeviceBrands, setFilteredDeviceBrands] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedDeviceBrand, setSelectedDeviceBrand] = useState(null);
@@ -288,84 +285,106 @@ function AllOrders() {
             handleSearch(fio);
         }
     }, [location.search]);
-
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch(searchValue);
+        }
+    };
     return (
         <div className="container-box">
             <div className="order-box">
                 <h2>Список заказов</h2>
                 <div className='order-nav'>
-                    <input
-                        type="text"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        placeholder="Введите значение для поиска"
-                    />
-                    <button onClick={() => handleSearch(searchValue)}>Найти</button>
+
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            className="search-input"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Введите номер"
+                        />
+                        <div className="search-icon" onClick={() => handleSearch(searchValue)}>
+                            <IoSearch />
+                        </div>
+                    </div>
                 </div>
                 <div className="order-filter">
-                    <label className="input-column">
-                        <select
-                            name="master"
-                            value={formData.master}
-                            onChange={(e) => setFormData({ ...formData, master: e.target.value })}
-                        >
-                            <option value="" disabled hidden>Выберите мастера</option>
-                            {staffs.map((staff) => (
-                                <option key={staff.user_id} value={staff.user_id}>
-                                    {staff.user_name}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                    <div className="orders-box">
+                        <h1 onClick={() => setIsOrdersVisible(!isOrdersVisible)}>
+                            Дополнительные параметры поиска
+                            <GoTriangleDown className={`icon ${isOrdersVisible ? 'rotate' : ''}`} />
+                        </h1>
+                        <div className={`orders-content ${isOrdersVisible ? 'visible' : ''}`}>
+                            <label className="input-column">
+                                <select
+                                    name="master"
+                                    value={formData.master}
+                                    onChange={(e) => setFormData({ ...formData, master: e.target.value })}
+                                >
+                                    <option value="" disabled hidden>Выберите мастера</option>
+                                    {staffs.map((staff) => (
+                                        <option key={staff.user_id} value={staff.user_id}>
+                                            {staff.user_name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            <div className="device-form">
+                                <label className="input-container">
+                                    <input
+                                        type="text"
+                                        name="deviceType"
+                                        value={formData.deviceType}
+                                        onChange={handleDeviceTypeChange}
+                                        onInput={(e) => {
+                                            if (e.target.value === '') {
+                                                setFilteredDeviceTypes([]);
+                                                setSelectedDeviceType(null);
+                                            }
+                                        }}
+                                        placeholder="Тип аппарата"
+                                    />
+                                    {formData.deviceType !== '' && (
+                                        <div className="matched-deviceType" style={{ display: filteredDeviceTypes.length > 0 && selectedDeviceType === null ? 'block' : 'none' }}>
+                                            {filteredDeviceTypes.map((type, index) => (
+                                                <div className='device_vibor' key={index} onClick={() => handleDeviceTypeClick(type)}>
+                                                    <h1>{type.device_type_name}</h1>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </label>
 
-                    <label>
-                        <input
-                            type="text"
-                            name="deviceType"
-                            value={formData.deviceType}
-                            onChange={handleDeviceTypeChange}
-                            onInput={(e) => {
-                                if (e.target.value === '') {
-                                    setFilteredDeviceTypes([]);
-                                    setSelectedDeviceType(null);
-                                }
-                            }}
-                            placeholder="Тип аппарата"
-                        />
-                    </label>
-                    {formData.deviceType !== '' && (
-                        <div className="matched-users" style={{ display: filteredDeviceTypes.length > 0 && selectedDeviceType === null ? 'block' : 'none' }}>
-                            {filteredDeviceTypes.map((type, index) => (
-                                <div className='device_vibor' key={index} onClick={() => handleDeviceTypeClick(type)}>
-                                    <h1>{type.device_type_name}</h1>
-                                </div>
-                            ))}
+                                <label className="input-container">
+                                    <input
+                                        type="text"
+                                        name="deviceBrand"
+                                        value={formData.deviceBrand}
+                                        onChange={handleDeviceBrandChange}
+                                        onInput={(e) => {
+                                            if (e.target.value === '') {
+                                                setFilteredDeviceBrands([]);
+                                                setSelectedDeviceBrand(null);
+                                            }
+                                        }}
+                                        placeholder="Бренд аппарата"
+                                    />
+                                    {formData.deviceBrand !== '' && (
+                                        <div className="matched-deviceBrand" style={{ display: filteredDeviceBrands.length > 0 && selectedDeviceBrand === null ? 'block' : 'none' }}>
+                                            {filteredDeviceBrands.map((brand, index) => (
+                                                <div className='device_vibor' key={index} onClick={() => handleDeviceBrandClick(brand)}>
+                                                    <h1>{brand.device_brand_name}</h1>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </label>
+                            </div>
                         </div>
-                    )}
-                    <label>
-                        <input
-                            type="text"
-                            name="deviceBrand"
-                            value={formData.deviceBrand}
-                            onChange={handleDeviceBrandChange}
-                            onInput={(e) => {
-                                if (e.target.value === '') {
-                                    setFilteredDeviceBrands([]);
-                                    setSelectedDeviceBrand(null);
-                                }
-                            }}
-                            placeholder="Бренд аппарата"
-                        />
-                    </label>
-                    {formData.deviceBrand !== '' && (
-                        <div className="matched-users" style={{ display: filteredDeviceBrands.length > 0 && selectedDeviceBrand === null ? 'block' : 'none' }}>
-                            {filteredDeviceBrands.map((brand, index) => (
-                                <div className='device_vibor' key={index} onClick={() => handleDeviceBrandClick(brand)}>
-                                    <h1>{brand.device_brand_name}</h1>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    </div>
+
                 </div>
                 <div className="order-cards">
                     {currentOrders.map((order, index) => (
