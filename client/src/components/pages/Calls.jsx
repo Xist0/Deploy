@@ -570,7 +570,7 @@ const Calls = () => {
               <div className="col">
 
                 {isLoading ? (
-                  <div className="loading-animation"> <img src="../public/LogoAnims.svg" alt="" /></div>
+                  <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
                 ) : (
                   <table className="table">
                     {isTableHeaderVisible && (
