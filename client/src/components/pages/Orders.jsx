@@ -45,7 +45,7 @@ function Orders() {
           <QRcodeScaner/>
           <div className="box-main">
             {loading && (
-              <div className="loading-animation"> <img src="/public/LogoAnims.svg" alt="" /></div>
+              <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
             )}
           </div>
         </div>

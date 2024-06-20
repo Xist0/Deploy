@@ -159,7 +159,7 @@ const PrintComponent = () => {
             </div>
             <div ref={componentRef}>
                 {isLoading ? (
-                <div className="loading-animation"> <img src="../../../public/LogoAnims.svg" alt="" /></div>
+                <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
             ) : showPdf ? (
                     <object data={pdfData} type="application/pdf" width="100%" height="600px">
                         <embed src={pdfData} type="application/pdf" />

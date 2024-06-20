@@ -386,28 +386,35 @@ function AllOrders() {
                     </div>
 
                 </div>
-                <div className="order-cards">
-                    {currentOrders.map((order, index) => (
-                        <OrderCard key={index} order={order} toggleDetails={toggleDetails} isOpen={expandedOrderId === order.order_id} />
-                    ))}
-                </div>
-                <nav>
-                    <ul className="pagination">
-                        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                            <a onClick={handlePrevious} className="page-link">
-                                Назад
-                            </a>
-                        </li>
-                        <li className="page-item disabled">
-                            <span className="page-link">{currentPage}</span>
-                        </li>
-                        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                            <a onClick={handleNext} className="page-link">
-                                Вперед
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                {loading ? (
+                    <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
+
+                ) : (
+                    <div className="order-list">
+                        <div className="order-cards">
+                            {currentOrders.map((order, index) => (
+                                <OrderCard key={index} order={order} toggleDetails={toggleDetails} isOpen={expandedOrderId === order.order_id} />
+                            ))}
+                        </div>
+                        <nav>
+                            <ul className="pagination">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <a onClick={handlePrevious} className="page-link">
+                                        Назад
+                                    </a>
+                                </li>
+                                <li className="page-item disabled">
+                                    <span className="page-link">{currentPage}</span>
+                                </li>
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <a onClick={handleNext} className="page-link">
+                                        Вперед
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                )}
             </div>
         </div>
     );

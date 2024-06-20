@@ -76,7 +76,7 @@ const PhoneBook = () => {
             <div className="calls-container">
                 <div className="phone-book">
                     {isLoading ? (
-                        <div className="loading-animation"> <img src="/public/LogoAnims.svg" alt="" /></div>
+                        <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
                     ) : (
                         <div className="phone-book">
                             <div className="phone-book-search">

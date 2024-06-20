@@ -78,7 +78,7 @@ function Acceptance() {
         <div className="container-box">
             <div className="container-block">
                 <h1>Выдать заказ</h1>
-                {isLoading && <div className="loading-animation"> <img src="/public/LogoAnims.svg" alt="" /></div>}
+                {isLoading && <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>}
                 <QRcodeScaner updateSearchWithQRCode={handleQRCodeData} isButtonDisabled={isLoading} />
                 {orderStatus && (
                     <div className={`order-status ${fadeOut ? 'fade-out' : ''}`}>

@@ -621,7 +621,7 @@ function Maxvi() {
                 <div className="container-maxvi">
                     {isLoading ? (
                         <div className="loading-animation">
-                            <img src="/public/LogoAnims.svg" alt="" />
+                            <img src="/pic/LogoAnims.svg" alt="" />
                         </div>
                     ) : (
                         records && (
@@ -874,7 +874,7 @@ function Maxvi() {
 
                                             {partsData && (isItsLoading ? (
                                                 <div className="loading-animation">
-                                                    <img src="/public/LogoAnims.svg" alt="" />
+                                                    <img src="/pic/LogoAnims.svg" alt="" />
                                                 </div>
                                             ) : (
                                                 <div className="order-details-main-container-zapchasti">
@@ -975,7 +975,7 @@ function Maxvi() {
 
                                                         {isItsLoading && (
                                                             <div className="loading-animation">
-                                                                <img src="/public/LogoAnims.svg" alt="" />
+                                                                <img src="/pic/LogoAnims.svg" alt="" />
                                                             </div>
                                                         )}
                                                         {!isItsLoading && (

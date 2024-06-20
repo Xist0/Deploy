@@ -112,7 +112,7 @@ function SearcOrder() {
     const renderData = () => {
         if (isLoading) {
             return (
-                <div className="loading-animation"> <img src="/public/LogoAnims.svg" alt="" /></div>
+                <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
             );
         }
         if (!records) {

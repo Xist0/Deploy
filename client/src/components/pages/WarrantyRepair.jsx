@@ -413,7 +413,7 @@ function WarrantyRepair() {
     if (isLoading) {
       return (
         <div className="loading-animation">
-          <img src="/public/LogoAnims.svg" alt="" />
+          <img src="/pic/LogoAnims.svg" alt="" />
         </div>
       );
     }
