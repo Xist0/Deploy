@@ -1002,7 +1002,7 @@ input {
 
 .search-input {
     width: 100%;
-    padding-right: 40px;
+    padding-left: 30px;
     height: 36px;
     font-size: 16px;
     border-radius: 6px;
@@ -1027,7 +1027,23 @@ input {
 .search-icon:hover svg {
     fill: #1776CD;
 }
+.search-icon-delete{
+    position: absolute;
+    top: 58%;
+    left: -10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.search-icon-delete svg {
+    width: 30px;
+    height: 20px;
+    fill: #666;
+    /* Цвет иконки можно изменить по желанию */
+}
 
+.search-icon-delete:hover svg {
+    fill: #1776CD;
+}
 .order-nav {
     display: flex;
     justify-content: center;
@@ -1170,9 +1186,11 @@ input {
     box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
     color: #cccccc;
 }
-.link-button-calls{
+
+.link-button-calls {
     padding: 10px 5px;
 }
+
 .dropdown>select {
     border: 1px solid #1776CD;
     border-radius: 6px;
@@ -1537,6 +1555,13 @@ textarea:focus {
     justify-content: flex-end;
     margin-top: 10px;
 }
+.call-mobail-logo-blue {
+    color: #1776CD;
+}
+.call-mobail-logo-blue:hover {
+    color: #003a70;
+    cursor: pointer;
+}
 
 .close {
     background: none;
@@ -1544,7 +1569,15 @@ textarea:focus {
     font-size: 1.5rem;
     cursor: pointer;
 }
+.date-time {
+    display: flex;
+    flex-direction: column;
+  }
+  .time {
+    display: none; /* Скрытие времени по умолчанию */
+  }
 
+  
 @media (max-width: 1280px) {
     .burger-menu-mav {
         display: block;
@@ -1705,6 +1738,9 @@ textarea:focus {
         cursor: pointer;
         /* Добавляем курсор указывающей руки для элемента span */
     }
+    /* .calls-mobail-adab{
+        width: 0 !important; 
+    } */
 }
 
 @media (max-width: 500px) {
@@ -1741,7 +1777,15 @@ textarea:focus {
         flex-direction: column;
         gap: 5px !important;
     }
-
+    .mobail-calls-tr  {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap !important;
+        margin-bottom: 0;
+        border-top: 1px solid;
+        justify-content: space-between;
+    }
+  
     .rdrMonth {
         width: 100% !important;
     }
@@ -1754,16 +1798,24 @@ textarea:focus {
     .table {
         width: 400px;
     }
-
+    .link-button-calls{
+        padding: 0;
+    }
     tr {
         width: 100%;
         margin: auto;
     }
-
-    .td-orders {
-        width: 100%;
+    .calls-mobail-adab {
+        display: block;
+        white-space: normal; /* Позволяет тексту переноситься на следующую строку */
+        word-break: break-word; /* Разрывает слова, если они не помещаются в строку */
+        overflow-wrap: break-word; /* Позволяет длинным словам переноситься на новую строку */
+        line-height: 1.4; /* Увеличивает межстрочный интервал для лучшей читаемости */
+        max-height: 3em; /* Ограничивает максимальную высоту двумя строками */
+        overflow: hidden; /* Скрывает текст, который не помещается */
+        text-overflow: ellipsis; /* Добавляет троеточие в конце обрезанного текста */
     }
-
+    
     .modal-footer {
         display: flex;
         align-items: center;
@@ -1798,9 +1850,7 @@ textarea:focus {
         text-align: center;
     }
 
-    .mobail-calls-tr {
-        margin-bottom: 0;
-    }
+  
 
     .calls-mobail {
         display: none;
@@ -1835,4 +1885,11 @@ textarea:focus {
     .staff tr:nth-child(even) {
         background-color: transparent;
     }
+    
 }
+@media (min-width: 769px) {
+    .time {
+      display: inline;
+    }
+    
+  }

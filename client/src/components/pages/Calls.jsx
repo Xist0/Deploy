@@ -8,6 +8,7 @@ import { DateRange } from 'react-date-range';
 import { ru } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { GoTriangleDown } from "react-icons/go";
+import { IoSearch } from "react-icons/io5";
 import { FaTimesCircle } from "react-icons/fa";
 const Modal = ({ cal, isModalOpen, toggleModal, downloadAudio }) => {
   const audioRef = useRef(null);
@@ -401,71 +402,74 @@ const Calls = () => {
 
   const renderRecords = () => {
     if (!records || records.length === 0) {
-      return <tr><td colSpan="10">Нет данных для отображения</td></tr>;
+        return <tr><td colSpan="10">Нет данных для отображения</td></tr>;
     }
 
     let filteredRecords = records;
     if (filterType === 'incoming') {
-      filteredRecords = records.filter(record => record.call_type === 'Входящий');
+        filteredRecords = records.filter(record => record.call_type === 'Входящий');
     } else if (filterType === 'outgoing') {
-      filteredRecords = records.filter(record => record.call_type === 'Исходящий');
+        filteredRecords = records.filter(record => record.call_type === 'Исходящий');
     }
+
     return filteredRecords.map((cal, index) => {
-      let logoCall;
-      let playButton;
+        let logoCall;
+        const [date, time] = cal.date_time.split(' ');
 
-      if (cal.call_status === 'NO ANSWER') {
-        playButton = <td className='tdRed' id='td'><label>Отсутствует</label></td>;
-        logoCall = cal.call_type === 'Входящий' ? <img src="/pic/inCallErr.svg" style={{ color: 'transparent' }} /> : <img src="/pic/outCallErr.svg" style={{ color: 'blue' }} />;
-      } else {
-        if (cal.call_status === 'NO ANSWER') {
-          playButton = <td className='tdRed' id='td'><label>Отсутствует</label></td>;
-          logoCall = cal.call_type === 'Входящий' ? <img src="/pic/inCallErr.svg" style={{ color: 'transparent' }} /> : <img src="/pic/outCallErr.svg" style={{ color: 'blue' }} />;
-        } else {
-          playButton = (
-          
-              <button
-                className="btn-td"
-                onClick={() => {
-                  fetchRecordDetails(cal.record_file_name, cal.date)
-                }}
-              >
-                Воспроизвести
-              </button>
-           
-          );
-          logoCall = cal.call_type === 'Входящий' ? <img src="/pic/inCallOk.svg" style={{ color: 'blue' }} /> : <img src="/pic/outCallOk.svg" style={{ color: 'blue' }} />;
+        // Преобразование даты в формат MM.DD
+        const formattedDate = date.split('-').slice(1).join('.');
+
+        // Преобразование секунд в формат MM:SS
+        const callDurationInSeconds = parseInt(cal.call_bill_sec, 10);
+        let callDuration = '00:00';
+        if (!isNaN(callDurationInSeconds)) {
+            const minutes = Math.floor(callDurationInSeconds / 60);
+            const seconds = callDurationInSeconds % 60;
+            callDuration = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
-      }
 
-      return (
-        <tr key={index} className='mobail-calls-tr'>
-          <td id='type_call' className='table-left calls-mobail'>{cal.call_type}</td>
-          <td className='calls-mobail'>{cal.in_number}</td>
-          <td>
-            <a class="link-button-calls" key={index} onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>
+        if (cal.call_status === 'NO ANSWER') {
+            logoCall = cal.call_type === 'Входящий'
+                ? <img src="/pic/inCallErr.svg" style={{ color: 'red' }} />
+                : <img src="/pic/outCallErr.svg" style={{ color: 'red' }} />;
+        } else {
+            logoCall = cal.call_type === 'Входящий'
+                ? <img src="/pic/inCallOk.svg" className='call-mobail-logo-blue' onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />
+                : <img src="/pic/outCallOk.svg" className='call-mobail-logo-blue' style={{ color: 'blue' }} onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />;
+        }
 
-          </td>
-          <td className='th-style-width truncate'>
-            <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>
-              {cal.name_user}
-            </Link>
-          </td>
-          <td className='td-orders '>
-            {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
-              <Link target={"_blank"} className='link-button-calls'  to="#" onClick={handleClick}>{cal.id_order}</Link>
-            ) : (
-              cal.id_order && cal.id_order.length > 0 ? cal.id_order : 'Нет заказа'
-            )}
-          </td>
-          <td>{`${cal.date_time}`}</td>
-          <td>{`${cal.call_bill_sec}`}</td>
-          <td className='calls-mobail'>{logoCall}</td>
-          <td id='type-butn'>{playButton}</td>
-        </tr>
-      );
+        return (
+            <tr key={index} className='mobail-calls-tr'>
+                <td className='calls-mobail'>{cal.in_number}</td>
+                <td className='calls-mobail-adab mobail-fio'>
+                    <a className="link-button-calls" key={index} onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>
+                </td>
+                <td className='th-style-width td-orders calls-mobail-adab truncate'>
+                    {cal.name_user && cal.name_user.length > 0 ? (
+                        <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>{cal.name_user}</Link>
+                    ) : (
+                        cal.name_user && cal.name_user.length > 0 ? cal.name_user : 'Нет ФИО'
+                    )}
+                </td>
+                <td className='td-orders calls-mobail-adab'>
+                    {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
+                        <Link target={"_blank"} className='link-button-calls' to="#" onClick={handleClick}>{cal.id_order}</Link>
+                    ) : (
+                        cal.id_order && cal.id_order.length > 0 ? cal.id_order : 'Нет заказа'
+                    )}
+                </td>
+                <td className='date-time'>
+                    <span className='date'>{formattedDate}</span>
+                    <span className='time'>{time}</span>
+                </td>
+                <td>{callDuration}</td>
+                <td className='call-mobail-logo'>{logoCall}</td>
+            </tr>
+        );
     });
-  };
+};
+
+
   useEffect(() => {
     filterRecords(searchTerm);
   }, [searchTerm]);
@@ -495,20 +499,82 @@ const Calls = () => {
                     />
                   )}
                 </div>
-                <div className="block-searh">
-
+                <div className="search-container">
+                <div className="search-icon-delete">
+                  {shouldShowResetIcon && (
+                    <FaTimesCircle
+                      className="reset-icon"
+                      onClick={resetFilters}
+                      style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
+                    />
+                  )}
+                </div>
                   <input
-                    type="number"
+                    type="text"
+                    className="search-input"
                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+
                     value={searchNumber}
-                    className='input-search'
                     onChange={handleSearchNumberChange}
                     onFocus={closeDateRange}
                     placeholder='Поиск по номеру'
                     disabled={isLoading || isSearchDisabled}
+
                   />
+                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => fetchData()}>
+                    <IoSearch />
+                  </div>
                 </div>
-                <div className="block-searh">
+              </form>
+
+            </div>
+          </div>
+          <div className="calls-container">
+            <div className="row row-cols-auto">
+              <div className="col">
+
+                {isLoading ? (
+                  <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
+                ) : (
+                  <table className="table">
+                    {isTableHeaderVisible && (
+                      <thead>
+                        <tr>
+                          <th scope="col" className='calls-mobail'>набранный номер</th>
+                          <th scope="col" className='calls-mobail'>номер звонящий</th>
+                          <th scope="col" className='th-style-width calls-mobail'>Ф.И.О</th>
+                          <th scope="col" className='calls-mobail'>заказ наряд</th>
+                          <th className='th-filter' onClick={handleSortByDateTime}>
+                            Дата и время
+                            <GoTriangleDown
+                              style={{
+                                transform: sortByDateTimeAsc ? 'rotate(180deg)' : 'rotate(0deg)',
+                              }}
+                            />
+                          </th>
+                          <th scope="col" className='calls-mobail'>Время <br /> разговора</th>
+
+                          <th className='th-filter table-left ' scope="col" onClick={handleTypeHeaderClick}>тип звонка</th>
+                        </tr>
+                      </thead>
+                    )}
+                    <tbody>{renderRecords()}</tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        {selectedRecord && (
+          <Modal
+            cal={selectedRecord}
+            isModalOpen={isModalOpen}
+            toggleModal={toggleModal}
+            downloadAudio={downloadAudio}
+          />
+        )}
+      </div>
+      {/* <div className="block-searh">
                   <input
                     type="text"
                     value={searchFIO}
@@ -550,67 +616,7 @@ const Calls = () => {
                       ))}
                     </div>
                   )}
-                </div>
-                <div className="block-searh-button">
-                  {shouldShowResetIcon && (
-                    <FaTimesCircle
-                      className="reset-icon"
-                      onClick={resetFilters}
-                      style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
-                    />
-                  )}
-                  <button type="submit" className="btn btn-primary" disabled={isLoading || isSearchDisabled}>поиск</button>
-                </div>
-              </form>
-
-            </div>
-          </div>
-          <div className="calls-container">
-            <div className="row row-cols-auto">
-              <div className="col">
-
-                {isLoading ? (
-                  <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
-                ) : (
-                  <table className="table">
-                    {isTableHeaderVisible && (
-                      <thead>
-                        <tr>
-                          <th className='th-filter table-left ' scope="col" onClick={handleTypeHeaderClick}>тип звонка</th>
-                          <th scope="col" className='calls-mobail'>набранный номер</th>
-                          <th scope="col" className='calls-mobail'>номер звонящий</th>
-                          <th scope="col" className='th-style-width calls-mobail'>Ф.И.О</th>
-                          <th scope="col" className='calls-mobail'>заказ наряд</th>
-                          <th className='th-filter' onClick={handleSortByDateTime}>
-                            Дата и время
-                            <GoTriangleDown
-                              style={{
-                                transform: sortByDateTimeAsc ? 'rotate(180deg)' : 'rotate(0deg)',
-                              }}
-                            />
-                          </th>
-                          <th scope="col" className='calls-mobail'>Время <br /> разговора</th>
-                          <th className="icon calls-mobail" ></th>
-                          <th scope="col"className='calls-mobail'>воспроизвести</th>
-                        </tr>
-                      </thead>
-                    )}
-                    <tbody>{renderRecords()}</tbody>
-                  </table>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        {selectedRecord && (
-          <Modal
-            cal={selectedRecord}
-            isModalOpen={isModalOpen}
-            toggleModal={toggleModal}
-            downloadAudio={downloadAudio}
-          />
-        )}
-      </div>
+                </div> */}
     </>
   );
 };
