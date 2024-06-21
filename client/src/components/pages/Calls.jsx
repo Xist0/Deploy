@@ -466,7 +466,7 @@ const Calls = () => {
           </td>
           <td className='th-style-width td-orders calls-mobail-adab'>
             {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
-              <Link target={"_blank"} className='link-button-calls' to="#" onClick={handleClick}>{cal.id_order.slice(5)}</Link>
+              <Link target={"_blank"} className='link-button-calls' to="#" onClick={handleClick}>{cal.id_order}</Link>
             ) : (
               cal.id_order && cal.id_order.length > 0 ? cal.id_order.slice(5) : 'Нет заказа'
             )}
