@@ -402,73 +402,88 @@ const Calls = () => {
 
   const renderRecords = () => {
     if (!records || records.length === 0) {
-        return <tr><td colSpan="10">Нет данных для отображения</td></tr>;
+      return <tr><td colSpan="8">Нет данных для отображения</td></tr>;
     }
 
     let filteredRecords = records;
     if (filterType === 'incoming') {
-        filteredRecords = records.filter(record => record.call_type === 'Входящий');
+      filteredRecords = records.filter(record => record.call_type === 'Входящий');
     } else if (filterType === 'outgoing') {
-        filteredRecords = records.filter(record => record.call_type === 'Исходящий');
+      filteredRecords = records.filter(record => record.call_type === 'Исходящий');
     }
 
     return filteredRecords.map((cal, index) => {
-        let logoCall;
-        const [date, time] = cal.date_time.split(' ');
+      let logoCall;
+      const [date, time] = cal.date_time.split(' ');
 
-        // Преобразование даты в формат MM.DD
-        const formattedDate = date.split('-').slice(1).join('.');
+      const formattedDate = date.split('-').slice(1).join('.');
 
-        // Преобразование секунд в формат MM:SS
-        const callDurationInSeconds = parseInt(cal.call_bill_sec, 10);
-        let callDuration = '00:00';
-        if (!isNaN(callDurationInSeconds)) {
-            const minutes = Math.floor(callDurationInSeconds / 60);
-            const seconds = callDurationInSeconds % 60;
-            callDuration = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      let callDuration = cal.call_bill_sec;
+      if (callDuration) {
+        const timeParts = callDuration.split(':');
+        if (timeParts.length === 3 && timeParts[0] === '00') {
+          callDuration = timeParts.slice(1).join(':');
         }
+      }
 
-        if (cal.call_status === 'NO ANSWER') {
-            logoCall = cal.call_type === 'Входящий'
-                ? <img src="/pic/inCallErr.svg" style={{ color: 'red' }} />
-                : <img src="/pic/outCallErr.svg" style={{ color: 'red' }} />;
-        } else {
-            logoCall = cal.call_type === 'Входящий'
-                ? <img src="/pic/inCallOk.svg" className='call-mobail-logo-blue' onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />
-                : <img src="/pic/outCallOk.svg" className='call-mobail-logo-blue' style={{ color: 'blue' }} onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />;
-        }
+      if (cal.call_status === 'NO ANSWER') {
+        logoCall = cal.call_type === 'Входящий'
+          ? <img src="/pic/inCallErr.svg" style={{ color: 'red' }} />
+          : <img src="/pic/outCallErr.svg" style={{ color: 'red' }} />;
+      } else {
+        logoCall = cal.call_type === 'Входящий'
+          ? <img src="/pic/inCallOk.svg" className='call-mobail-logo-blue' onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />
+          : <img src="/pic/outCallOk.svg" className='call-mobail-logo-blue' style={{ color: 'blue' }} onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />;
+      }
 
-        return (
-            <tr key={index} className='mobail-calls-tr'>
-                <td className='calls-mobail'>{cal.in_number}</td>
-                <td className='calls-mobail-adab mobail-fio'>
-                    <a className="link-button-calls" key={index} onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>
-                </td>
-                <td className='th-style-width td-orders calls-mobail-adab truncate'>
-                    {cal.name_user && cal.name_user.length > 0 ? (
-                        <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>{cal.name_user}</Link>
-                    ) : (
-                        cal.name_user && cal.name_user.length > 0 ? cal.name_user : 'Нет ФИО'
-                    )}
-                </td>
-                <td className='td-orders calls-mobail-adab'>
-                    {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
-                        <Link target={"_blank"} className='link-button-calls' to="#" onClick={handleClick}>{cal.id_order}</Link>
-                    ) : (
-                        cal.id_order && cal.id_order.length > 0 ? cal.id_order : 'Нет заказа'
-                    )}
-                </td>
-                <td className='date-time'>
-                    <span className='date'>{formattedDate}</span>
-                    <span className='time'>{time}</span>
-                </td>
-                <td>{callDuration}</td>
-                <td className='call-mobail-logo'>{logoCall}</td>
-            </tr>
+      let displayNumber;
+      if (cal.name_user && cal.name_user.length > 0) {
+        displayNumber = <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>{cal.name_user}</Link>;
+      } else if (cal.in_number && cal.in_number.length < 4 && cal.out_nomber && cal.out_nomber.length < 4) {
+        displayNumber = (
+          <React.Fragment>
+            {cal.in_number} {'>'} {cal.out_nomber}
+          </React.Fragment>
         );
-    });
-};
+      } else if (cal.out_nomber && cal.out_nomber.length < 4) {
+        displayNumber = <a className="link-button-calls" onClick={() => handleNumberClick(cal.in_number)}>{cal.in_number}</a>;
+      } else if (cal.in_number && cal.in_number.length < 4) {
+        displayNumber = <a className="link-button-calls" onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>;
+      }
 
+
+      return (
+        <tr key={index} className='mobail-calls-tr'>
+          <td className='calls-mobail'>
+            {cal.in_number && cal.in_number.length < 4 ? (
+              <p>{cal.in_number }</p> 
+            ) : (
+              <p>{cal.out_nomber }</p> 
+            )}
+          </td>
+          <td className='calls-mobail-adab mobail-fio'>
+            {displayNumber}
+          </td>
+          <td className='th-style-width td-orders calls-mobail-adab'>
+            {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
+              <Link target={"_blank"} className='link-button-calls' to="#" onClick={handleClick}>{cal.id_order.slice(5)}</Link>
+            ) : (
+              cal.id_order && cal.id_order.length > 0 ? cal.id_order.slice(5) : 'Нет заказа'
+            )}
+          </td>
+          <td className='call-time'>
+            {cal.date_time}
+          </td>
+          <td className='date-time'>
+            <span className='date'>{formattedDate}</span>
+            <span className='time'>{time}</span>
+          </td>
+          <td>{callDuration}</td>
+          <td className='call-mobail-logo'>{logoCall}</td>
+        </tr>
+      );
+    });
+  };
 
   useEffect(() => {
     filterRecords(searchTerm);
@@ -500,15 +515,15 @@ const Calls = () => {
                   )}
                 </div>
                 <div className="search-container">
-                <div className="search-icon-delete">
-                  {shouldShowResetIcon && (
-                    <FaTimesCircle
-                      className="reset-icon"
-                      onClick={resetFilters}
-                      style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
-                    />
-                  )}
-                </div>
+                  <div className="search-icon-delete">
+                    {shouldShowResetIcon && (
+                      <FaTimesCircle
+                        className="reset-icon"
+                        onClick={resetFilters}
+                        style={{ marginLeft: '10px', cursor: 'pointer', fontSize: '20px' }}
+                      />
+                    )}
+                  </div>
                   <input
                     type="text"
                     className="search-input"
@@ -540,9 +555,8 @@ const Calls = () => {
                     {isTableHeaderVisible && (
                       <thead>
                         <tr>
-                          <th scope="col" className='calls-mobail'>набранный номер</th>
-                          <th scope="col" className='calls-mobail'>номер звонящий</th>
-                          <th scope="col" className='th-style-width calls-mobail'>Ф.И.О</th>
+                          <th scope="col" className='calls-mobail'>Офис</th>
+                          <th scope="col" className='th-style-width calls-mobail'>Клиент</th>
                           <th scope="col" className='calls-mobail'>заказ наряд</th>
                           <th className='th-filter' onClick={handleSortByDateTime}>
                             Дата и время
