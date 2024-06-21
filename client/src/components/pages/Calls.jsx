@@ -423,7 +423,7 @@ const Calls = () => {
           logoCall = cal.call_type === 'Входящий' ? <img src="/pic/inCallErr.svg" style={{ color: 'transparent' }} /> : <img src="/pic/outCallErr.svg" style={{ color: 'blue' }} />;
         } else {
           playButton = (
-            <td className="table-success" style={{ textAlign: 'center' }}>
+          
               <button
                 className="btn-td"
                 onClick={() => {
@@ -432,35 +432,35 @@ const Calls = () => {
               >
                 Воспроизвести
               </button>
-            </td>
+           
           );
           logoCall = cal.call_type === 'Входящий' ? <img src="/pic/inCallOk.svg" style={{ color: 'blue' }} /> : <img src="/pic/outCallOk.svg" style={{ color: 'blue' }} />;
         }
       }
 
       return (
-        <tr key={index}>
-          <td id='type_call' className='table-left'>{cal.call_type}</td>
-          <td>{cal.in_number}</td>
+        <tr key={index} className='mobail-calls-tr'>
+          <td id='type_call' className='table-left calls-mobail'>{cal.call_type}</td>
+          <td className='calls-mobail'>{cal.in_number}</td>
           <td>
-            <a class="link-button" key={index} onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>
+            <a class="link-button-calls" key={index} onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>
 
           </td>
           <td className='th-style-width truncate'>
-            <Link className="link-button" onClick={() => handleFIOClick(cal.name_user)}>
+            <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>
               {cal.name_user}
             </Link>
           </td>
-          <td className='td-orders'>
+          <td className='td-orders '>
             {cal.id_order && cal.id_order.length > 0 && cal.id_order.startsWith('00НФ') ? (
-              <Link target={"_blank"} to="#" onClick={handleClick}>{cal.id_order}</Link>
+              <Link target={"_blank"} className='link-button-calls'  to="#" onClick={handleClick}>{cal.id_order}</Link>
             ) : (
               cal.id_order && cal.id_order.length > 0 ? cal.id_order : 'Нет заказа'
             )}
           </td>
           <td>{`${cal.date_time}`}</td>
           <td>{`${cal.call_bill_sec}`}</td>
-          <td>{logoCall}</td>
+          <td className='calls-mobail'>{logoCall}</td>
           <td id='type-butn'>{playButton}</td>
         </tr>
       );

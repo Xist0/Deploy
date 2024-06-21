@@ -1170,7 +1170,9 @@ input {
     box-shadow: 0px 0px 15px 5px rgba(56, 115, 159, 0.3);
     color: #cccccc;
 }
-
+.link-button-calls{
+    padding: 10px 5px;
+}
 .dropdown>select {
     border: 1px solid #1776CD;
     border-radius: 6px;
@@ -1311,6 +1313,21 @@ textarea:focus {
     border-radius: 5px;
 }
 
+.tdRed {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background: rgba(192, 35, 35, 0.334);
+    border-radius: 6px;
+    cursor: default;
+    pointer-events: none;
+    padding: 5px 4px;
+
+}
+
+.tdRed:hover {
+    box-shadow: 0px 0px 25px 0px rgba(192, 35, 35, 0.334);
+}
 
 .rdrMonth {
     width: 100% !important;
@@ -1768,6 +1785,7 @@ textarea:focus {
         display: flex;
         align-items: center;
         gap: 40px;
+        width: 100%;
         justify-content: center;
     }
 
@@ -1780,10 +1798,15 @@ textarea:focus {
         text-align: center;
     }
 
+    .mobail-calls-tr {
+        margin-bottom: 0;
+    }
+
     .calls-mobail {
         display: none;
     }
-    .phone-book > .table > thead {
+
+    .phone-book>.table>thead {
         left: -9999px !important;
         position: absolute !important;
         visibility: hidden !important;

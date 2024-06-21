@@ -178,22 +178,6 @@ tbody {
   padding: 5px;
   border-radius: 6px;
 }
-
-.tdRed {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  box-shadow: 0px 0px 25px 0px rgba(192, 35, 35, 0.334);
-  background: rgba(192, 35, 35, 0.334);
-  border-radius: 6px;
-  cursor: default;
-  pointer-events: none;
-  padding: 5px 4px;
-
-}
-
-
-
 .col {
   display: flex;
   justify-content: center;
