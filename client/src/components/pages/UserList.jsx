@@ -141,7 +141,7 @@ function UserList() {
                         <div>{message}</div>
                         <div className="table-container">
                             <table>
-                                <thead>
+                                <thead className='table-container-mobail'>
                                     <tr>
                                         <th>ID</th>
                                         <th id='UserName'>Имя</th>
@@ -154,7 +154,7 @@ function UserList() {
 
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className='table-container-mobail-tbody'>
                                     {users.map(user => (
                                         <User
                                             key={user.id}

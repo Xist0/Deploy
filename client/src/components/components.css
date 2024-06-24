@@ -1429,6 +1429,7 @@ textarea:focus {
 
 #User1CID>input {
     width: 100%;
+    max-width: 100%;
 }
 
 #userRole {
@@ -1927,5 +1928,10 @@ textarea:focus {
     .mobail-calls-tr .th-style-width.td-orders.calls-mobail-adab {
         display: table-cell;
     }
-    
+    .table-container-mobail{
+        display: none;
+    }
+    .table-container-mobail-tbody tr{
+        margin-bottom: 10px;
+    }
 }
