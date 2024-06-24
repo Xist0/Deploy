@@ -471,7 +471,7 @@ const Calls = () => {
               <p>{cal.out_nomber}</p>
             )}
           </td>
-          <td className='calls-outNumber'>{cal.out_nomber}</td>
+          <td className='calls-outNumber'>{cal.in_number}</td>
           <td className='calls-mobail-adab mobail-fio'>
             {displayNumber}
           </td>
