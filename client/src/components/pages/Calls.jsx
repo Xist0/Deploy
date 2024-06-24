@@ -468,10 +468,14 @@ const Calls = () => {
             {cal.in_number && cal.in_number.length < 4 ? (
               <p>{cal.in_number}</p>
             ) : (
-              <p>{cal.out_nomber}</p>
+              <p>{cal.in_number}</p>
             )}
           </td>
-          <td className='calls-outNumber'>{cal.in_number}</td>
+          <td className='calls-outNumber'>  {cal.out_nomber && cal.in_number.length < 4 ? (
+            <p>{cal.out_nomber}</p>
+          ) : (
+            <p>{cal.in_number}</p>
+          )}</td>
           <td className='calls-mobail-adab mobail-fio'>
             {displayNumber}
           </td>
