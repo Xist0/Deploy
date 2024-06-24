@@ -491,7 +491,7 @@ const Calls = () => {
 
   return (
     <>
-      <Messenger />
+      {/* <Messenger /> */}
       <div div className="container-box">
         <div className="calls-container">
           <div className="row row-cols-auto">
