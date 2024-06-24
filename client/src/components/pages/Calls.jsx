@@ -106,6 +106,7 @@ const Calls = () => {
   const [searchOrder, setSearchOrder] = useState('');
   const [isSearchDisabled, setIsSearchDisabled] = useState(false);
   const [filterType, setFilterType] = useState('all');
+  const [noDataMessage, setNoDataMessage] = useState('');
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const iconClass = isDateRangeVisible ? 'rotate' : '';
   const [matchedUsers, setMatchedUsers] = useState([]);
@@ -157,24 +158,32 @@ const Calls = () => {
 
   const fetchData = async () => {
     setRequestCounter(requestCounter + 1);
-
+  
     if (isLoading) {
       return;
     }
     setIsLoading(true);
     setIsSearchDisabled(true);
+    setNoDataMessage(''); // Сброс сообщения об отсутствии данных
     try {
       let startDateParam = state[0].startDate ? format(state[0].startDate, 'yyyy-MM-dd') : null;
       let endDateParam = state[0].endDate ? format(state[0].endDate, 'yyyy-MM-dd') : null;
       const searchNumberValue = searchNumber || null;
-
+  
       const response = await fetch(`/api/callstoday/${startDateParam ?? 'null'}/${endDateParam ?? 'null'}/${searchNumberValue}`);
       const data = await response.json();
-
-      data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
-
-      setRecords(data);
-      setTableHeaderVisibility(true);
+  
+      if (data === null || data.length === 0) {
+        setNoDataMessage('Ничего не найдено при запросе');
+        setRecords([]);
+        setTableHeaderVisibility(false);
+      } else {
+        data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
+  
+        setRecords(data);
+        setTableHeaderVisibility(true);
+      }
+  
       if (latestRequestCounter.current === requestCounter) {
         setRecords(data);
         setTableHeaderVisibility(true);
@@ -186,6 +195,7 @@ const Calls = () => {
       setIsSearchDisabled(false);
     }
   };
+  
 
 
   const filterfetchData = async () => {
@@ -402,22 +412,22 @@ const Calls = () => {
 
   const renderRecords = () => {
     if (!records || records.length === 0) {
-      return <tr><td colSpan="8">Нет данных для отображения</td></tr>;
+      return <tr><td colSpan="8">{noDataMessage || 'Нет данных для отображения'}</td></tr>;
     }
-
+  
     let filteredRecords = records;
     if (filterType === 'incoming') {
       filteredRecords = records.filter(record => record.call_type === 'Входящий');
     } else if (filterType === 'outgoing') {
       filteredRecords = records.filter(record => record.call_type === 'Исходящий');
     }
-
+  
     return filteredRecords.map((cal, index) => {
       let logoCall;
       const [date, time] = cal.date_time.split(' ');
-
+  
       const formattedDate = date.split('-').slice(1).join('.');
-
+  
       let callDuration = cal.call_bill_sec;
       if (callDuration) {
         const timeParts = callDuration.split(':');
@@ -425,7 +435,7 @@ const Calls = () => {
           callDuration = timeParts.slice(1).join(':');
         }
       }
-
+  
       if (cal.call_status === 'NO ANSWER') {
         logoCall = cal.call_type === 'Входящий'
           ? <img src="/pic/inCallErr.svg" style={{ color: 'red' }} />
@@ -435,7 +445,7 @@ const Calls = () => {
           ? <img src="/pic/inCallOk.svg" className='call-mobail-logo-blue' onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />
           : <img src="/pic/outCallOk.svg" className='call-mobail-logo-blue' style={{ color: 'blue' }} onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />;
       }
-
+  
       let displayNumber;
       if (cal.name_user && cal.name_user.length > 0) {
         displayNumber = <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>{cal.name_user}</Link>;
@@ -450,8 +460,8 @@ const Calls = () => {
       } else if (cal.in_number && cal.in_number.length < 4) {
         displayNumber = <a className="link-button-calls" onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>;
       }
-
-
+  
+  
       return (
         <tr key={index} className='mobail-calls-tr'>
           <td className='calls-mobail'>
@@ -484,14 +494,17 @@ const Calls = () => {
       );
     });
   };
-
+  const closeDate = () =>{
+    closeDateRange()
+    fetchData()
+  }
   useEffect(() => {
     filterRecords(searchTerm);
   }, [searchTerm]);
 
   return (
     <>
-      {/* <Messenger /> */}
+      <Messenger />
       <div div className="container-box">
         <div className="calls-container">
           <div className="row row-cols-auto">
@@ -513,6 +526,10 @@ const Calls = () => {
                       ranges={state}
                     />
                   )}
+                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}   
+                  >
+                    <IoSearch />
+                  </div>
                 </div>
                 <div className="search-container">
                   <div className="search-icon-delete">
@@ -532,11 +549,11 @@ const Calls = () => {
                     value={searchNumber}
                     onChange={handleSearchNumberChange}
                     onFocus={closeDateRange}
-                    placeholder='Поиск по номеру'
+                    placeholder='Поиск'
                     disabled={isLoading || isSearchDisabled}
 
                   />
-                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => fetchData()}>
+                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}>
                     <IoSearch />
                   </div>
                 </div>

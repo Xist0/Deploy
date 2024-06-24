@@ -1751,9 +1751,13 @@ textarea:focus {
     /* .calls-mobail-adab{
         width: 0 !important; 
     } */
+    .search-container {
+        position: relative;
+        width: 100%;
+    }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 1300px) {
 
     .th-style-width {
         min-width: 0px;
