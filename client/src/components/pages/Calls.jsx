@@ -158,7 +158,7 @@ const Calls = () => {
 
   const fetchData = async () => {
     setRequestCounter(requestCounter + 1);
-  
+
     if (isLoading) {
       return;
     }
@@ -169,21 +169,21 @@ const Calls = () => {
       let startDateParam = state[0].startDate ? format(state[0].startDate, 'yyyy-MM-dd') : null;
       let endDateParam = state[0].endDate ? format(state[0].endDate, 'yyyy-MM-dd') : null;
       const searchNumberValue = searchNumber || null;
-  
+
       const response = await fetch(`/api/callstoday/${startDateParam ?? 'null'}/${endDateParam ?? 'null'}/${searchNumberValue}`);
       const data = await response.json();
-  
+
       if (data === null || data.length === 0) {
         setNoDataMessage('Ничего не найдено при запросе');
         setRecords([]);
         setTableHeaderVisibility(false);
       } else {
         data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
-  
+
         setRecords(data);
         setTableHeaderVisibility(true);
       }
-  
+
       if (latestRequestCounter.current === requestCounter) {
         setRecords(data);
         setTableHeaderVisibility(true);
@@ -195,7 +195,7 @@ const Calls = () => {
       setIsSearchDisabled(false);
     }
   };
-  
+
 
 
   const filterfetchData = async () => {
@@ -414,20 +414,20 @@ const Calls = () => {
     if (!records || records.length === 0) {
       return <tr><td colSpan="8">{noDataMessage || 'Нет данных для отображения'}</td></tr>;
     }
-  
+
     let filteredRecords = records;
     if (filterType === 'incoming') {
       filteredRecords = records.filter(record => record.call_type === 'Входящий');
     } else if (filterType === 'outgoing') {
       filteredRecords = records.filter(record => record.call_type === 'Исходящий');
     }
-  
+
     return filteredRecords.map((cal, index) => {
       let logoCall;
       const [date, time] = cal.date_time.split(' ');
-  
+
       const formattedDate = date.split('-').slice(1).join('.');
-  
+
       let callDuration = cal.call_bill_sec;
       if (callDuration) {
         const timeParts = callDuration.split(':');
@@ -435,7 +435,7 @@ const Calls = () => {
           callDuration = timeParts.slice(1).join(':');
         }
       }
-  
+
       if (cal.call_status === 'NO ANSWER') {
         logoCall = cal.call_type === 'Входящий'
           ? <img src="/pic/inCallErr.svg" style={{ color: 'red' }} />
@@ -445,7 +445,7 @@ const Calls = () => {
           ? <img src="/pic/inCallOk.svg" className='call-mobail-logo-blue' onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />
           : <img src="/pic/outCallOk.svg" className='call-mobail-logo-blue' style={{ color: 'blue' }} onClick={() => fetchRecordDetails(cal.record_file_name, cal.date)} />;
       }
-  
+
       let displayNumber;
       if (cal.name_user && cal.name_user.length > 0) {
         displayNumber = <Link className="link-button-calls" onClick={() => handleFIOClick(cal.name_user)}>{cal.name_user}</Link>;
@@ -460,17 +460,18 @@ const Calls = () => {
       } else if (cal.in_number && cal.in_number.length < 4) {
         displayNumber = <a className="link-button-calls" onClick={() => handleNumberClick(cal.out_nomber)}>{cal.out_nomber}</a>;
       }
-  
-  
+
+
       return (
         <tr key={index} className='mobail-calls-tr'>
           <td className='calls-mobail'>
             {cal.in_number && cal.in_number.length < 4 ? (
-              <p>{cal.in_number }</p> 
+              <p>{cal.in_number}</p>
             ) : (
-              <p>{cal.out_nomber }</p> 
+              <p>{cal.out_nomber}</p>
             )}
           </td>
+          <td className='calls-outNumber'>{cal.out_nomber}</td>
           <td className='calls-mobail-adab mobail-fio'>
             {displayNumber}
           </td>
@@ -494,7 +495,7 @@ const Calls = () => {
       );
     });
   };
-  const closeDate = () =>{
+  const closeDate = () => {
     closeDateRange()
     fetchData()
   }
@@ -526,7 +527,7 @@ const Calls = () => {
                       ranges={state}
                     />
                   )}
-                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}   
+                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}
                   >
                     <IoSearch />
                   </div>
@@ -573,6 +574,7 @@ const Calls = () => {
                       <thead>
                         <tr>
                           <th scope="col" className='calls-mobail'>Офис</th>
+                          <th className='calls-outNumber'> Номер </th>
                           <th scope="col" className='th-style-width calls-mobail'>Клиент</th>
                           <th scope="col" className='calls-mobail'>заказ наряд</th>
                           <th className='th-filter' onClick={handleSortByDateTime}>
