@@ -16,7 +16,9 @@
 }
 
 /* Links */
-
+body {
+    padding-top: 80px; /* Отступ равен высоте навигационного меню */
+}
 a,
 a:link,
 a:visited {
@@ -197,5 +199,7 @@ legend {
 		align-items: center;
 		justify-content: center;
 	}
-
+	body {
+		padding-top: 0; /* Отступ равен высоте навигационного меню */
+	}
 }

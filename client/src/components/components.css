@@ -4,10 +4,18 @@
     height: 60px;
     width: calc(100% - 10%);
     margin: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #fff; /* Цвет фона для меню */
 }
-.nav-menu-mob{
+
+.nav-menu-mob {
     display: none;
 }
+
 .navi {
     display: flex;
     justify-content: space-between;
@@ -105,14 +113,17 @@ audio {
     position: relative;
     /* Добавляем относительное позиционирование */
 }
-.row-cols-calendar{
+
+.row-cols-calendar {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.row-cols-calendar-svg{
+
+.row-cols-calendar-svg {
     width: 20px;
 }
+
 .row-cols label {
     display: flex;
     width: 100%;
@@ -157,11 +168,13 @@ li a:hover {
     font-weight: 400;
     line-height: normal;
 }
-.page-item-pag-active{
+
+.page-item-pag-active {
     font-size: 25px;
     color: #1776CD;
 
 }
+
 .burger-menu-mav {
     display: none;
 }
@@ -204,8 +217,8 @@ li a:hover {
 
 .orders-box {
     display: flex;
-    flex-direction: column;
     gap: 40px;
+    align-items: center;
 }
 
 .orders-box h1 {
@@ -215,17 +228,9 @@ li a:hover {
     gap: 10px;
 }
 
-.orders-container {
-    display: flex;
-    border: 1px solid;
-    min-width: 970px;
-    border-radius: 6px;
-    width: 1200px;
-    gap: 20px;
-    padding: 20px 40px;
-    background: #ffffff;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-}
+
+
+
 
 .orders-button-status {
     width: 270px;
@@ -1042,7 +1047,7 @@ input {
 .search-icon-delete {
     position: absolute;
     top: 58%;
-    right:  -30px;
+    right: -30px;
     transform: translateY(-50%);
     cursor: pointer;
 }
@@ -1057,6 +1062,46 @@ input {
     fill: #1776CD;
 }
 
+.orders-box-nav {
+    position: relative;
+}
+
+.orders-content {
+    position: absolute;
+    top: 22%;
+    left: 5%;
+    width: 100%;
+    max-width: 500px;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    /* Обеспечивает, что элемент будет сверху других */
+    background: #fff;
+    /* Опционально: для лучшей видимости */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Опционально: для стиля */
+}
+
+.orders-content.visible {
+    max-height: 1000px;
+    opacity: 1;
+    padding: 10px;
+}
+
+.orders-content label {
+    width: 100%;
+}
+
+.orders-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
 .order-nav {
     display: flex;
     justify-content: center;
@@ -1067,14 +1112,13 @@ input {
 .order-cards {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
 }
 
 .order-filter {
     display: flex;
-    flex-direction: column;
     gap: 20px;
-    width: 30%;
+    width: 100%;
     margin: 20px 0;
 }
 
@@ -1083,16 +1127,19 @@ input {
     max-width: 100%;
 }
 
+
 .device-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
 }
-.printer-url{
+
+.printer-url {
     width: 100%;
 }
-.printer-btn{
+
+.printer-btn {
     display: flex;
     max-width: 500px;
     gap: 10px;
@@ -1101,6 +1148,7 @@ input {
     align-items: center;
     border: transparent !important;
 }
+
 .input-container {
     position: relative;
     width: 100%;
@@ -1184,19 +1232,30 @@ input {
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    max-width: 40%;
+
+
 }
-.order-details-main{
+
+.order-details-main {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-width: 60%;
     width: 100%;
+    max-width: 20%;
 
 }
-.order-details-box{
-    display: flex;
+
+.order-dateils-user {
+    width: 100%;
+    max-width: 40%;
 }
+
+.order-details-box {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+}
+
 .order-details-user {
     display: flex;
     flex-direction: column;
@@ -1343,30 +1402,6 @@ textarea:focus {
 
 
 
-.orders-content {
-    max-height: 0;
-    opacity: 0;
-}
-
-.orders-content label {
-    width: 100%;
-}
-
-.orders-content.visible {
-    max-height: 1000px;
-    padding: 10px;
-    opacity: 1;
-}
-
-.orders-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
 .tdRed {
     display: flex;
     justify-content: center;
@@ -1455,9 +1490,11 @@ textarea:focus {
     width: 100%;
     border: none;
 }
+
 #action td {
     border: none;
 }
+
 #User1CID {
     display: flex;
     gap: 20px;
@@ -1487,9 +1524,11 @@ textarea:focus {
     color: white;
     text-align: center;
 }
-.staff tr{
+
+.staff tr {
     border: 1px solid;
 }
+
 .staff tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -1553,21 +1592,24 @@ textarea:focus {
     width: 100%;
     position: relative;
 }
-.container-search-sms-block{
+
+.container-search-sms-block {
     display: flex;
     width: 100%;
     justify-content: space-between;
 }
-.container-search-sms-block > .input-column{
+
+.container-search-sms-block>.input-column {
     width: 50%;
 }
+
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.page-item-pag  {
+.page-item-pag {
     cursor: pointer;
     width: 20px;
 }
@@ -1929,9 +1971,6 @@ textarea:focus {
         gap: 10px;
     }
 
-    .order-filter {
-        width: 100%;
-    }
 
     .block-searh-button {
         display: flex;
@@ -1975,12 +2014,15 @@ textarea:focus {
     .table thead tr {
         margin: 0;
     }
-    .order-details-box{
+
+    .order-details-box {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 10px;
         justify-content: space-between;
+        align-items: center;
     }
+
     .staff td {
         border: 1px solid #000000;
         padding: 8px;
@@ -2015,17 +2057,47 @@ textarea:focus {
     .table-container-mobail-tbody tr {
         margin-bottom: 10px;
     }
-    .nav-menu-mob{
+
+    .nav-menu-mob {
         display: block;
     }
+
     .page-item-pag {
         display: none;
     }
 
-    .page-item-pag-active{
+    .page-item-pag-active {
         display: block;
     }
-    .row-cols-calendar{
+
+    .row-cols-calendar {
         gap: 0;
+    }
+
+    .order-filter {
+        width: 100%;
+    }
+
+    .visible {
+        width: 90% !important;
+    }
+
+    .orders-content {
+        position: absolute;
+        top: 21%;
+    }
+    .orders-box {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+    .order-details-main{
+        max-width: 100%;
+        width: 100%;
+    }
+    .order-dateils-user{
+        max-width: 100%;
+        width: 100%;
     }
 }

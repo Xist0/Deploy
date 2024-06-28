@@ -44,24 +44,23 @@ function OrderCard({ order, toggleDetails, isOpen }) {
                 <div className={`order-card-main`}>
                     <div className="order-details-box">
                         <div className="order-details-main">
-                            <h3>Order ID: {order.order_id}</h3>
+                            <h3>Заказ: {order.order_id}</h3>
                             <p>Дата заказа: {order.order_date}</p>
                             <p>Тип заказа: {order.order_type}</p>
                             <p>Статус заказа: {order.order_status}</p>
                         </div>
-
+                        <div className="order-dateils-user" >
+                            <h1>Клиент: {order.retail_user.user_name}</h1>
+                            <p>Номер телефона: {order.retail_user.user_phone}</p>
+                            <p>Адрес: {order.retail_user.user_address}</p>
+                            <p>Тип клиента: {order.retail_user.user_type}</p>
+                        </div>
                         <div className="order-dateils-device">
-                            <h1>Устройство: {order.device.device_full_model}</h1>                            
+                            <h1>Устройство: {order.device.device_full_model}</h1>
                             <p>Внешний вид: {order.device.device_appearance}</p>
                             <p>Дефект: {order.device.device_stated_defect}</p>
                             <p>Комплектация: {order.device.device_equipment}</p>
                         </div>
-                    </div>
-                    <div >
-                        <h1>Клиент: {order.retail_user.user_name}</h1>
-                        <p>Номер телефона: {order.retail_user.user_phone}</p>
-                        <p>Адрес: {order.retail_user.user_address}</p>
-                        <p>Тип клиента: {order.retail_user.user_type}</p>
                     </div>
                 </div>
 
@@ -340,28 +339,16 @@ function AllOrders() {
     return (
         <div className="container-box">
             <div className="order-box">
-                <h2>Список заказов</h2>
-                <div className='order-nav'>
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            className="search-input"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Введите номер"
-                        />
-                        <div className="search-icon" onClick={() => handleSearch(searchValue)}>
-                            <IoSearch />
-                        </div>
-                    </div>
-                </div>
+
                 <div className="order-filter">
                     <div className="orders-box">
-                        <h1 onClick={() => setIsOrdersVisible(!isOrdersVisible)}>
-                            Дополнительные параметры поиска
-                            <GoTriangleDown className={`icon ${isOrdersVisible ? 'rotate' : ''}`} />
-                        </h1>
+                        <div className='orders-box-nav'>
+                    
+                            <h1 onClick={() => setIsOrdersVisible(!isOrdersVisible)}>
+                                Дополнительные параметры поиска
+                                <GoTriangleDown className={`icon ${isOrdersVisible ? 'rotate' : ''}`} />
+                            </h1>
+                        </div>
                         <div className={`orders-content ${isOrdersVisible ? 'visible' : ''}`}>
                             <label className="input-column">
                                 <select
@@ -429,6 +416,19 @@ function AllOrders() {
                                 </label>
                             </div>
                         </div>
+                        <div className="search-container">
+                                <input
+                                    type="text"
+                                    className="search-input"
+                                    value={searchValue}
+                                    onChange={(e) => setSearchValue(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Введите номер"
+                                />
+                                <div className="search-icon" onClick={() => handleSearch(searchValue)}>
+                                    <IoSearch />
+                                </div>
+                            </div>
                     </div>
                 </div>
                 {loading ? (
