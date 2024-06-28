@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { IoClose, IoChevronDownOutline } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import './components.css';
 import { Context } from '../main';
 import { MdManageAccounts } from "react-icons/md";
@@ -13,7 +13,7 @@ function NavMenu() {
   const menuRef = useRef(null);
   const { store } = useContext(Context);
   const userRole = store.user.role;
-  const userName = store.user.login
+  const userName = store.user.login;
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
@@ -35,7 +35,6 @@ function NavMenu() {
     if (role === 'Клиент' || role === 'Мастер' || role === 'Администратор' || role === 'Менеджер') {
       return (
         <div>
-
           <NavLink to="/AllOrders" onClick={closeMenu}>Все заказы</NavLink>
         </div>
       );
@@ -43,18 +42,19 @@ function NavMenu() {
       return null;
     }
   };
+
   const renderOrderLinks = (role) => {
     if (role === 'Менеджер' || role === 'Администратор') {
       return (
         <div>
           <NavLink to="/OrderStatus" onClick={closeMenu}>Новый Заказ</NavLink>
-          {/* <NavLink to="/ChangeOrder" onClick={closeMenu}>Изменить заказ</NavLink> */}
         </div>
       );
     } else {
       return null;
     }
   };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -84,37 +84,28 @@ function NavMenu() {
         <li className='orders'>
           <div className="dropdown">
             <span onClick={toggleExpanded}>
-
               Заказы<GoTriangleDown className={`icon ${expanded ? 'rotate' : ''}`} />
             </span>
             <div className={`dropdown-content ${expanded ? 'show' : ''}`}>
-              <>
-
-                <>
-                  {renderOrderUserLinks(userRole)}
-                  {renderOrderLinks(userRole)}
-
-                  <NavLink to="/WarrantyRepair" onClick={closeMenu}>Гарантия</NavLink>
-                  <NavLink to="/Maxvi" onClick={closeMenu}>Гарантия Maxvi</NavLink>
-                </>
-
-              </>
+              {renderOrderUserLinks(userRole)}
+              {renderOrderLinks(userRole)}
+              <NavLink to="/WarrantyRepair" onClick={closeMenu}>Гарантия</NavLink>
+              <NavLink to="/Maxvi" onClick={closeMenu}>Гарантия Maxvi</NavLink>
             </div>
           </div>
         </li>
-
         {userRole === 'Админ' || userRole === 'Администратор' || userRole === 'Менеджер' ? (
           <li><NavLink to="/Calls" onClick={closeMenu}>Звонки</NavLink></li>
         ) : null}
         {userRole === 'Администратор' ? (
           <li><NavLink to="/adminka" onClick={closeMenu}> Админка </NavLink></li>
         ) : null}
-        <li><NavLink to="/PhoneBook" onClick={closeMenu}>Телефонный справочник</NavLink> </li>
+        <li><NavLink to="/PhoneBook" onClick={closeMenu}>Телефонный справочник</NavLink></li>
         {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Выдача' || userRole === 'Администратор' ? (
-          <li><NavLink to="/Acceptance" onClick={closeMenu}>Выдача</NavLink></li>
+          <li className='nav-menu-mob'><NavLink to="/Acceptance"  onClick={closeMenu}>Выдача</NavLink></li>
         ) : null}
         {userRole === 'Выдача' || userRole === 'Приёмка' || userRole === 'Отправка' || userRole === 'Администратор' ? (
-          <li><NavLink to="/Shipment" onClick={closeMenu}>Отправка</NavLink></li>
+          <li className='nav-menu-mob'><NavLink to="/Shipment"  onClick={closeMenu}>Отправка</NavLink></li>
         ) : null}
         <li><NavLink to="/" className='ManageAccounts' onClick={closeMenu}><MdManageAccounts />{store.user.login}</NavLink></li>
       </ul>

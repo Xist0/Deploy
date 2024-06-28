@@ -3,6 +3,7 @@ import LoginForm from '../component/LoginForm';
 import RegisterForm from '../component/RegisterForm';
 import UserList from './UserList';
 import PrintComponent from './PrintComponent';
+import ListPrinter from './ListPrinter';
 
 function Adminka() {
 
@@ -11,6 +12,7 @@ function Adminka() {
             <RegisterForm  />
             <UserList />
             {/* <PrintComponent/> */}
+            <ListPrinter/>
         </div>
     );
 }

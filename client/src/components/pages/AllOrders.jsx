@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { IoSearch } from "react-icons/io5";
 import { GoTriangleDown } from "react-icons/go";
 
@@ -40,41 +40,36 @@ function OrderCard({ order, toggleDetails, isOpen }) {
 
     return (
         <>
-            <div className={`order-card ${showDetails ? 'order-card-active' : ''}`} onClick={handleToggleDetails}>
-                <div className={`order-card-main ${showDetails ? 'order-card-main-active' : ''}`}>
-                    <h3>Order ID: {order.order_id}</h3>
-                    <p>Дата заказа: {order.order_date}</p>
-                    <p>Клиент: {order.retail_user.user_name}</p>
-                    <p>Тип заказа: {order.order_type}</p>
-                    <p>Статус заказа: {order.order_status}</p>
-                    <p>Устройство: {order.device.device_full_model}</p>
-                </div>
-                {showDetails && (
-                    <div className="order-card-details">
-                        <div className="order-details-container">
-                            <div className="order-dateils-device">
-                                <h1>Устройство</h1>
-                                <p>{order.device.device_full_model}</p>
-                                <p>Внешний вид: {order.device.device_appearance}</p>
-                                <p>Коментарии: {order.device.device_equipment}</p>
-                                <p>Дефект: {order.device.device_stated_defect}</p>
-                            </div>
-                            <div className="order-details-user">
-                                <h1>Клиент</h1>
-                                <p>{order.retail_user.user_name}</p>
-                                <p>Номер телефона: {order.retail_user.user_phone}</p>
-                                <p>Адрес: {order.retail_user.user_address}</p>
-                            </div>
+            <div className={`order-card`} onClick={handleClick}>
+                <div className={`order-card-main`}>
+                    <div className="order-details-box">
+                        <div className="order-details-main">
+                            <h3>Order ID: {order.order_id}</h3>
+                            <p>Дата заказа: {order.order_date}</p>
+                            <p>Тип заказа: {order.order_type}</p>
+                            <p>Статус заказа: {order.order_status}</p>
                         </div>
-                        <div className="link-button">
-                            <Link target={"_blank"} to="#" onClick={handleClick}> Перейти</Link>
+
+                        <div className="order-dateils-device">
+                            <h1>Устройство: {order.device.device_full_model}</h1>                            
+                            <p>Внешний вид: {order.device.device_appearance}</p>
+                            <p>Дефект: {order.device.device_stated_defect}</p>
+                            <p>Комплектация: {order.device.device_equipment}</p>
                         </div>
                     </div>
-                )}
+                    <div >
+                        <h1>Клиент: {order.retail_user.user_name}</h1>
+                        <p>Номер телефона: {order.retail_user.user_phone}</p>
+                        <p>Адрес: {order.retail_user.user_address}</p>
+                        <p>Тип клиента: {order.retail_user.user_type}</p>
+                    </div>
+                </div>
+
             </div>
         </>
     );
 }
+
 function AllOrders() {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -225,8 +220,6 @@ function AllOrders() {
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
     const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
     const totalPages = Math.ceil(orders.length / ordersPerPage);
 
     const handlePrevious = () => {
@@ -285,17 +278,70 @@ function AllOrders() {
             handleSearch(fio);
         }
     }, [location.search]);
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleSearch(searchValue);
         }
     };
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        pageNumbers.push(
+            <a
+                key={1}
+                onClick={() => paginate(1)}
+                className={`page-item-pag ${currentPage === 1 ? 'page-item-pag-active' : ''}`}
+            >
+                1
+            </a>
+        );
+
+        if (currentPage > 6) {
+            pageNumbers.push(<a key="dots-before" className='page-item-pag' >...</a>);
+        }
+
+        const startPage = Math.max(2, currentPage - 5);
+        const endPage = Math.min(totalPages - 1, currentPage + 5);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(
+                <a
+                    key={i}
+                    onClick={() => paginate(i)}
+                    className={`page-item-pag ${i === currentPage ? 'page-item-pag-active' : ''}`}
+                >
+                    {i}
+                </a>
+            );
+        }
+
+        if (endPage < totalPages - 1) {
+            pageNumbers.push(<a key="dots-after" className='page-item-pag'>...</a>);
+        }
+
+        pageNumbers.push(
+            <a
+                key={totalPages}
+                onClick={() => paginate(totalPages)}
+                className={`page-item-pag ${currentPage === totalPages ? 'page-item-pag-active' : ''}`}
+            >
+                {totalPages}
+            </a>
+        );
+
+        return pageNumbers;
+    };
+
     return (
         <div className="container-box">
             <div className="order-box">
                 <h2>Список заказов</h2>
                 <div className='order-nav'>
-
                     <div className="search-container">
                         <input
                             type="text"
@@ -384,11 +430,9 @@ function AllOrders() {
                             </div>
                         </div>
                     </div>
-
                 </div>
                 {loading ? (
                     <div className="loading-animation"> <img src="/pic/LogoAnims.svg" alt="" /></div>
-
                 ) : (
                     <div className="order-list">
                         <div className="order-cards">
@@ -396,23 +440,15 @@ function AllOrders() {
                                 <OrderCard key={index} order={order} toggleDetails={toggleDetails} isOpen={expandedOrderId === order.order_id} />
                             ))}
                         </div>
-                        <nav>
-                            <ul className="pagination">
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <a onClick={handlePrevious} className="page-link">
-                                        Назад
-                                    </a>
-                                </li>
-                                <li className="page-item disabled">
-                                    <span className="page-link">{currentPage}</span>
-                                </li>
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <a onClick={handleNext} className="page-link">
-                                        Вперед
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <div className="pagination">
+                            <button onClick={handlePrevious} className={`page-item ${currentPage === 1 ? 'pagination-button-aut' : ''}`}>
+                                Назад
+                            </button>
+                            {renderPageNumbers()}
+                            <button onClick={handleNext} className={`page-item ${currentPage === totalPages ? 'pagination-button-aut' : ''}`}>
+                                Вперед
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>

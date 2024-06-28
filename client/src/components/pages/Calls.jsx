@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Messenger from './messenger/Messenger';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { FaCalendarAlt } from "react-icons/fa";
 import { DateRange } from 'react-date-range';
 import { ru } from 'date-fns/locale';
 import { format } from 'date-fns';
@@ -516,9 +517,13 @@ const Calls = () => {
             <div className="p-3 mb-2">
               <form onSubmit={handleSubmit}>
                 <div className="row-cols">
+                  <div className="row-cols-calendar">
+                  <FaCalendarAlt className='row-cols-calendar-svg' />
+
                   <label onClick={handleToggleDateRange}>
-                    Введите дату поиска записей <GoTriangleDown className={`icon ${isDateRangeVisible ? 'rotate' : ''}`} />
+                    <GoTriangleDown className={`icon ${isDateRangeVisible ? 'rotate' : ''}`} />
                   </label>
+                  </div>
                   {isDateRangeVisible && (
                     <DateRange
                       locale={russianTranslations}
@@ -531,12 +536,23 @@ const Calls = () => {
                       ranges={state}
                     />
                   )}
-                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}
-                  >
-                    <IoSearch />
+                  <div className="search-icon"                   >
+                    <input
+                      type="text"
+                      className="search-input"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+
+                      value={searchNumber}
+                      onChange={handleSearchNumberChange}
+                      onFocus={closeDateRange}
+                      placeholder='Поиск'
+                      disabled={isLoading || isSearchDisabled}
+
+                    />
+                    <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}>
+                      <IoSearch />
+                    </div>
                   </div>
-                </div>
-                <div className="search-container">
                   <div className="search-icon-delete">
                     {shouldShowResetIcon && (
                       <FaTimesCircle
@@ -546,22 +562,8 @@ const Calls = () => {
                       />
                     )}
                   </div>
-                  <input
-                    type="text"
-                    className="search-input"
-                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-
-                    value={searchNumber}
-                    onChange={handleSearchNumberChange}
-                    onFocus={closeDateRange}
-                    placeholder='Поиск'
-                    disabled={isLoading || isSearchDisabled}
-
-                  />
-                  <div className="search-icon" disabled={isLoading || isSearchDisabled} onClick={() => closeDate()}>
-                    <IoSearch />
-                  </div>
                 </div>
+
               </form>
 
             </div>

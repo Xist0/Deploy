@@ -69,7 +69,63 @@ const PhoneBook = () => {
         setCurrentPage(1);
     };
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const totalPages = Math.ceil(records.length / recordsPerPage);
+
+    const handlePrevious = () => {
+        setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    };
+
+    const handleNext = () => {
+        setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+    };
+
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        pageNumbers.push(
+            <a
+                key={1}
+                onClick={() => setCurrentPage(1)}
+                className={`page-item-pag ${currentPage === 1 ? 'page-item-pag-active' : ''}`}
+            >
+                1
+            </a>
+        );
+
+        if (currentPage > 6) {
+            pageNumbers.push(<a key="dots-before" className='page-item-pag'>...</a>);
+        }
+
+        const startPage = Math.max(2, currentPage - 5);
+        const endPage = Math.min(totalPages - 1, currentPage + 5);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(
+                <a
+                    key={i}
+                    onClick={() => setCurrentPage(i)}
+                    className={`page-item-pag ${i === currentPage ? 'page-item-pag-active' : ''}`}
+                >
+                    {i}
+                </a>
+            );
+        }
+
+        if (endPage < totalPages - 1) {
+            pageNumbers.push(<a key="dots-after" className='page-item-pag'>...</a>);
+        }
+
+        pageNumbers.push(
+            <a
+                key={totalPages}
+                onClick={() => setCurrentPage(totalPages)}
+                className={`page-item-pag ${currentPage === totalPages ? 'page-item-pag-active' : ''}`}
+            >
+                {totalPages}
+            </a>
+        );
+
+        return pageNumbers;
+    };
 
     return (
         <div className="container-box">
@@ -90,11 +146,12 @@ const PhoneBook = () => {
                             <table className="table">
                                 {isTableHeaderVisible && (
                                     <thead>
-                                        <tr >
+                                        <tr>
                                             <th scope="col">ID 1C</th>
-                                            <th scope="col" >ФИО</th>
+                                            <th scope="col">ФИО</th>
                                             <th scope="col">Номер</th>
                                             <th scope="col">Адрес</th>
+                                            <th scope="col">Юридический адрес</th>
                                         </tr>
                                     </thead>
                                 )}
@@ -102,17 +159,17 @@ const PhoneBook = () => {
                             </table>
                             <div className="pagination">
                                 <button
-                                    className="page-link"
-                                    onClick={() => paginate(currentPage - 1)}
+                                    onClick={handlePrevious}
+                                    className={`page-item ${currentPage === 1 ? 'pagination-button-aut' : ''}`}
                                     disabled={currentPage === 1}
                                 >
                                     Назад
                                 </button>
-                                <span className="page-number">{currentPage}</span>
+                                {renderPageNumbers()}
                                 <button
-                                    className="page-link"
-                                    onClick={() => paginate(currentPage + 1)}
-                                    disabled={currentPage === Math.ceil(records.length / recordsPerPage)}
+                                    onClick={handleNext}
+                                    className={`page-item ${currentPage === totalPages ? 'pagination-button-aut' : ''}`}
+                                    disabled={currentPage === totalPages}
                                 >
                                     Вперед
                                 </button>
@@ -122,7 +179,7 @@ const PhoneBook = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default PhoneBook;

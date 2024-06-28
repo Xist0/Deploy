@@ -5,7 +5,9 @@
     width: calc(100% - 10%);
     margin: auto;
 }
-
+.nav-menu-mob{
+    display: none;
+}
 .navi {
     display: flex;
     justify-content: space-between;
@@ -103,7 +105,14 @@ audio {
     position: relative;
     /* Добавляем относительное позиционирование */
 }
-
+.row-cols-calendar{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.row-cols-calendar-svg{
+    width: 20px;
+}
 .row-cols label {
     display: flex;
     width: 100%;
@@ -143,12 +152,16 @@ li a:hover {
 
 .active {
     color: #1776CD;
-    font-size: 16px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
 }
+.page-item-pag-active{
+    font-size: 25px;
+    color: #1776CD;
 
+}
 .burger-menu-mav {
     display: none;
 }
@@ -1002,7 +1015,6 @@ input {
 
 .search-input {
     width: 100%;
-    padding-left: 30px;
     height: 36px;
     font-size: 16px;
     border-radius: 6px;
@@ -1021,7 +1033,6 @@ input {
     width: 30px;
     height: 20px;
     fill: #666;
-    /* Цвет иконки можно изменить по желанию */
 }
 
 .search-icon:hover svg {
@@ -1031,7 +1042,7 @@ input {
 .search-icon-delete {
     position: absolute;
     top: 58%;
-    left: -10px;
+    right:  -30px;
     transform: translateY(-50%);
     cursor: pointer;
 }
@@ -1040,7 +1051,6 @@ input {
     width: 30px;
     height: 20px;
     fill: #666;
-    /* Цвет иконки можно изменить по желанию */
 }
 
 .search-icon-delete:hover svg {
@@ -1079,7 +1089,18 @@ input {
     gap: 20px;
     width: 100%;
 }
-
+.printer-url{
+    width: 100%;
+}
+.printer-btn{
+    display: flex;
+    max-width: 500px;
+    gap: 10px;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    border: transparent !important;
+}
 .input-container {
     position: relative;
     width: 100%;
@@ -1162,8 +1183,20 @@ input {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+    max-width: 40%;
 }
+.order-details-main{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 60%;
+    width: 100%;
 
+}
+.order-details-box{
+    display: flex;
+}
 .order-details-user {
     display: flex;
     flex-direction: column;
@@ -1398,7 +1431,7 @@ textarea:focus {
 }
 
 .staff th {
-    border: 1px solid #000000;
+    /* border: 1px solid #000000; */
     padding: 8px;
     text-align: left;
 }
@@ -1420,8 +1453,11 @@ textarea:focus {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    border: none;
 }
-
+#action td {
+    border: none;
+}
 #User1CID {
     display: flex;
     gap: 20px;
@@ -1451,7 +1487,9 @@ textarea:focus {
     color: white;
     text-align: center;
 }
-
+.staff tr{
+    border: 1px solid;
+}
 .staff tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -1515,11 +1553,38 @@ textarea:focus {
     width: 100%;
     position: relative;
 }
-
+.container-search-sms-block{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.container-search-sms-block > .input-column{
+    width: 50%;
+}
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.page-item-pag  {
+    cursor: pointer;
+    width: 20px;
+}
+
+.page-item-pag:hover {
+    color: #1776CD;
+}
+
+.pagination-button-aut {
+    cursor: initial;
+    background: #41414162;
+}
+
+.pagination-button-aut:hover {
+    box-shadow: none;
+    background: #41414162;
+    color: rgb(224, 224, 224);
 }
 
 .modal-body {
@@ -1572,15 +1637,18 @@ textarea:focus {
 .hide-on-mobile {
     display: none;
 }
-.date-time{
+
+.date-time {
     display: none;
 }
+
 .close {
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
 }
+
 .time {
     display: none;
 }
@@ -1726,9 +1794,11 @@ textarea:focus {
         width: 100%;
         text-align: left;
     }
-    .call-time{
+
+    .call-time {
         display: none;
     }
+
     .orders {
         display: flex;
         align-items: center;
@@ -1785,9 +1855,11 @@ textarea:focus {
     .row-cols input {
         position: relative;
     }
-    .calls-outNumber{
+
+    .calls-outNumber {
         display: none;
     }
+
     form {
         display: flex;
         position: relative;
@@ -1903,7 +1975,12 @@ textarea:focus {
     .table thead tr {
         margin: 0;
     }
-
+    .order-details-box{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: space-between;
+    }
     .staff td {
         border: 1px solid #000000;
         padding: 8px;
@@ -1913,9 +1990,11 @@ textarea:focus {
     .staff tr:nth-child(even) {
         background-color: transparent;
     }
-    .date-time{
+
+    .date-time {
         display: block;
     }
+
     .hide-on-mobile {
         display: none;
     }
@@ -1928,10 +2007,25 @@ textarea:focus {
     .mobail-calls-tr .th-style-width.td-orders.calls-mobail-adab {
         display: table-cell;
     }
-    .table-container-mobail{
+
+    .table-container-mobail {
         display: none;
     }
-    .table-container-mobail-tbody tr{
+
+    .table-container-mobail-tbody tr {
         margin-bottom: 10px;
+    }
+    .nav-menu-mob{
+        display: block;
+    }
+    .page-item-pag {
+        display: none;
+    }
+
+    .page-item-pag-active{
+        display: block;
+    }
+    .row-cols-calendar{
+        gap: 0;
     }
 }

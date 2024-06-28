@@ -491,7 +491,7 @@ app.post('/api/sms/message/sms', async (req, res) => {
   try {
     const requestData = req.body;
 
-    const response = await fetch('http://192.168.1.76:8000/sms/message', {
+    const response = await fetch('http://192.168.1.76:80/sms/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -499,19 +499,21 @@ app.post('/api/sms/message/sms', async (req, res) => {
       body: JSON.stringify(requestData)
     });
 
-    const responseData = await response.json();
-    console.log('Data received:', responseData);
-    res.json(responseData);
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(201).json({ message: 'Успех', status: response.status });
   } catch (error) {
     console.error('Error sending data:', error);
-    res.status(500).send(error.message || 'Internal Server Error');
+    res.status(500).json({ message: error.message || 'Ошибка запроса', status: 500 });
   }
 });
-app.post('/api/sms/message', async (req, res) => {
+app.post('/api/initiate_call', async (req, res) => {
   try {
     const requestData = req.body;
 
-    const response = await fetch('http://192.168.1.76:8000/sms/message', {
+    const response = await fetch('http://192.168.1.76:80/initiate_call', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -519,14 +521,103 @@ app.post('/api/sms/message', async (req, res) => {
       body: JSON.stringify(requestData)
     });
 
-    const responseData = await response.json();
-    console.log('Data received:', responseData);
-    res.json(responseData);
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(201).json({ message: 'Успех', status: response.status });
   } catch (error) {
     console.error('Error sending data:', error);
-    res.status(500).send(error.message || 'Internal Server Error');
+    res.status(500).json({ message: error.message || 'Ошибка запроса', status: 500 });
   }
 });
+app.get('/api/allprinters', async (req, res) => {
+  try {
+    const response = await fetch('http://192.168.1.10/api/allprinters', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    const responseData = await response.json();
+
+    res.status(200).json(responseData); // Отправляем данные клиенту
+  } catch (error) {
+    console.error('Error fetching printers:', error);
+    res.status(500).json({ message: error.message || 'Ошибка запроса', status: 500 });
+  }
+});
+// Добавление нового принтера
+
+app.post('/api/postprinter', async (req, res) => {
+  try {
+    const newPrinter = req.body; // Получаем новый принтер из тела запроса
+    const response = await fetch('http://192.168.1.10/api/postprinter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newPrinter) // Отправляем новый принтер на сервер
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    const addedPrinter = await response.json(); // Получаем ответ от сервера
+    res.status(201).json({ message: 'Принтер успешно добавлен', printer: addedPrinter });
+  } catch (error) {
+    console.error('Error adding printer:', error);
+    res.status(500).json({ message: 'Ошибка при добавлении принтера', status: 500 });
+  }
+});
+
+
+// Изменение принтера по ID
+app.put('/api/changeprinter', async (req, res) => {
+  try {
+    const updatedPrinterData = req.body; // Данные принтера для обновления
+
+    // Отправка запроса на внешний сервер
+    const response = await fetch(`http://192.168.1.10/api/changeprinter`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedPrinterData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(200).json({ message: 'Данные принтера успешно изменены'});
+  } catch (error) {
+    console.error('Error updating printer:', error);
+    res.status(500).json({ message: error.message || 'Ошибка при изменении данных принтера', status: 500 });
+  }
+});
+
+// Удаление принтера по ID
+app.delete('/api/deleteprinter/:id', async (req, res) => {
+  try {
+    const printerId = req.params.id;
+
+    const response = await fetch(`http://192.168.1.10/api/deleteprinter/${printerId}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(200).json({ message: 'Принтер успешно удален', deletedPrinterId: printerId });
+  } catch (error) {
+    console.error('Error deleting printer:', error);
+    res.status(500).json({ message: 'Ошибка при удалении принтера', status: 500 });
+  }
+});
+
 
 // Maxvi
 let savedLink = '';
