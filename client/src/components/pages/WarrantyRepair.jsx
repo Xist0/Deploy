@@ -391,7 +391,7 @@ function WarrantyRepair() {
         </div>
         <div className='expanded-content-main'>
           <h1>Модель EXEL</h1>
-          <h4>{data.device.device_sale_date}</h4>
+          <h4>{data.device.device_excel_mode}</h4>
         </div>
         <div className='expanded-content-main'>
           <h1>Адрес</h1>
