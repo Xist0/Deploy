@@ -91,7 +91,7 @@ function SearcOrder() {
                 body: JSON.stringify(requestData)
             });
             const result = await response.json();
-            setModalMessage(`Статус: ${result.status}, Message: ${result.message}`);
+            setModalMessage(`Сообщение отправлено`);
         } catch (error) {
             setModalMessage(`Ошибка: ${error.message}`);
         } finally {
@@ -117,8 +117,8 @@ function SearcOrder() {
                 },
                 body: JSON.stringify(requestData)
             });
-            const responseData = await response.json();
-            setModalMessage(`Status: ${result.status}, Message: ${result.message}`);
+            const result = await response.json();
+            setModalMessage(`Сообщение отправлено`);
         } catch (error) {
             setModalMessage(`Ошибка: ${error.message}`);
         } finally {
