@@ -1087,6 +1087,8 @@ input {
     max-height: 1000px;
     opacity: 1;
     padding: 10px;
+    background: #fff;
+    z-index: 99999999;
 }
 
 .orders-content label {
@@ -1867,6 +1869,7 @@ textarea:focus {
     .search-container {
         position: relative;
         width: 100%;
+        z-index: 9999;
     }
 }
 
