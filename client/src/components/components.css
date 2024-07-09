@@ -9,7 +9,8 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background-color: #fff; /* Цвет фона для меню */
+    background-color: #fff;
+    /* Цвет фона для меню */
 }
 
 .nav-menu-mob {
@@ -774,12 +775,12 @@ td>a:hover {
 }
 
 .truncate p {
-    -webkit-line-clamp: 2;
     display: -webkit-box;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 .container-user-register-header {
     display: flex;
     align-items: center;
@@ -1075,7 +1076,6 @@ input {
     max-height: 0;
     opacity: 0;
     transition: all 0.3s ease;
-    display: none;
     z-index: 1000;
     /* Обеспечивает, что элемент будет сверху других */
     background: #fff;
@@ -1088,8 +1088,6 @@ input {
     max-height: 1000px;
     opacity: 1;
     padding: 10px;
-    background: #fff;
-    z-index: 99999999;
 }
 
 .orders-content label {
@@ -1321,7 +1319,6 @@ input {
 }
 
 .container-search-sms textarea {
-    width: 50%;
     border-radius: 6px;
     border: 1px solid #1776CD;
     padding: 10px 15px;
@@ -1375,7 +1372,6 @@ textarea:focus {
 
 .staff {
     overflow: hidden;
-    margin: 40px 0;
     transition: max-height 0.3s ease-in-out;
 }
 
@@ -1747,7 +1743,7 @@ textarea:focus {
         left: -100%;
         top: 40px;
         height: 100vh;
-        z-index: 99999999;
+        z-index: 9999;
         justify-content: left;
     }
 
@@ -1870,7 +1866,6 @@ textarea:focus {
     .search-container {
         position: relative;
         width: 100%;
-        z-index: 800;
     }
 }
 
@@ -2090,17 +2085,20 @@ textarea:focus {
         position: absolute;
         top: 21%;
     }
+
     .orders-box {
         display: flex;
         gap: 20px;
         flex-direction: column;
         align-items: center;
     }
-    .order-details-main{
+
+    .order-details-main {
         max-width: 100%;
         width: 100%;
     }
-    .order-dateils-user{
+
+    .order-dateils-user {
         max-width: 100%;
         width: 100%;
     }

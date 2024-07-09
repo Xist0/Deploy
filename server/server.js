@@ -531,6 +531,107 @@ app.post('/api/initiate_call', async (req, res) => {
     res.status(500).json({ message: error.message || 'Ошибка запроса', status: 500 });
   }
 });
+app.get('/api/alltemplate', async (req, res) => {
+  try {
+    const response = await fetch('http://192.168.1.10/api/alltemplate', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    const responseData = await response.json();
+
+    res.status(200).json(responseData); // Отправляем данные клиенту
+  } catch (error) {
+    console.error('Error fetching printers:', error);
+    res.status(500).json({ message: error.message || 'Ошибка запроса', status: 500 });
+  }
+});
+// Добавление нового SMS-шаблона
+app.post('/api/posttemplate', async (req, res) => {
+  try {
+    const newSMS = req.body; // Получаем новый SMS-шаблон из тела запроса
+    const response = await fetch('http://192.168.1.10/api/posttemplate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newSMS) // Отправляем новый SMS-шаблон на внешний сервер
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    const addedSMS = await response.json(); // Получаем ответ от внешнего сервера
+    res.status(201).json({ message: 'Шаблон успешно добавлен', template: addedSMS.template });
+  } catch (error) {
+    console.error('Error adding SMS template:', error);
+    res.status(500).json({ message: 'Ошибка при добавлении шаблона', status: 500 });
+  }
+});
+
+// Изменение SMS-шаблона по ID
+app.put('/api/puttemplate', async (req, res) => {
+  try {
+    const updatedSMSData = req.body; // Данные SMS-шаблона для обновления
+
+    // Отправка запроса на внешний сервер
+    const response = await fetch('http://192.168.1.10/api/puttemplate', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedSMSData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(200).json({ message: 'Шаблон успешно обновлен' });
+  } catch (error) {
+    console.error('Error updating SMS template:', error);
+    res.status(500).json({ message: error.message || 'Ошибка при обновлении шаблона', status: 500 });
+  }
+});
+
+// Удаление SMS-шаблона по ID
+app.delete('/api/deletetemplate/:id', async (req, res) => {
+  try {
+    const templateId = req.params.id;
+
+    const response = await fetch(`http://192.168.1.10/api/deletetemplate/${templateId}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(200).json({ message: 'Шаблон успешно удален', deletedTemplateId: templateId });
+  } catch (error) {
+    console.error('Error deleting SMS template:', error);
+    res.status(500).json({ message: 'Ошибка при удалении шаблона', status: 500 });
+  }
+});
+app.get('/api/usersasterisk', async (req, res) => {
+  try {
+    const response = await fetch('http://192.168.1.10/api/usersasterisk', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    const responseData = await response.json();
+
+    res.status(200).json(responseData); // Отправляем данные клиенту
+  } catch (error) {
+    console.error('Error fetching printers:', error);
+    res.status(500).json({ message: error.message || 'Ошибка запроса', status: 500 });
+  }
+});
+
 app.get('/api/allprinters', async (req, res) => {
   try {
     const response = await fetch('http://192.168.1.10/api/allprinters', {
@@ -572,7 +673,29 @@ app.post('/api/postprinter', async (req, res) => {
   }
 });
 
+app.put('/api/changeorder', async (req, res) => {
+  try {
+    const updatedPrinterData = req.body; // Данные принтера для обновления
 
+    // Отправка запроса на внешний сервер
+    const response = await fetch(`http://192.168.1.10/api/changeorder`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedPrinterData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    res.status(200).json({ message: 'Данные успешно изменены'});
+  } catch (error) {
+    console.error('Error updating printer:', error);
+    res.status(500).json({ message: error.message || 'Ошибка при изменении данных ', status: 500 });
+  }
+});
 // Изменение принтера по ID
 app.put('/api/changeprinter', async (req, res) => {
   try {
@@ -617,7 +740,6 @@ app.delete('/api/deleteprinter/:id', async (req, res) => {
     res.status(500).json({ message: 'Ошибка при удалении принтера', status: 500 });
   }
 });
-
 
 // Maxvi
 let savedLink = '';

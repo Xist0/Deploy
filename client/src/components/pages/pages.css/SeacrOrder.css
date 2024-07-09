@@ -67,11 +67,13 @@
     align-items: center;
     border-bottom: 1px solid;
 }
-.container-search-result-main input{
+
+.container-search-result-main input {
     width: 60%;
     margin-top: 5px;
     max-width: 50%;
 }
+
 .container-search-result-work {
     width: 45%;
     display: flex;
@@ -107,6 +109,21 @@
 
 .OrderDefect h2 {
     width: 50%;
+}
+
+.OrderDefect textarea {
+    border: 1px solid #1776CD;
+    border-radius: 6px;
+    padding: 10px 5px;
+    margin-top: 10px;
+
+}
+
+.container-search-result-butoon-red {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .OrderDefect p {
@@ -251,7 +268,7 @@
         flex-wrap: wrap;
         height: 100%;
     }
- 
+
     .container-search-result-staff {
         display: flex;
         flex-wrap: wrap;

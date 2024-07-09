@@ -7,12 +7,17 @@ import { Context } from '../../main';
 function SearcOrder() {
     const [number, setNumber] = useState('');
     const [records, setRecords] = useState(null);
+    const [receptionNumbers, setReceptionNumbers] = useState([]); // Для хранения массива номеров приёма
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+    const [types, setTypes] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [editedRecords, setEditedRecords] = useState(null);
+    const [workDescription, setWorkDescription] = useState('');
+    const [diagnosticsResult, setDiagnosticsResult] = useState('');
+    const [recommendations, setRecommendations] = useState('');
     const location = useLocation();
     const { store } = useContext(Context);
     const [selectedReceptionNumber, setSelectedReceptionNumber] = useState('');
@@ -28,7 +33,12 @@ function SearcOrder() {
             fetchData(trimmedOrderNumber);
         }
     }, [location.search]);
-
+    useEffect(() => {
+        fetchTypes();
+    }, [records]);
+    useEffect(() => {
+        fetchNumber();
+    }, []);
     const fetchData = async (searchNumber) => {
         if (searchNumber.trim() === '') {
             return;
@@ -44,6 +54,9 @@ function SearcOrder() {
             });
             const data = await response.json();
             setRecords(data);
+            setWorkDescription(data.work_description || '');
+            setDiagnosticsResult(data.diagnostics_result || '');
+            setRecommendations(data.recommendations || '');
             setEditedRecords(data); // Initialize editedRecords with fetched data
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -63,12 +76,19 @@ function SearcOrder() {
             fetchData(number);
         }
     };
-
+    const handleTemplateSelect = (e) => {
+        const selectedTemplate = e.target.value;
+        if (records) {
+            const messageWithParameters = replaceTemplateParameters(selectedTemplate, records);
+            setMessage(messageWithParameters);
+        } else {
+            setMessage(selectedTemplate);
+        }
+    };
     const searchWithQRCode = (searchNumber) => {
         setNumber(searchNumber);
         fetchData(searchNumber);
     };
-
     const handleNotifyClient = async () => {
         if (!records || !records.retail_user || !records.retail_user.user_phone) {
             alert('Номер телефона не найден');
@@ -178,13 +198,16 @@ function SearcOrder() {
             sources: {
                 sources_id: editedRecords?.sources?.sources_id || '',
                 sources_name: editedRecords?.sources?.sources_name || ''
-            }
+            },
+            work_description: workDescription,
+            diagnostics_result: diagnosticsResult,
+            recommendations: recommendations,
         };
         console.log('Saving with data:', requestData);
 
         try {
-            const response = await fetch('/api/neworder', {
-                method: 'POST',
+            const response = await fetch('/api/changeorder', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -192,12 +215,46 @@ function SearcOrder() {
             });
             const responseData = await response.json();
             console.log('Data received:', responseData);
-            setRecords({ ...editedRecords });
+            setRecords({ ...editedRecords, work_description: workDescription, diagnostics_result: diagnosticsResult, recommendations: recommendations });
         } catch (error) {
             console.error('Error saving data:', error);
         }
     };
+    const fetchTypes = async () => {
+        try {
+            const response = await fetch('/api/alltemplate');
+            const data = await response.json();
+            console.log("Fetched data:", data);
 
+            // Обновление типов сообщений с заменой параметров
+            const updatedTypes = data.map(template => ({
+                ...template,
+                template_text: replaceTemplateParameters(template.template_text, records)
+            }));
+
+            setTypes(updatedTypes);  // Обновите эту строку, чтобы напрямую установить данные в состояние
+        } catch (error) {
+            console.error('Error fetching types:', error);
+        }
+    };
+    const fetchNumber = async () => {
+        try {
+            const response = await fetch('/api/usersasterisk');
+            const data = await response.json();
+            setReceptionNumbers(data); // Сохраняем полученные данные в состояние
+        } catch (error) {
+            console.error('Error fetching reception numbers:', error);
+        }
+    };
+
+
+    const replaceTemplateParameters = (template, records) => {
+        if (!records) return template;
+        return template
+            .replace(/{number}/g, records.order_id || '')
+            .replace(/{status}/g, records.order_status || '')
+            .replace(/{adress}/g, records.order_branch || '');
+    };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setEditedRecords(prevRecords => {
@@ -378,6 +435,18 @@ function SearcOrder() {
                             )}
                         </div>
                         <div className="OrderDefect">
+                            <h2>Пункт приёма:</h2>
+                            {isEditing ? (
+                                <input
+                                    name="device.device_imei"
+                                    value={editedRecords.order_branch}
+                                    onChange={handleInputChange}
+                                />
+                            ) : (
+                                <p>{records.order_branch || 'Не указано'}</p>
+                            )}
+                        </div>
+                        <div className="OrderDefect">
                             <h2>Дефект:</h2>
                             {isEditing ? (
                                 <input
@@ -390,8 +459,8 @@ function SearcOrder() {
                             )}
                         </div>
                         {/* {!isEditing && <button onClick={handleEdit}>Редактировать</button>} */}
-                        {isEditing && <button onClick={handleSave}>Сохранить</button>}
-                        {isEditing && <button onClick={handleEditFalse}>Отмена</button>}
+                        {/* {isEditing && <button onClick={handleSave}>Сохранить</button>}
+                        {isEditing && <button onClick={handleEditFalse}>Отмена</button>} */}
                     </div>
                     <div className="container-search-result-work">
                         <div className="container-search-result-parts-title">
@@ -425,24 +494,81 @@ function SearcOrder() {
                         <div className="container-search-sms">
                             <h1>Оповещение клиента:</h1>
                             <div className="container-search-sms-block">
-                                <textarea
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                    placeholder='Сообщение'>
-                                </textarea>
+
+                                <label className='input-column'>
+                                    <select value={message} onChange={handleTemplateSelect}>
+                                        <option value="" hidden>Выберите шаблон сообщения</option>
+                                        {types.map((template, index) => (
+                                            <option key={index} value={template.template_text}>
+                                                {template.template_text}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <textarea
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        placeholder='Сообщение'>
+                                    </textarea>
+                                </label>
                                 <button onClick={handleSendSMS}>Отправить смс</button>
                             </div>
-                            <div className="container-search-sms-block">                          
+                            <div className="container-search-sms-block">
+
                                 <label className='input-column'>
-                                    <select value={selectedReceptionNumber} onChange={handleReceptionNumberChange}>
-                                        <option value="" disabled hidden>Номер приёмки</option>
-                                        <option value="101">Салмышская</option>
-                                        <option value="201">Туркистансикая</option>
-                                        <option value="301">Бретская</option>
+                                    <select onChange={handleReceptionNumberChange} value={selectedReceptionNumber}>
+                                        <option value="" hidden>Выберите номер</option>
+                                        {receptionNumbers.map((number, index) => (
+                                            <option key={index} value={number.user_phone}>
+                                                {number.user_name} ({number.user_phone})
+                                            </option>
+                                        ))}
                                     </select>
                                 </label>
                                 <button onClick={handleNotifyClient}>Позвонить клиенту</button>
                             </div>
+                        </div>
+                        <div className="OrderDefect">
+                            <h2>Результат диагностики:</h2>
+                            {isEditing ? (
+                                <textarea
+                                    value={diagnosticsResult}
+                                    onChange={(e) => setDiagnosticsResult(e.target.value)}
+                                />
+                            ) : (
+                                <p>{records.diagnostics_result || 'Не указано'}</p>
+                            )}
+                        </div>
+                        <div className="OrderDefect">
+                            <h2>Описание работ:</h2>
+                            {isEditing ? (
+                                <textarea
+                                    value={workDescription}
+                                    onChange={(e) => setWorkDescription(e.target.value)}
+                                />
+                            ) : (
+                                <p>{records.work_description || 'Не указано'}</p>
+                            )}
+                        </div>
+                        <div className="OrderDefect">
+                            <h2>Рекомендации:</h2>
+                            {isEditing ? (
+                                <textarea
+                                    value={recommendations}
+                                    onChange={(e) => setRecommendations(e.target.value)}
+                                />
+                            ) : (
+                                <p>{records.recommendations || 'Не указано'}</p>
+                            )}
+                        </div>
+                        <div className="container-search-result-butoon-red">
+                            {isEditing ? (
+                                <div className='container-search-result-butoon-red'>
+                                    <button onClick={handleSave}>Сохранить</button>
+                                    <button onClick={handleEditFalse}>Отменить</button>
+                                </div>
+                            ) : (
+                                <button onClick={handleEdit}>Редактировать</button>
+                            )}
                         </div>
                     </div>
                 </div>
